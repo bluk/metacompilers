@@ -1,0 +1,232 @@
+.SYNTAX PROGRAM
+
+[ body of compiler definition ]
+PROGRAM = '.SYNTAX' ID
+          .OUT(.LB '// ' * ' compiler' .NL)
+          .OUT('public class Compiler {' .LM+ .NL .NL)
+          PREAMBLE
+          $(PR / COMMENT)
+          '.TOKENS'
+          $(TR / COMMENT)
+          '.END'
+          POSTAMBLE
+          .OUT(.LM- '}' .NL) ;
+
+[ object definition preamble ]
+PREAMBLE = .OUT('public func compile(_ input: String) -> Bool {' .LM+ .NL)
+           .OUT('// initialize compiler variables' .NL)
+           .OUT('self.inbuf = input' .NL)
+           .OUT('self.initialize()' .NL)
+           .OUT('// call the first rule' .NL)
+           .OUT('self.ctxpush(' 34 * 34 ')' .NL)
+           .OUT('self.rule' * '()' .NL)
+           .OUT('self.ctxpop()' .NL)
+           .OUT('// special case handling of first rule failure' .NL)
+           .OUT('if ((!self.eflag) && (!self.pflag)) {' .LM+ .NL)
+           .OUT('self.eflag = true' .NL)
+           .OUT('self.erule = ' 34 * 34 '' .NL)
+           .OUT('self.einput = self.inp }' .LM- .NL)
+           .OUT('return !self.eflag' .NL)
+           .OUT(.LM- '}' .NL .NL) ;
+
+
+[ runtime and object definition postamble ]
+POSTAMBLE =
+
+           .OUT('struct StackFrame {' .LM+ .NL)
+           .OUT('var generatedLabel: Int' .NL)
+           .OUT('var erule: String' .NL)
+           .OUT('var leftMargin: Int' .NL)
+           .OUT(.LM- '}' .NL)
+
+           .OUT('// runtime variables' .NL)
+           .OUT('var pflag = false' .NL)
+           .OUT('var tflag = false' .NL)
+           .OUT('var eflag = false' .NL)
+           .OUT('var inp = 0' .NL)
+           .OUT('var inbuf = ' 34 34 .NL)
+           .OUT('public var outbuf = ' 34 34 .NL)
+           .OUT('public var erule = ' 34 34  .NL)
+           .OUT('public var einput = 0' .NL)
+           .OUT('public var token = ' 34 34 .NL)
+           .OUT('var labelcount = 0' .NL)
+           .OUT('var stack:[StackFrame] = []' .NL .NL)
+
+           .OUT('public init() {'.LM+ .NL)
+           .OUT('self.initialize()' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func initialize () {'.LM+ .NL)
+           .OUT('// initialize for another compile' .NL)
+           .OUT('self.pflag = false' .NL)
+           .OUT('self.tflag = false' .NL)
+           .OUT('self.eflag = false' .NL)
+           .OUT('self.inp = 0' .NL)
+           .OUT('self.outbuf = ' 34 34 .NL)
+           .OUT('self.erule = ' 34 34 .NL)
+           .OUT('self.einput = 0' .NL)
+           .OUT('self.token = ' 34 34 .NL)
+           .OUT('self.labelcount = 1' .NL)
+           .OUT('self.stack = []' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func ctxpush (_ rulename: String) {' .LM+ .NL)
+           .OUT('// push and initialize a new stackframe' .NL)
+           .OUT('// new context inherits current context left margin' .NL)
+           .OUT('var LM = 0; if (self.stack.count >= 1) { LM = self.stack[self.stack.count - 1].leftMargin }' .NL)
+           .OUT('// stackframe definition' .NL)
+           .OUT('self.stack.append(StackFrame(generatedLabel: 0, erule: rulename, leftMargin: LM))' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func ctxpop () {' .LM+ .NL)
+           .OUT('// pop and possibly deallocate old stackframe' .NL)
+           .OUT('_ = self.stack.popLast() // pop stackframe' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func out (_ s: String) {' .LM+ .NL)
+           .OUT('// output string' .NL)
+           .OUT('var i = 0' .NL)
+           .OUT('// if newline last output, add left margin before string' .NL)
+           .OUT('if (self.outbuf.count > 0 && String(UnicodeScalar(Array(self.outbuf.utf8)[self.outbuf.count - 1])) == ' 34 92 'n' 34 ') {' .NL)
+           .OUT('  i = self.stack[self.stack.count - 1].leftMargin' .NL)
+           .OUT('  while (i>0) { self.outbuf += ' 34 ' ' 34 '; i -= 1 } }' .NL)
+           .OUT('self.outbuf += s' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func eol () {' .LM+ .NL)
+           .OUT('// output end of line' .NL)
+           .OUT('self.outbuf += ' 34 92 'n' 34 .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func test (_ s: String) {' .LM+ .NL)
+           .OUT('// test for a string in the input' .NL)
+           .OUT('var i = 0' .NL)
+           .OUT('// delete whitespace' .NL)
+           .OUT('while (Array(self.inbuf.utf8)[self.inp] == 32 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 9 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 13 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 10) { self.inp += 1}' .NL)
+           .OUT('// test string case insensitive' .NL)
+           .OUT('self.pflag = true ; i = 0' .NL)
+           .OUT('while (self.pflag && (i < s.count) && ((self.inp+i) < self.inbuf.count) )' .NL)
+           .OUT('{ self.pflag = String(UnicodeScalar(Array(s.utf8)[i])).uppercased() ==' .NL)
+           .OUT('                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp+i])).uppercased()' .NL)
+           .OUT('  i += 1 }' .NL)
+           .OUT('self.pflag = self.pflag && (i == s.count)' .NL)
+           .OUT('// advance input if found' .NL)
+           .OUT('if (self.pflag) { self.inp = self.inp + s.count }' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func err() {' .LM+ .NL)
+           .OUT('// compilation error, provide error indication and context' .NL)
+           .OUT('self.eflag = true' .NL)
+           .OUT('self.erule = self.stack[self.stack.count - 1].erule' .NL)
+           .OUT('self.einput = self.inp' .NL)
+           .OUT(.LM- '}' .NL .NL) ;
+
+[ parsing rule definition ]
+PR = ID .OUT('func rule'* '() {' .LM+ .NL)
+     '=' EX1 ';'
+     .OUT(.LM- '}' .NL .NL) ;
+
+[ token rule definition ]
+TR = ID .OUT('func rule'* '() {' .LM+ .NL)
+     ':' TX1 ';'
+     .OUT(.LM- '}' .NL .NL) ;
+
+[ comment definition ]
+COMMENT = '[' CMLINE ']' .OUT('//' * .NL) ;
+
+[ parsing expressions ]
+EX1 = EX2 $('/' .OUT('if (!self.pflag) {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) ) ;
+
+EX2 = (EX3 .OUT('if (self.pflag) {' .LM+ .NL) / OUTPUT .OUT('if (true) {' .LM+ .NL) )
+      $(EX3 .OUT('if (!self.pflag) { self.err() }' .NL) / OUTPUT)
+      .OUT(.LM- '}' .NL) ;
+
+
+EX3 = ID        .OUT('self.ctxpush(' 34 * 34 ')' .NL)
+                .OUT('self.rule' * '()' .NL)
+                .OUT('self.ctxpop()' .NL)
+                .OUT('if (self.eflag) { return }' .NL)  /
+      STRING    .OUT('self.test(' 34 * 34 ')' .NL) /
+      '(' EX1 ')'                            /
+      '.EMPTY'  .OUT('self.pflag = true' .NL)    /
+      '.LITCHR' .OUT('self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL)
+                .OUT('self.inp += 1' .NL)  /
+      '$' .OUT('self.pflag = true' .NL)
+          .OUT('while (self.pflag) {' .LM+ .NL)
+           EX3
+          .OUT(.LM- '}' .NL)
+          .OUT('self.pflag = true' .NL) ;
+
+[ output expressions ]
+OUTPUT = '.OUT' '('$OUT1 ')' ;
+
+OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
+       STRING  .OUT('self.out(' 34 * 34 ')' .NL) /
+       NUMBER  .OUT('self.out(String(UnicodeScalar(' * ')))' .NL)        /
+       '#'     .OUT('if (self.stack[self.stack.count - 1].generatedLabel == 0) {' .LM+ .NL)
+               .OUT('self.stack[self.stack.count - 1] = self.labelcount' .NL)
+               .OUT('self.labelcount += 1 }' .LM- .NL)
+               .OUT('self.out(self.stack[self.stack.count - 1].generatedLabel)' .NL) /
+       '.NL'   .OUT('self.eol()' .NL)          /
+       '.LB'             /
+       '.TB'   .OUT('self.out(' 34 92 't' 34 ')' .NL)          /
+       '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 2' .NL) /
+       '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 2' .NL) ;
+
+[ token expressions ]
+TX1 = TX2 $('/' .OUT('if (!self.pflag) {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) ;
+
+TX2 = TX3 .OUT('if (self.pflag) {' .LM+ .NL)
+      $(TX3 .OUT('if (!self.pflag) { return }' .NL) )
+      .OUT(.LM- '}' .NL) ;
+
+TX3 = ( '.TOKEN'  .OUT('self.tflag = true' .NL)
+                  .OUT('self.token = ' 34 34 .NL) /
+        '.DELTOK' .OUT('self.tflag = false' .NL) /
+        '$' .OUT('self.pflag = true' .NL)
+            .OUT('while (self.pflag) {' .LM+ .NL)
+             TX3
+            .OUT(.LM- '}' .NL) )
+        .OUT('self.pflag = true' .NL) /
+      '.ANYBUT(' CX1 ')' .OUT('self.pflag = !self.pflag' .NL)
+        .OUT('if (self.pflag) {' .LM+ .NL)
+        .OUT('if (self.tflag) { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
+        .OUT('self.inp += 1 }' .LM- .NL) /
+      '.ANY(' CX1 ')'
+        .OUT('if (self.pflag) {' .LM+ .NL)
+        .OUT('if (self.tflag) { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
+        .OUT('self.inp += 1 }' .LM- .NL) /
+      ID
+        .OUT('self.ctxpush(' 34 * 34 ')' .NL)
+        .OUT('self.rule' * '()' .NL)
+        .OUT('self.ctxpop()' .NL)
+        .OUT('if (self.eflag) { return }' .NL)  /
+      '(' TX1 ')'  ;
+
+[ character expressions ]
+CX1 = .OUT('self.pflag =' .LM+ .NL)
+      CX2 $('!' .OUT(' ||' .NL) CX2)
+      .OUT(.LM- .NL) ;
+CX2 = CX3 (':' .OUT('(Array(self.inbuf.utf8)[self.inp] >= ' * ' ) &&' .NL)
+               CX3
+               .OUT(' (Array(self.inbuf.utf8)[self.inp] <= ' * '  )' ) /
+           .EMPTY .OUT('Array(self.inbuf.utf8)[self.inp] == ' * ' ' )  ) ;
+CX3 = NUMBER / SQUOTE .LITCHR ;
+
+[ token definitions ]
+.TOKENS
+
+PREFIX : $.ANY(32!9!13!10) ;
+ID     : PREFIX .TOKEN ALPHA $(ALPHA/DIGIT) .DELTOK ;
+NUMBER : PREFIX .TOKEN DIGIT $DIGIT .DELTOK ;
+STRING : PREFIX .ANY(39) .TOKEN $.ANYBUT(13!10!39) .DELTOK .ANY(39) ;
+ALPHA  : .ANY('A:'Z!'a:'z) ;
+DIGIT  : .ANY('0:'9) ;
+SQUOTE : PREFIX .ANY('') ;
+CMLINE : .TOKEN $.ANYBUT(10!13!']) .DELTOK ;
+
+.END
+
