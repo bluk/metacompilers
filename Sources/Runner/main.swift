@@ -26,10 +26,10 @@ guard let dataAsStr = String(data: data, encoding: .utf8) else {
 let compiler = Compiler()
 let result = compiler.compile(dataAsStr)
 if result {
-    print(compiler.outbuf)
+    print(compiler.outputBuffer)
 } else {
     print("Compiler Error:")
-    print(compiler.outbuf)
+    print(compiler.outputBuffer)
     print(compiler.erule)
     print(compiler.einput)
     print(compiler.token)

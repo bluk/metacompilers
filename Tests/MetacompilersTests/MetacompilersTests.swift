@@ -28,10 +28,13 @@ final class MetacompilersTests: XCTestCase {
 
         let compiler = Compiler()
         XCTAssertTrue(compiler.compile(metalangContents))
-        XCTAssertEqual(compiler.outbuf.trimmingCharacters(in: .newlines), compilerSourceContents.trimmingCharacters(in: .newlines))
+        XCTAssertEqual(
+            compiler.outbuf.trimmingCharacters(in: .newlines),
+            compilerSourceContents.trimmingCharacters(in: .newlines)
+        )
     }
 
     static var allTests = [
-        ("testCompile", testCompile),
+        ("testCompile", testCompile)
     ]
 }
