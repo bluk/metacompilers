@@ -25,6 +25,7 @@ public class Node {
         case expression
         case comment
         case output
+        case leftMargin(margin: Int)
         case helper(name: String)
     }
 

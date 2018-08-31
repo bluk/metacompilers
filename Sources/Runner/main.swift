@@ -29,27 +29,41 @@ guard let dataAsStr = String(data: data, encoding: .utf8) else {
     exit(1)
 }
 
-func traverseNodes(node: Node) {
-    switch (node.type) {
-    case .root:
-        for child in node.children {
-            traverseNodes(node: child)
-        }
-    case .output:
-        var outputBuffer = ""
-        for child in node.children {
-            switch (child.type) {
-            case .text:
-                if let content = child.content {
-                    outputBuffer += content
-                }
-            default:
-                fatalError("Unexpected child")
+class CodeGenerator {
+    var outputBuffer = ""
+    var leftMargin = 0
+
+    func traverseNodes(node: Node) {
+        switch (node.type) {
+        case .root:
+            for child in node.children {
+                traverseNodes(node: child)
             }
+        case .leftMargin(let margin):
+            leftMargin = margin
+        case .output:
+            for child in node.children {
+                switch (child.type) {
+                case .text:
+                    if let content = child.content {
+                        // output string
+                        var indent = 0
+                        // if newline last output, add left margin before string
+                        if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == "\n" {
+                            indent = leftMargin
+                            while indent > 0 { outputBuffer += " "; indent -= 1 }
+                        }
+                        outputBuffer += content
+                    }
+                case .leftMargin(let margin):
+                    leftMargin = margin
+                default:
+                    fatalError("Unexpected child")
+                }
+            }
+        default:
+            break
         }
-        print(outputBuffer, terminator: "")
-    default:
-        break
     }
 }
 
@@ -59,7 +73,9 @@ do {
     if (isCompilerOutput) {
         print(compiler.outputBuffer)
     } else {
-        traverseNodes(node: compiler.rootAST)
+        let generator = CodeGenerator()
+        generator.traverseNodes(node: compiler.rootAST)
+        print(generator.outputBuffer)
     }
 } catch Compiler.CompilerError.parseFailure(let rule, let inputOffset) {
     print("Compiler Error:")

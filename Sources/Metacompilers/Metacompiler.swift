@@ -49,6 +49,8 @@ public class Compiler {
             latestNode = Node(type: .text)
             latestNode?.content = "public class Compiler {"
             add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
             add(childNode: latestNode!)
@@ -93,6 +95,17 @@ public class Compiler {
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "}"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
         }
     }
 
@@ -108,6 +121,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "public func compile(_ input: String) throws {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -195,6 +210,8 @@ public class Compiler {
             latestNode = Node(type: .text)
             latestNode?.content = "if !self.isParsed {"
             add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
             add(childNode: latestNode!)
@@ -231,6 +248,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -244,6 +263,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -283,6 +304,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -458,6 +481,8 @@ public class Compiler {
             latestNode = Node(type: .text)
             latestNode?.content = "public init() {"
             add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
             add(childNode: latestNode!)
@@ -479,6 +504,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -496,6 +523,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func initialize () {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -633,6 +662,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -650,6 +681,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func contextPush(_ rulename: String) {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -724,6 +757,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -741,6 +776,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func contextPop() {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -774,6 +811,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -791,6 +830,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func out(_ output: String) {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -915,6 +956,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -932,6 +975,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func add(childNode: Node) {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -954,6 +999,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -971,6 +1018,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func pushLastChildAsNodeContext() {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1004,6 +1053,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1021,6 +1072,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func popNodeContext() {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1043,6 +1096,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1060,6 +1115,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func eol () {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1109,6 +1166,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1126,6 +1185,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func test (_ stringToCompare: String) {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1313,6 +1374,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1330,6 +1393,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "public enum CompilerError: Error {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1352,6 +1417,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1369,6 +1436,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "func err() throws {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1402,6 +1471,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1436,6 +1507,8 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "() throws {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1491,6 +1564,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1525,6 +1600,8 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "() throws {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -1562,6 +1639,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1621,6 +1700,8 @@ public class Compiler {
                     latestNode = Node(type: .text)
                     latestNode?.content = "if !self.isParsed {"
                     add(childNode: latestNode!)
+                    latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                    add(childNode: latestNode!)
                     latestNode = Node(type: .text)
                     latestNode?.content = "\n"
                     add(childNode: latestNode!)
@@ -1632,6 +1713,8 @@ public class Compiler {
                     self.eol()
                     add(childNode: Node(type: .output))
                     pushLastChildAsNodeContext()
+                    latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                    add(childNode: latestNode!)
                     latestNode = Node(type: .text)
                     latestNode?.content = "}"
                     add(childNode: latestNode!)
@@ -1732,6 +1815,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -1873,6 +1958,8 @@ public class Compiler {
                 latestNode = Node(type: .text)
                 latestNode?.content = "while self.isParsed {"
                 add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
                 add(childNode: latestNode!)
@@ -1884,6 +1971,8 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "}"
                 add(childNode: latestNode!)
@@ -2306,11 +2395,49 @@ public class Compiler {
         if !self.isParsed {
             self.test(".LM+")
             if self.isParsed {
+                self.out("latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))")
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: latestNode!)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if !self.isParsed {
             self.test(".LM-")
             if self.isParsed {
+                self.out("latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))")
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: latestNode!)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
     }
@@ -2333,6 +2460,8 @@ public class Compiler {
                     latestNode = Node(type: .text)
                     latestNode?.content = "if !self.isParsed {"
                     add(childNode: latestNode!)
+                    latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                    add(childNode: latestNode!)
                     latestNode = Node(type: .text)
                     latestNode?.content = "\n"
                     add(childNode: latestNode!)
@@ -2344,6 +2473,8 @@ public class Compiler {
                     self.eol()
                     add(childNode: Node(type: .output))
                     pushLastChildAsNodeContext()
+                    latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                    add(childNode: latestNode!)
                     latestNode = Node(type: .text)
                     latestNode?.content = "}"
                     add(childNode: latestNode!)
@@ -2370,6 +2501,8 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
             latestNode?.content = "if self.isParsed {"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -2399,6 +2532,8 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "}"
             add(childNode: latestNode!)
@@ -2416,16 +2551,49 @@ public class Compiler {
         if self.isParsed {
             self.out("self.isToken = true")
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "self.isToken = true"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
             self.out("self.token = ")
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "self.token = "
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = String(UnicodeScalar(34))
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = String(UnicodeScalar(34))
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
         }
         if !self.isParsed {
             self.test(".DELTOK")
             if self.isParsed {
                 self.out("self.isToken = false")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "self.isToken = false"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -2433,19 +2601,59 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.isParsed = true")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "self.isParsed = true"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "while self.isParsed {"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 try self.ruleTX3()
                 if !self.isParsed { try self.err() }
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.out("}")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "}"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if self.isParsed {
             self.out("self.isParsed = true")
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "self.isParsed = true"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
         }
         if !self.isParsed {
             self.test(".ANYBUT(")
@@ -2456,14 +2664,54 @@ public class Compiler {
                 if !self.isParsed { try self.err() }
                 self.out("self.isParsed = !self.isParsed")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "self.isParsed = !self.isParsed"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("if self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "if self.isParsed {"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("self.inp += 1 }")
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "self.inp += 1 }"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -2476,11 +2724,42 @@ public class Compiler {
                 self.out("if self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "if self.isParsed {"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 self.out("self.inp += 1 }")
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "self.inp += 1 }"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -2490,6 +2769,21 @@ public class Compiler {
                 self.out(self.token)
                 self.out("()")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "try self.rule"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = self.token
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "()"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -2511,6 +2805,17 @@ public class Compiler {
         self.stack[self.stack.count - 1].leftMargin += 4
         self.eol()
         if true {
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "self.isParsed ="
+            add(childNode: latestNode!)
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
             try self.ruleCX2()
             if !self.isParsed { try self.err() }
             self.isParsed = true
@@ -2519,6 +2824,15 @@ public class Compiler {
                 if self.isParsed {
                     self.out(" ||")
                     self.eol()
+                    add(childNode: Node(type: .output))
+                    pushLastChildAsNodeContext()
+                    latestNode = Node(type: .text)
+                    latestNode?.content = " ||"
+                    add(childNode: latestNode!)
+                    latestNode = Node(type: .text)
+                    latestNode?.content = "\n"
+                    add(childNode: latestNode!)
+                    popNodeContext()
                     try self.ruleCX2()
                     if !self.isParsed { try self.err() }
                 }
@@ -2527,6 +2841,14 @@ public class Compiler {
             if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
         }
     }
 
@@ -2541,17 +2863,53 @@ public class Compiler {
                 self.out(self.token)
                 self.out(" ) &&")
                 self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "(Array(self.inbuf.utf8)[self.inp] >= "
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = self.token
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = " ) &&"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
                 try self.ruleCX3()
                 if !self.isParsed { try self.err() }
                 self.out(" (Array(self.inbuf.utf8)[self.inp] <= ")
                 self.out(self.token)
                 self.out("  )")
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = " (Array(self.inbuf.utf8)[self.inp] <= "
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = self.token
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "  )"
+                add(childNode: latestNode!)
+                popNodeContext()
             }
             if !self.isParsed {
                 self.isParsed = true
                 if self.isParsed {
                     self.out("Array(self.inbuf.utf8)[self.inp] == ")
                     self.out(self.token)
+                    add(childNode: Node(type: .output))
+                    pushLastChildAsNodeContext()
+                    latestNode = Node(type: .text)
+                    latestNode?.content = "Array(self.inbuf.utf8)[self.inp] == "
+                    add(childNode: latestNode!)
+                    latestNode = Node(type: .text)
+                    latestNode?.content = self.token
+                    add(childNode: latestNode!)
+                    popNodeContext()
                 }
             }
             if !self.isParsed { try self.err() }
