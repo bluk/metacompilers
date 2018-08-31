@@ -18,9 +18,7 @@ PREAMBLE = .OUT('public func compile(_ input: String) -> Bool {' .LM+ .NL)
            .OUT('self.inbuf = input' .NL)
            .OUT('self.initialize()' .NL)
            .OUT('// call the first rule' .NL)
-           .OUT('self.contextPush(' 34 * 34 ')' .NL)
            .OUT('self.rule' * '()' .NL)
-           .OUT('self.contextPop()' .NL)
            .OUT('// special case handling of first rule failure' .NL)
            .OUT('if !self.isError && !self.isParsed {' .LM+ .NL)
            .OUT('self.isError = true' .NL)
@@ -123,11 +121,15 @@ POSTAMBLE =
 
 [ parsing rule definition ]
 PR = ID .OUT('func rule'* '() {' .LM+ .NL)
+     .OUT('self.contextPush(' 34 * 34 ')' .NL)
+     .OUT('defer { self.contextPop() }' .NL)
      '=' EX1 ';'
      .OUT(.LM- '}' .NL .NL) ;
 
 [ token rule definition ]
 TR = ID .OUT('func rule'* '() {' .LM+ .NL)
+     .OUT('self.contextPush(' 34 * 34 ')' .NL)
+     .OUT('defer { self.contextPop() } ' .NL)
      ':' TX1 ';'
      .OUT(.LM- '}' .NL .NL) ;
 
@@ -141,10 +143,7 @@ EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .N
       $(EX3 .OUT('if !self.isParsed { self.err() }' .NL) / OUTPUT)
       .OUT(.LM- '}' .NL) ;
 
-
-EX3 = ID        .OUT('self.contextPush(' 34 * 34 ')' .NL)
-                .OUT('self.rule' * '()' .NL)
-                .OUT('self.contextPop()' .NL)
+EX3 = ID        .OUT('self.rule' * '()' .NL)
                 .OUT('if self.isError { return }' .NL)  /
       STRING    .OUT('self.test(' 34 * 34 ')' .NL) /
       '(' EX1 ')'                            /
@@ -193,9 +192,7 @@ TX3 = ( '.TOKEN'  .OUT('self.isToken = true' .NL)
         .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
         .OUT('self.inp += 1 }' .LM- .NL) /
       ID
-        .OUT('self.contextPush(' 34 * 34 ')' .NL)
         .OUT('self.rule' * '()' .NL)
-        .OUT('self.contextPop()' .NL)
         .OUT('if self.isError { return }' .NL)  /
       '(' TX1 ')'  ;
 
