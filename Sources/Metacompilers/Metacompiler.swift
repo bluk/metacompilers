@@ -25,10 +25,40 @@ public class Compiler {
             self.out(self.token)
             self.out(" compiler")
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "// "
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = self.token
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = " compiler"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
             self.out("public class Compiler {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "// "
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = self.token
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = " compiler"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
             try self.rulePREAMBLE()
             if !self.isParsed { try self.err() }
             self.isParsed = true
@@ -149,6 +179,8 @@ public class Compiler {
             self.eol()
             self.out("var currentNode: Node?")
             self.eol()
+            self.out("var latestNode: Node?")
+            self.eol()
             self.out("var nodeContextStack: [Node] = []")
             self.eol()
             self.out("var stack: [StackFrame] = []")
@@ -266,11 +298,9 @@ public class Compiler {
             self.out("func pushLastChildAsNodeContext() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            self.out("let node = currentNode!.children.last!")
+            self.out("nodeContextStack.append(currentNode!)")
             self.eol()
-            self.out("nodeContextStack.append(node)")
-            self.eol()
-            self.out("currentNode = node")
+            self.out("currentNode = currentNode!.children.last!")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
@@ -665,23 +695,6 @@ public class Compiler {
             }
         }
         if !self.isParsed {
-            self.test(".LB")
-            if self.isParsed {
-            }
-        }
-        if !self.isParsed {
-            self.test(".TB")
-            if self.isParsed {
-                self.out("self.out(")
-                self.out(String(UnicodeScalar(34)))
-                self.out(String(UnicodeScalar(92)))
-                self.out("t")
-                self.out(String(UnicodeScalar(34)))
-                self.out(")")
-                self.eol()
-            }
-        }
-        if !self.isParsed {
             self.test(".LM+")
             if self.isParsed {
                 self.out("self.stack[self.stack.count - 1].leftMargin += 4")
@@ -706,11 +719,8 @@ public class Compiler {
         if self.isParsed {
             self.test("(")
             if !self.isParsed { try self.err() }
-            self.out("self.add(childNode: ")
             try self.ruleNODETYPE()
             if !self.isParsed { try self.err() }
-            self.out(")")
-            self.eol()
             self.test(")")
             if !self.isParsed { try self.err() }
         }
@@ -739,11 +749,87 @@ public class Compiler {
         defer { self.contextPop() }
         self.test(".NODEOUTPUT")
         if self.isParsed {
-            self.out("Node(type: .output)")
+            self.out("add(childNode: Node(type: .output))")
+            self.eol()
+            self.out("pushLastChildAsNodeContext()")
+            self.eol()
+            self.isParsed = true
+            while self.isParsed {
+                try self.ruleNODECONTENT()
+            }
+            self.isParsed = true
+            if !self.isParsed { try self.err() }
+            self.out("popNodeContext()")
+            self.eol()
         }
     }
 
-    // NODECONTENT = '*' .OUT( 
+    func ruleNODECONTENT() throws {
+        self.contextPush("NODECONTENT")
+        defer { self.contextPop() }
+        self.test("*")
+        if self.isParsed {
+            self.out("latestNode = Node(type: .text)")
+            self.eol()
+            self.out("latestNode?.content = self.token")
+            self.eol()
+            self.out("add(childNode: latestNode!)")
+            self.eol()
+        }
+        if !self.isParsed {
+            try self.ruleSTRING()
+            if self.isParsed {
+                self.out("latestNode = Node(type: .text)")
+                self.eol()
+                self.out("latestNode?.content = ")
+                self.out(String(UnicodeScalar(34)))
+                self.out(self.token)
+                self.out(String(UnicodeScalar(34)))
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+            }
+        }
+        if !self.isParsed {
+            try self.ruleNUMBER()
+            if self.isParsed {
+                self.out("latestNode = Node(type: .text)")
+                self.eol()
+                self.out("latestNode?.content = String(UnicodeScalar(")
+                self.out(self.token)
+                self.out("))")
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NL")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .text)")
+                self.eol()
+                self.out("latestNode?.content = ")
+                self.out(String(UnicodeScalar(34)))
+                self.out(String(UnicodeScalar(92)))
+                self.out("n")
+                self.out(String(UnicodeScalar(34)))
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+            }
+        }
+        if !self.isParsed {
+            self.test(".LM+")
+            if self.isParsed {
+            }
+        }
+        if !self.isParsed {
+            self.test(".LM-")
+            if self.isParsed {
+            }
+        }
+    }
+
     // token expressions 
     func ruleTX1() throws {
         self.contextPush("TX1")
@@ -1152,6 +1238,7 @@ public class Compiler {
     public var token = ""
     public var rootAST = Node(type: .root)
     var currentNode: Node?
+    var latestNode: Node?
     var nodeContextStack: [Node] = []
     var stack: [StackFrame] = []
 
@@ -1201,9 +1288,8 @@ public class Compiler {
     }
 
     func pushLastChildAsNodeContext() {
-        let node = currentNode!.children.last!
-        nodeContextStack.append(node)
-        currentNode = node
+        nodeContextStack.append(currentNode!)
+        currentNode = currentNode!.children.last!
     }
 
     func popNodeContext() {

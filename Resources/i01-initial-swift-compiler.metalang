@@ -3,8 +3,8 @@
 [ body of compiler definition ]
 
 PROGRAM = '.SYNTAX' ID
-          .OUT(.LB '// ' * ' compiler' .NL)
-          .OUT('public class Compiler {' .LM+ .NL .NL)
+          .OUT('// ' * ' compiler' .NL) .NODE(.NODEOUTPUT '// ' * ' compiler' .NL)
+          .OUT('public class Compiler {' .LM+ .NL .NL) .NODE(.NODEOUTPUT '// ' * ' compiler' .NL)
           PREAMBLE
           $(PR / COMMENT)
           '.TOKENS'
@@ -44,6 +44,7 @@ POSTAMBLE =
            .OUT('public var token = ' 34 34 .NL)
            .OUT('public var rootAST = Node(type: .root)' .NL)
            .OUT('var currentNode: Node?' .NL)
+           .OUT('var latestNode: Node?' .NL)
            .OUT('var nodeContextStack: [Node] = []' .NL)
            .OUT('var stack: [StackFrame] = []' .NL .NL)
 
@@ -93,9 +94,8 @@ POSTAMBLE =
            .OUT(.LM- '}' .NL .NL)
 
            .OUT('func pushLastChildAsNodeContext() {' .LM+ .NL)
-           .OUT('let node = currentNode!.children.last!' .NL)
-           .OUT('nodeContextStack.append(node)' .NL)
-           .OUT('currentNode = node' .NL)
+           .OUT('nodeContextStack.append(currentNode!)' .NL)
+           .OUT('currentNode = currentNode!.children.last!' .NL)
            .OUT(.LM- '}' .NL .NL)
 
            .OUT('func popNodeContext() {' .LM+ .NL)
@@ -178,20 +178,26 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        STRING  .OUT('self.out(' 34 * 34 ')' .NL) /
        NUMBER  .OUT('self.out(String(UnicodeScalar(' * ')))' .NL)        /
        '.NL'   .OUT('self.eol()' .NL)          /
-       '.LB'             /
-       '.TB'   .OUT('self.out(' 34 92 't' 34 ')' .NL)          /
        '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
        '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) ;
 
 [ .NODE( .NODE_COMMENT '//' * ' compiler' ) ]
 [node expressions ]
-NODE = '.NODE' '(' .OUT('self.add(childNode: ') NODETYPE .OUT(')' .NL) ')';
+NODE = '.NODE' '(' NODETYPE ')';
 NODECONTEXTPUSH = '.NODECONTEXTPUSH' .OUT('self.pushLastChildAsNodeContext()') ;
 NODECONTEXTPOP = '.NODECONTEXTPOP' .OUT('self.popNodeContext()') ;
 
-NODETYPE = '.NODEOUTPUT' .OUT('Node(type: .output)') ;
+NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)
+                         $NODECONTENT
+                         .OUT('popNodeContext()' .NL) ;
 
-[ NODECONTENT = '*' .OUT( ]
+NODECONTENT = '*' .OUT('latestNode = Node(type: .text)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL ) /
+              STRING .OUT('latestNode = Node(type: .text)' .NL 'latestNode?.content = ' 34 * 34 .NL 'add(childNode: latestNode!)' .NL ) /
+              NUMBER .OUT('latestNode = Node(type: .text)' .NL 'latestNode?.content = String(UnicodeScalar(' * '))' .NL 'add(childNode: latestNode!)' .NL ) /
+              '.NL' .OUT('latestNode = Node(type: .text)' .NL 'latestNode?.content = ' 34 92 'n' 34 .NL 'add(childNode: latestNode!)' .NL ) /
+              '.LM+' /
+              '.LM-'
+              ;
 
 [ token expressions ]
 TX1 = TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) ;
