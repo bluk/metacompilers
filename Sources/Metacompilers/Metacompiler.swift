@@ -145,6 +145,12 @@ public class Compiler {
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
             self.eol()
+            self.out("public var rootAST = Node(type: .root)")
+            self.eol()
+            self.out("var currentNode: Node?")
+            self.eol()
+            self.out("var nodeContextStack: [Node] = []")
+            self.eol()
             self.out("var stack: [StackFrame] = []")
             self.eol()
             self.eol()
@@ -178,11 +184,17 @@ public class Compiler {
             self.eol()
             self.out("self.stack = []")
             self.eol()
+            self.out("self.rootAST = Node(type: .root)")
+            self.eol()
+            self.out("self.currentNode = rootAST")
+            self.eol()
+            self.out("self.nodeContextStack = []")
+            self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
             self.eol()
-            self.out("func contextPush (_ rulename: String) {")
+            self.out("func contextPush(_ rulename: String) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("// push and initialize a new stackframe")
@@ -201,7 +213,7 @@ public class Compiler {
             self.out("}")
             self.eol()
             self.eol()
-            self.out("func contextPop () {")
+            self.out("func contextPop() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("// pop and possibly deallocate old stackframe")
@@ -212,7 +224,7 @@ public class Compiler {
             self.out("}")
             self.eol()
             self.eol()
-            self.out("func out (_ output: String) {")
+            self.out("func out(_ output: String) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("// output string")
@@ -237,6 +249,37 @@ public class Compiler {
             self.out("; indent -= 1 } }")
             self.eol()
             self.out("self.outputBuffer += output")
+            self.eol()
+            self.stack[self.stack.count - 1].leftMargin -= 4
+            self.out("}")
+            self.eol()
+            self.eol()
+            self.out("func add(childNode: Node) {")
+            self.stack[self.stack.count - 1].leftMargin += 4
+            self.eol()
+            self.out("currentNode?.children.append(childNode)")
+            self.eol()
+            self.stack[self.stack.count - 1].leftMargin -= 4
+            self.out("}")
+            self.eol()
+            self.eol()
+            self.out("func pushLastChildAsNodeContext() {")
+            self.stack[self.stack.count - 1].leftMargin += 4
+            self.eol()
+            self.out("let node = currentNode!.children.last!")
+            self.eol()
+            self.out("nodeContextStack.append(node)")
+            self.eol()
+            self.out("currentNode = node")
+            self.eol()
+            self.stack[self.stack.count - 1].leftMargin -= 4
+            self.out("}")
+            self.eol()
+            self.eol()
+            self.out("func popNodeContext() {")
+            self.stack[self.stack.count - 1].leftMargin += 4
+            self.eol()
+            self.out("currentNode = nodeContextStack.popLast()!")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
@@ -441,6 +484,14 @@ public class Compiler {
                 self.eol()
             }
         }
+        if !self.isParsed {
+            try self.ruleNODE()
+            if self.isParsed {
+                self.out("if true {")
+                self.stack[self.stack.count - 1].leftMargin += 4
+                self.eol()
+            }
+        }
         if self.isParsed {
             self.isParsed = true
             while self.isParsed {
@@ -612,6 +663,31 @@ public class Compiler {
                 self.out("self.stack[self.stack.count - 1].leftMargin -= 4")
                 self.eol()
             }
+        }
+    }
+
+    //node expressions 
+    func ruleNODE() throws {
+        self.contextPush("NODE")
+        defer { self.contextPop() }
+        self.test(".NODE")
+        if self.isParsed {
+            self.test("(")
+            if !self.isParsed { try self.err() }
+            self.out("self.addNode(")
+            try self.ruleNODETYPE()
+            if !self.isParsed { try self.err() }
+            self.test(")")
+            if !self.isParsed { try self.err() }
+            self.out(")")
+        }
+    }
+
+    func ruleNODETYPE() throws {
+        self.contextPush("NODETYPE")
+        defer { self.contextPop() }
+        self.out(".content")
+        if true {
         }
     }
 
@@ -1021,6 +1097,9 @@ public class Compiler {
     var inbuf = ""
     public var outputBuffer = ""
     public var token = ""
+    public var rootAST = Node(type: .root)
+    var currentNode: Node?
+    var nodeContextStack: [Node] = []
     var stack: [StackFrame] = []
 
     public init() {
@@ -1035,9 +1114,12 @@ public class Compiler {
         self.outputBuffer = ""
         self.token = ""
         self.stack = []
+        self.rootAST = Node(type: .root)
+        self.currentNode = rootAST
+        self.nodeContextStack = []
     }
 
-    func contextPush (_ rulename: String) {
+    func contextPush(_ rulename: String) {
         // push and initialize a new stackframe
         // new context inherits current context left margin
         var leftMargin = 0
@@ -1046,12 +1128,12 @@ public class Compiler {
         self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))
     }
 
-    func contextPop () {
+    func contextPop() {
         // pop and possibly deallocate old stackframe
         _ = self.stack.popLast() // pop stackframe
     }
 
-    func out (_ output: String) {
+    func out(_ output: String) {
         // output string
         var indent = 0
         // if newline last output, add left margin before string
@@ -1059,6 +1141,20 @@ public class Compiler {
           indent = self.stack[self.stack.count - 1].leftMargin
           while indent > 0 { self.outputBuffer += " "; indent -= 1 } }
         self.outputBuffer += output
+    }
+
+    func add(childNode: Node) {
+        currentNode?.children.append(childNode)
+    }
+
+    func pushLastChildAsNodeContext() {
+        let node = currentNode!.children.last!
+        nodeContextStack.append(node)
+        currentNode = node
+    }
+
+    func popNodeContext() {
+        currentNode = nodeContextStack.popLast()!
     }
 
     func eol () {

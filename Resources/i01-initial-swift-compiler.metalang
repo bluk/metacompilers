@@ -41,6 +41,9 @@ POSTAMBLE =
            .OUT('var inbuf = ' 34 34 .NL)
            .OUT('public var outputBuffer = ' 34 34 .NL)
            .OUT('public var token = ' 34 34 .NL)
+           .OUT('public var rootAST = Node(type: .root)' .NL)
+           .OUT('var currentNode: Node?' .NL)
+           .OUT('var nodeContextStack: [Node] = []' .NL)
            .OUT('var stack: [StackFrame] = []' .NL .NL)
 
            .OUT('public init() {'.LM+ .NL)
@@ -55,9 +58,13 @@ POSTAMBLE =
            .OUT('self.outputBuffer = ' 34 34 .NL)
            .OUT('self.token = ' 34 34 .NL)
            .OUT('self.stack = []' .NL)
+           .OUT('self.rootAST = Node(type: .root)' .NL)
+           .OUT('self.currentNode = rootAST' .NL)
+           .OUT('self.nodeContextStack = []' .NL)
+
            .OUT(.LM- '}' .NL .NL)
 
-           .OUT('func contextPush (_ rulename: String) {' .LM+ .NL)
+           .OUT('func contextPush(_ rulename: String) {' .LM+ .NL)
            .OUT('// push and initialize a new stackframe' .NL)
            .OUT('// new context inherits current context left margin' .NL)
            .OUT('var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL)
@@ -65,12 +72,12 @@ POSTAMBLE =
            .OUT('self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL)
            .OUT(.LM- '}' .NL .NL)
 
-           .OUT('func contextPop () {' .LM+ .NL)
+           .OUT('func contextPop() {' .LM+ .NL)
            .OUT('// pop and possibly deallocate old stackframe' .NL)
            .OUT('_ = self.stack.popLast() // pop stackframe' .NL)
            .OUT(.LM- '}' .NL .NL)
 
-           .OUT('func out (_ output: String) {' .LM+ .NL)
+           .OUT('func out(_ output: String) {' .LM+ .NL)
            .OUT('// output string' .NL)
            .OUT('var indent = 0' .NL)
            .OUT('// if newline last output, add left margin before string' .NL)
@@ -78,6 +85,20 @@ POSTAMBLE =
            .OUT('  indent = self.stack[self.stack.count - 1].leftMargin' .NL)
            .OUT('  while indent > 0 { self.outputBuffer += ' 34 ' ' 34 '; indent -= 1 } }' .NL)
            .OUT('self.outputBuffer += output' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func add(childNode: Node) {' .LM+ .NL)
+           .OUT('currentNode?.children.append(childNode)' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func pushLastChildAsNodeContext() {' .LM+ .NL)
+           .OUT('let node = currentNode!.children.last!' .NL)
+           .OUT('nodeContextStack.append(node)' .NL)
+           .OUT('currentNode = node' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func popNodeContext() {' .LM+ .NL)
+           .OUT('currentNode = nodeContextStack.popLast()!' .NL)
            .OUT(.LM- '}' .NL .NL)
 
            .OUT('func eol () {' .LM+ .NL)
@@ -133,7 +154,7 @@ COMMENT = '[' CMLINE ']' .OUT('//' * .NL) ;
 [ parsing expressions ]
 EX1 = EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) ) ;
 
-EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) )
+EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) )
       $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) / OUTPUT)
       .OUT(.LM- '}' .NL) ;
 
@@ -150,7 +171,7 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) /
           .OUT('self.isParsed = true' .NL) ;
 
 [ output expressions ]
-OUTPUT = '.OUT' '('$OUT1 ')' ;
+OUTPUT = '.OUT' '(' $OUT1 ')' ;
 
 OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        STRING  .OUT('self.out(' 34 * 34 ')' .NL) /
@@ -160,6 +181,11 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        '.TB'   .OUT('self.out(' 34 92 't' 34 ')' .NL)          /
        '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
        '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) ;
+
+[node expressions ]
+NODE = '.NODE' '(' .OUT('self.addNode(') NODETYPE ')' .OUT(')') ;
+
+NODETYPE = .OUT('.content') ;
 
 [ token expressions ]
 TX1 = TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) ;
