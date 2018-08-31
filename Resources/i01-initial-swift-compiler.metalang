@@ -34,7 +34,6 @@ PREAMBLE = .OUT('public func compile(_ input: String) -> Bool {' .LM+ .NL)
 POSTAMBLE =
 
            .OUT('struct StackFrame {' .LM+ .NL)
-           .OUT('var generatedLabel: Int' .NL)
            .OUT('var erule: String' .NL)
            .OUT('var leftMargin: Int' .NL)
            .OUT(.LM- '}' .NL)
@@ -49,7 +48,6 @@ POSTAMBLE =
            .OUT('public var erule = ' 34 34  .NL)
            .OUT('public var einput = 0' .NL)
            .OUT('public var token = ' 34 34 .NL)
-           .OUT('var labelCount = 0' .NL)
            .OUT('var stack: [StackFrame] = []' .NL .NL)
 
            .OUT('public init() {'.LM+ .NL)
@@ -66,7 +64,6 @@ POSTAMBLE =
            .OUT('self.erule = ' 34 34 .NL)
            .OUT('self.einput = 0' .NL)
            .OUT('self.token = ' 34 34 .NL)
-           .OUT('self.labelCount = 1' .NL)
            .OUT('self.stack = []' .NL)
            .OUT(.LM- '}' .NL .NL)
 
@@ -75,7 +72,7 @@ POSTAMBLE =
            .OUT('// new context inherits current context left margin' .NL)
            .OUT('var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL)
            .OUT('// stackframe definition' .NL)
-           .OUT('self.stack.append(StackFrame(generatedLabel: 0, erule: rulename, leftMargin: leftMargin))' .NL)
+           .OUT('self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL)
            .OUT(.LM- '}' .NL .NL)
 
            .OUT('func contextPop () {' .LM+ .NL)
@@ -166,10 +163,6 @@ OUTPUT = '.OUT' '('$OUT1 ')' ;
 OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        STRING  .OUT('self.out(' 34 * 34 ')' .NL) /
        NUMBER  .OUT('self.out(String(UnicodeScalar(' * ')))' .NL)        /
-       '#'     .OUT('if self.stack[self.stack.count - 1].generatedLabel == 0 {' .LM+ .NL)
-               .OUT('self.stack[self.stack.count - 1] = self.labelCount' .NL)
-               .OUT('self.labelCount += 1 }' .LM- .NL)
-               .OUT('self.out(self.stack[self.stack.count - 1].generatedLabel)' .NL) /
        '.NL'   .OUT('self.eol()' .NL)          /
        '.LB'             /
        '.TB'   .OUT('self.out(' 34 92 't' 34 ')' .NL)          /

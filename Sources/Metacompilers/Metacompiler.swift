@@ -149,8 +149,6 @@ public class Compiler {
         self.stack[self.stack.count - 1].leftMargin += 4
         self.eol()
         if true {
-            self.out("var generatedLabel: Int")
-            self.eol()
             self.out("var erule: String")
             self.eol()
             self.out("var leftMargin: Int")
@@ -185,8 +183,6 @@ public class Compiler {
             self.out("public var token = ")
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
-            self.eol()
-            self.out("var labelCount = 0")
             self.eol()
             self.out("var stack: [StackFrame] = []")
             self.eol()
@@ -227,8 +223,6 @@ public class Compiler {
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
             self.eol()
-            self.out("self.labelCount = 1")
-            self.eol()
             self.out("self.stack = []")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -248,7 +242,7 @@ public class Compiler {
             self.eol()
             self.out("// stackframe definition")
             self.eol()
-            self.out("self.stack.append(StackFrame(generatedLabel: 0, erule: rulename, leftMargin: leftMargin))")
+            self.out("self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
@@ -652,21 +646,6 @@ public class Compiler {
                 self.out("self.out(String(UnicodeScalar(")
                 self.out(self.token)
                 self.out(")))")
-                self.eol()
-            }
-        }
-        if !self.isParsed {
-            self.test("#")
-            if self.isParsed {
-                self.out("if self.stack[self.stack.count - 1].generatedLabel == 0 {")
-                self.stack[self.stack.count - 1].leftMargin += 4
-                self.eol()
-                self.out("self.stack[self.stack.count - 1] = self.labelCount")
-                self.eol()
-                self.out("self.labelCount += 1 }")
-                self.stack[self.stack.count - 1].leftMargin -= 4
-                self.eol()
-                self.out("self.out(self.stack[self.stack.count - 1].generatedLabel)")
                 self.eol()
             }
         }
@@ -1161,7 +1140,6 @@ public class Compiler {
     }
 
     struct StackFrame {
-        var generatedLabel: Int
         var erule: String
         var leftMargin: Int
     }
@@ -1175,7 +1153,6 @@ public class Compiler {
     public var erule = ""
     public var einput = 0
     public var token = ""
-    var labelCount = 0
     var stack: [StackFrame] = []
 
     public init() {
@@ -1192,7 +1169,6 @@ public class Compiler {
         self.erule = ""
         self.einput = 0
         self.token = ""
-        self.labelCount = 1
         self.stack = []
     }
 
@@ -1202,7 +1178,7 @@ public class Compiler {
         var leftMargin = 0
         if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }
         // stackframe definition
-        self.stack.append(StackFrame(generatedLabel: 0, erule: rulename, leftMargin: leftMargin))
+        self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))
     }
 
     func contextPop () {
