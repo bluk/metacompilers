@@ -1,6 +1,7 @@
 .SYNTAX PROGRAM
 
 [ body of compiler definition ]
+
 PROGRAM = '.SYNTAX' ID
           .OUT(.LB '// ' * ' compiler' .NL)
           .OUT('public class Compiler {' .LM+ .NL .NL)
@@ -116,7 +117,7 @@ POSTAMBLE =
            .OUT('       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}' .NL)
            .OUT('// test string case insensitive' .NL)
            .OUT('self.isParsed = true' .NL)
-.OUT('while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL)
+           .OUT('while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL)
            .OUT('self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==' .NL)
            .OUT('                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()' .NL)
            .OUT('  inputOffset += 1 }' .NL)
@@ -154,8 +155,8 @@ COMMENT = '[' CMLINE ']' .OUT('//' * .NL) ;
 [ parsing expressions ]
 EX1 = EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) ) ;
 
-EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) )
-      $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) / OUTPUT)
+EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) / NODECONTEXTPUSH .OUT('if true {' .LM+ .NL) / NODECONTEXTPOP .OUT('if true {' .LM+ .NL) )
+      $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) / OUTPUT / NODE / NODECONTEXTPUSH / NODECONTEXTPOP)
       .OUT(.LM- '}' .NL) ;
 
 EX3 = ID        .OUT('try self.rule' * '()' .NL) /
@@ -182,10 +183,15 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
        '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) ;
 
+[ .NODE( .NODE_COMMENT '//' * ' compiler' ) ]
 [node expressions ]
-NODE = '.NODE' '(' .OUT('self.addNode(') NODETYPE ')' .OUT(')') ;
+NODE = '.NODE' '(' .OUT('self.add(childNode: ') NODETYPE .OUT(')' .NL) ')';
+NODECONTEXTPUSH = '.NODECONTEXTPUSH' .OUT('self.pushLastChildAsNodeContext()') ;
+NODECONTEXTPOP = '.NODECONTEXTPOP' .OUT('self.popNodeContext()') ;
 
-NODETYPE = .OUT('.content') ;
+NODETYPE = '.NODEOUTPUT' .OUT('Node(type: .output)') ;
+
+[ NODECONTENT = '*' .OUT( ]
 
 [ token expressions ]
 TX1 = TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) ;

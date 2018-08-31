@@ -20,8 +20,10 @@ public class Node {
 
     public enum NodeType {
         case root
-        case content
+        case text
         case statement
+        case expression
+        case comment
         case output
         case helper(name: String)
     }
@@ -34,16 +36,4 @@ public class Node {
     public init(type: NodeType) {
         self.type = type
     }
-}
-
-func addChildNode() {
-
-}
-
-func pushNodeStack() {
-
-}
-
-func popNodeStack() {
-
 }

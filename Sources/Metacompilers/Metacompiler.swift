@@ -492,6 +492,22 @@ public class Compiler {
                 self.eol()
             }
         }
+        if !self.isParsed {
+            try self.ruleNODECONTEXTPUSH()
+            if self.isParsed {
+                self.out("if true {")
+                self.stack[self.stack.count - 1].leftMargin += 4
+                self.eol()
+            }
+        }
+        if !self.isParsed {
+            try self.ruleNODECONTEXTPOP()
+            if self.isParsed {
+                self.out("if true {")
+                self.stack[self.stack.count - 1].leftMargin += 4
+                self.eol()
+            }
+        }
         if self.isParsed {
             self.isParsed = true
             while self.isParsed {
@@ -502,6 +518,21 @@ public class Compiler {
                 }
                 if !self.isParsed {
                     try self.ruleOUTPUT()
+                    if self.isParsed {
+                    }
+                }
+                if !self.isParsed {
+                    try self.ruleNODE()
+                    if self.isParsed {
+                    }
+                }
+                if !self.isParsed {
+                    try self.ruleNODECONTEXTPUSH()
+                    if self.isParsed {
+                    }
+                }
+                if !self.isParsed {
+                    try self.ruleNODECONTEXTPOP()
                     if self.isParsed {
                     }
                 }
@@ -666,6 +697,7 @@ public class Compiler {
         }
     }
 
+    // .NODE( .NODE_COMMENT '//' * ' compiler' ) 
     //node expressions 
     func ruleNODE() throws {
         self.contextPush("NODE")
@@ -674,23 +706,44 @@ public class Compiler {
         if self.isParsed {
             self.test("(")
             if !self.isParsed { try self.err() }
-            self.out("self.addNode(")
+            self.out("self.add(childNode: ")
             try self.ruleNODETYPE()
             if !self.isParsed { try self.err() }
+            self.out(")")
+            self.eol()
             self.test(")")
             if !self.isParsed { try self.err() }
-            self.out(")")
+        }
+    }
+
+    func ruleNODECONTEXTPUSH() throws {
+        self.contextPush("NODECONTEXTPUSH")
+        defer { self.contextPop() }
+        self.test(".NODECONTEXTPUSH")
+        if self.isParsed {
+            self.out("self.pushLastChildAsNodeContext()")
+        }
+    }
+
+    func ruleNODECONTEXTPOP() throws {
+        self.contextPush("NODECONTEXTPOP")
+        defer { self.contextPop() }
+        self.test(".NODECONTEXTPOP")
+        if self.isParsed {
+            self.out("self.popNodeContext()")
         }
     }
 
     func ruleNODETYPE() throws {
         self.contextPush("NODETYPE")
         defer { self.contextPop() }
-        self.out(".content")
-        if true {
+        self.test(".NODEOUTPUT")
+        if self.isParsed {
+            self.out("Node(type: .output)")
         }
     }
 
+    // NODECONTENT = '*' .OUT( 
     // token expressions 
     func ruleTX1() throws {
         self.contextPush("TX1")
