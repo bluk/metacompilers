@@ -173,8 +173,8 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL)          /
        '.NL'   .OUT('self.eol()' .NL)          /
        '.LB'             /
        '.TB'   .OUT('self.out(' 34 92 't' 34 ')' .NL)          /
-       '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 2' .NL) /
-       '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 2' .NL) ;
+       '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
+       '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) ;
 
 [ token expressions ]
 TX1 = TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) ;
