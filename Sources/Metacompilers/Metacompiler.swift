@@ -1,29 +1,26 @@
 // PROGRAM compiler
 public class Compiler {
 
-    public func compile(_ input: String) -> Bool {
+    public func compile(_ input: String) throws {
         // initialize compiler variables
         self.inbuf = input
         self.initialize()
         // call the first rule
-        self.rulePROGRAM()
+        try self.rulePROGRAM()
         // special case handling of first rule failure
-        if !self.isError && !self.isParsed {
-            self.isError = true
-            self.erule = "PROGRAM"
-            self.einput = self.inp }
-        return !self.isError
+        if !self.isParsed {
+            throw CompilerError.parseFailure(rule: "PROGRAM", inputOffset: self.inp)
+        }
     }
 
     // body of compiler definition 
-    func rulePROGRAM() {
+    func rulePROGRAM() throws {
         self.contextPush("PROGRAM")
         defer { self.contextPop() }
         self.test(".SYNTAX")
         if self.isParsed {
-            self.ruleID()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            try self.ruleID()
+            if !self.isParsed { try self.err() }
             self.out("// ")
             self.out(self.token)
             self.out(" compiler")
@@ -32,46 +29,40 @@ public class Compiler {
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.eol()
-            self.rulePREAMBLE()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            try self.rulePREAMBLE()
+            if !self.isParsed { try self.err() }
             self.isParsed = true
             while self.isParsed {
-                self.rulePR()
-                if self.isError { return }
+                try self.rulePR()
                 if self.isParsed {
                 }
                 if !self.isParsed {
-                    self.ruleCOMMENT()
-                    if self.isError { return }
+                    try self.ruleCOMMENT()
                     if self.isParsed {
                     }
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.test(".TOKENS")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.isParsed = true
             while self.isParsed {
-                self.ruleTR()
-                if self.isError { return }
+                try self.ruleTR()
                 if self.isParsed {
                 }
                 if !self.isParsed {
-                    self.ruleCOMMENT()
-                    if self.isError { return }
+                    try self.ruleCOMMENT()
                     if self.isParsed {
                     }
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.test(".END")
-            if !self.isParsed { self.err() }
-            self.rulePOSTAMBLE()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
+            try self.rulePOSTAMBLE()
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
@@ -79,10 +70,10 @@ public class Compiler {
     }
 
     // object definition preamble 
-    func rulePREAMBLE() {
+    func rulePREAMBLE() throws {
         self.contextPush("PREAMBLE")
         defer { self.contextPop() }
-        self.out("public func compile(_ input: String) -> Bool {")
+        self.out("public func compile(_ input: String) throws {")
         self.stack[self.stack.count - 1].leftMargin += 4
         self.eol()
         if true {
@@ -94,27 +85,23 @@ public class Compiler {
             self.eol()
             self.out("// call the first rule")
             self.eol()
-            self.out("self.rule")
+            self.out("try self.rule")
             self.out(self.token)
             self.out("()")
             self.eol()
             self.out("// special case handling of first rule failure")
             self.eol()
-            self.out("if !self.isError && !self.isParsed {")
+            self.out("if !self.isParsed {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            self.out("self.isError = true")
-            self.eol()
-            self.out("self.erule = ")
+            self.out("throw CompilerError.parseFailure(rule: ")
             self.out(String(UnicodeScalar(34)))
             self.out(self.token)
             self.out(String(UnicodeScalar(34)))
-            self.out("")
+            self.out(", inputOffset: self.inp)")
             self.eol()
-            self.out("self.einput = self.inp }")
             self.stack[self.stack.count - 1].leftMargin -= 4
-            self.eol()
-            self.out("return !self.isError")
+            self.out("}")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
@@ -124,7 +111,7 @@ public class Compiler {
     }
 
     // runtime and object definition postamble 
-    func rulePOSTAMBLE() {
+    func rulePOSTAMBLE() throws {
         self.contextPush("POSTAMBLE")
         defer { self.contextPop() }
         self.out("struct StackFrame {")
@@ -144,8 +131,6 @@ public class Compiler {
             self.eol()
             self.out("var isToken = false")
             self.eol()
-            self.out("var isError = false")
-            self.eol()
             self.out("var inp = 0")
             self.eol()
             self.out("var inbuf = ")
@@ -155,12 +140,6 @@ public class Compiler {
             self.out("public var outputBuffer = ")
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
-            self.eol()
-            self.out("public var erule = ")
-            self.out(String(UnicodeScalar(34)))
-            self.out(String(UnicodeScalar(34)))
-            self.eol()
-            self.out("public var einput = 0")
             self.eol()
             self.out("public var token = ")
             self.out(String(UnicodeScalar(34)))
@@ -187,19 +166,11 @@ public class Compiler {
             self.eol()
             self.out("self.isToken = false")
             self.eol()
-            self.out("self.isError = false")
-            self.eol()
             self.out("self.inp = 0")
             self.eol()
             self.out("self.outputBuffer = ")
             self.out(String(UnicodeScalar(34)))
             self.out(String(UnicodeScalar(34)))
-            self.eol()
-            self.out("self.erule = ")
-            self.out(String(UnicodeScalar(34)))
-            self.out(String(UnicodeScalar(34)))
-            self.eol()
-            self.out("self.einput = 0")
             self.eol()
             self.out("self.token = ")
             self.out(String(UnicodeScalar(34)))
@@ -325,16 +296,21 @@ public class Compiler {
             self.out("}")
             self.eol()
             self.eol()
-            self.out("func err() {")
+            self.out("public enum CompilerError: Error {")
+            self.stack[self.stack.count - 1].leftMargin += 4
+            self.eol()
+            self.out("case parseFailure(rule: String, inputOffset: Int)")
+            self.eol()
+            self.stack[self.stack.count - 1].leftMargin -= 4
+            self.out("}")
+            self.eol()
+            self.eol()
+            self.out("func err() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("// compilation error, provide error indication and context")
             self.eol()
-            self.out("self.isError = true")
-            self.eol()
-            self.out("self.erule = self.stack[self.stack.count - 1].erule")
-            self.eol()
-            self.out("self.einput = self.inp")
+            self.out("throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)")
             self.eol()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
@@ -344,15 +320,14 @@ public class Compiler {
     }
 
     // parsing rule definition 
-    func rulePR() {
+    func rulePR() throws {
         self.contextPush("PR")
         defer { self.contextPop() }
-        self.ruleID()
-        if self.isError { return }
+        try self.ruleID()
         if self.isParsed {
             self.out("func rule")
             self.out(self.token)
-            self.out("() {")
+            self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("self.contextPush(")
@@ -364,12 +339,11 @@ public class Compiler {
             self.out("defer { self.contextPop() }")
             self.eol()
             self.test("=")
-            if !self.isParsed { self.err() }
-            self.ruleEX1()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
+            try self.ruleEX1()
+            if !self.isParsed { try self.err() }
             self.test(";")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
@@ -378,15 +352,14 @@ public class Compiler {
     }
 
     // token rule definition 
-    func ruleTR() {
+    func ruleTR() throws {
         self.contextPush("TR")
         defer { self.contextPop() }
-        self.ruleID()
-        if self.isError { return }
+        try self.ruleID()
         if self.isParsed {
             self.out("func rule")
             self.out(self.token)
-            self.out("() {")
+            self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.out("self.contextPush(")
@@ -398,12 +371,11 @@ public class Compiler {
             self.out("defer { self.contextPop() } ")
             self.eol()
             self.test(":")
-            if !self.isParsed { self.err() }
-            self.ruleTX1()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
+            try self.ruleTX1()
+            if !self.isParsed { try self.err() }
             self.test(";")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
@@ -412,16 +384,15 @@ public class Compiler {
     }
 
     // comment definition 
-    func ruleCOMMENT() {
+    func ruleCOMMENT() throws {
         self.contextPush("COMMENT")
         defer { self.contextPop() }
         self.test("[")
         if self.isParsed {
-            self.ruleCMLINE()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            try self.ruleCMLINE()
+            if !self.isParsed { try self.err() }
             self.test("]")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.out("//")
             self.out(self.token)
             self.eol()
@@ -429,11 +400,10 @@ public class Compiler {
     }
 
     // parsing expressions 
-    func ruleEX1() {
+    func ruleEX1() throws {
         self.contextPush("EX1")
         defer { self.contextPop() }
-        self.ruleEX2()
-        if self.isError { return }
+        try self.ruleEX2()
         if self.isParsed {
             self.isParsed = true
             while self.isParsed {
@@ -442,32 +412,29 @@ public class Compiler {
                     self.out("if !self.isParsed {")
                     self.stack[self.stack.count - 1].leftMargin += 4
                     self.eol()
-                    self.ruleEX2()
-                    if self.isError { return }
-                    if !self.isParsed { self.err() }
+                    try self.ruleEX2()
+                    if !self.isParsed { try self.err() }
                     self.stack[self.stack.count - 1].leftMargin -= 4
                     self.out("}")
                     self.eol()
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
         }
     }
 
-    func ruleEX2() {
+    func ruleEX2() throws {
         self.contextPush("EX2")
         defer { self.contextPop() }
-        self.ruleEX3()
-        if self.isError { return }
+        try self.ruleEX3()
         if self.isParsed {
             self.out("if self.isParsed {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
         }
         if !self.isParsed {
-            self.ruleOUTPUT()
-            if self.isError { return }
+            try self.ruleOUTPUT()
             if self.isParsed {
                 self.out("if true {")
                 self.stack[self.stack.count - 1].leftMargin += 4
@@ -477,43 +444,37 @@ public class Compiler {
         if self.isParsed {
             self.isParsed = true
             while self.isParsed {
-                self.ruleEX3()
-                if self.isError { return }
+                try self.ruleEX3()
                 if self.isParsed {
-                    self.out("if !self.isParsed { self.err() }")
+                    self.out("if !self.isParsed { try self.err() }")
                     self.eol()
                 }
                 if !self.isParsed {
-                    self.ruleOUTPUT()
-                    if self.isError { return }
+                    try self.ruleOUTPUT()
                     if self.isParsed {
                     }
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
         }
     }
 
-    func ruleEX3() {
+    func ruleEX3() throws {
         self.contextPush("EX3")
         defer { self.contextPop() }
-        self.ruleID()
-        if self.isError { return }
+        try self.ruleID()
         if self.isParsed {
-            self.out("self.rule")
+            self.out("try self.rule")
             self.out(self.token)
             self.out("()")
             self.eol()
-            self.out("if self.isError { return }")
-            self.eol()
         }
         if !self.isParsed {
-            self.ruleSTRING()
-            if self.isError { return }
+            try self.ruleSTRING()
             if self.isParsed {
                 self.out("self.test(")
                 self.out(String(UnicodeScalar(34)))
@@ -526,11 +487,10 @@ public class Compiler {
         if !self.isParsed {
             self.test("(")
             if self.isParsed {
-                self.ruleEX1()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleEX1()
+                if !self.isParsed { try self.err() }
                 self.test(")")
-                if !self.isParsed { self.err() }
+                if !self.isParsed { try self.err() }
             }
         }
         if !self.isParsed {
@@ -557,9 +517,8 @@ public class Compiler {
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
-                self.ruleEX3()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleEX3()
+                if !self.isParsed { try self.err() }
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.out("}")
                 self.eol()
@@ -570,26 +529,25 @@ public class Compiler {
     }
 
     // output expressions 
-    func ruleOUTPUT() {
+    func ruleOUTPUT() throws {
         self.contextPush("OUTPUT")
         defer { self.contextPop() }
         self.test(".OUT")
         if self.isParsed {
             self.test("(")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.isParsed = true
             while self.isParsed {
-                self.ruleOUT1()
-                if self.isError { return }
+                try self.ruleOUT1()
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.test(")")
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
         }
     }
 
-    func ruleOUT1() {
+    func ruleOUT1() throws {
         self.contextPush("OUT1")
         defer { self.contextPop() }
         self.test("*")
@@ -598,8 +556,7 @@ public class Compiler {
             self.eol()
         }
         if !self.isParsed {
-            self.ruleSTRING()
-            if self.isError { return }
+            try self.ruleSTRING()
             if self.isParsed {
                 self.out("self.out(")
                 self.out(String(UnicodeScalar(34)))
@@ -610,8 +567,7 @@ public class Compiler {
             }
         }
         if !self.isParsed {
-            self.ruleNUMBER()
-            if self.isError { return }
+            try self.ruleNUMBER()
             if self.isParsed {
                 self.out("self.out(String(UnicodeScalar(")
                 self.out(self.token)
@@ -660,11 +616,10 @@ public class Compiler {
     }
 
     // token expressions 
-    func ruleTX1() {
+    func ruleTX1() throws {
         self.contextPush("TX1")
         defer { self.contextPop() }
-        self.ruleTX2()
-        if self.isError { return }
+        try self.ruleTX2()
         if self.isParsed {
             self.isParsed = true
             while self.isParsed {
@@ -673,46 +628,43 @@ public class Compiler {
                     self.out("if !self.isParsed {")
                     self.stack[self.stack.count - 1].leftMargin += 4
                     self.eol()
-                    self.ruleTX2()
-                    if self.isError { return }
-                    if !self.isParsed { self.err() }
+                    try self.ruleTX2()
+                    if !self.isParsed { try self.err() }
                     self.stack[self.stack.count - 1].leftMargin -= 4
                     self.out("}")
                     self.eol()
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
         }
     }
 
-    func ruleTX2() {
+    func ruleTX2() throws {
         self.contextPush("TX2")
         defer { self.contextPop() }
-        self.ruleTX3()
-        if self.isError { return }
+        try self.ruleTX3()
         if self.isParsed {
             self.out("if self.isParsed {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
             self.isParsed = true
             while self.isParsed {
-                self.ruleTX3()
-                if self.isError { return }
+                try self.ruleTX3()
                 if self.isParsed {
                     self.out("if !self.isParsed { return }")
                     self.eol()
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.out("}")
             self.eol()
         }
     }
 
-    func ruleTX3() {
+    func ruleTX3() throws {
         self.contextPush("TX3")
         defer { self.contextPop() }
         self.test(".TOKEN")
@@ -739,9 +691,8 @@ public class Compiler {
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
-                self.ruleTX3()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleTX3()
+                if !self.isParsed { try self.err() }
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.out("}")
                 self.eol()
@@ -754,11 +705,10 @@ public class Compiler {
         if !self.isParsed {
             self.test(".ANYBUT(")
             if self.isParsed {
-                self.ruleCX1()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleCX1()
+                if !self.isParsed { try self.err() }
                 self.test(")")
-                if !self.isParsed { self.err() }
+                if !self.isParsed { try self.err() }
                 self.out("self.isParsed = !self.isParsed")
                 self.eol()
                 self.out("if self.isParsed {")
@@ -774,11 +724,10 @@ public class Compiler {
         if !self.isParsed {
             self.test(".ANY(")
             if self.isParsed {
-                self.ruleCX1()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleCX1()
+                if !self.isParsed { try self.err() }
                 self.test(")")
-                if !self.isParsed { self.err() }
+                if !self.isParsed { try self.err() }
                 self.out("if self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
@@ -790,63 +739,56 @@ public class Compiler {
             }
         }
         if !self.isParsed {
-            self.ruleID()
-            if self.isError { return }
+            try self.ruleID()
             if self.isParsed {
-                self.out("self.rule")
+                self.out("try self.rule")
                 self.out(self.token)
                 self.out("()")
-                self.eol()
-                self.out("if self.isError { return }")
                 self.eol()
             }
         }
         if !self.isParsed {
             self.test("(")
             if self.isParsed {
-                self.ruleTX1()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleTX1()
+                if !self.isParsed { try self.err() }
                 self.test(")")
-                if !self.isParsed { self.err() }
+                if !self.isParsed { try self.err() }
             }
         }
     }
 
     // character expressions 
-    func ruleCX1() {
+    func ruleCX1() throws {
         self.contextPush("CX1")
         defer { self.contextPop() }
         self.out("self.isParsed =")
         self.stack[self.stack.count - 1].leftMargin += 4
         self.eol()
         if true {
-            self.ruleCX2()
-            if self.isError { return }
-            if !self.isParsed { self.err() }
+            try self.ruleCX2()
+            if !self.isParsed { try self.err() }
             self.isParsed = true
             while self.isParsed {
                 self.test("!")
                 if self.isParsed {
                     self.out(" ||")
                     self.eol()
-                    self.ruleCX2()
-                    if self.isError { return }
-                    if !self.isParsed { self.err() }
+                    try self.ruleCX2()
+                    if !self.isParsed { try self.err() }
                 }
             }
             self.isParsed = true
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.eol()
         }
     }
 
-    func ruleCX2() {
+    func ruleCX2() throws {
         self.contextPush("CX2")
         defer { self.contextPop() }
-        self.ruleCX3()
-        if self.isError { return }
+        try self.ruleCX3()
         if self.isParsed {
             self.test(":")
             if self.isParsed {
@@ -854,9 +796,8 @@ public class Compiler {
                 self.out(self.token)
                 self.out(" ) &&")
                 self.eol()
-                self.ruleCX3()
-                if self.isError { return }
-                if !self.isParsed { self.err() }
+                try self.ruleCX3()
+                if !self.isParsed { try self.err() }
                 self.out(" (Array(self.inbuf.utf8)[self.inp] <= ")
                 self.out(self.token)
                 self.out("  )")
@@ -869,30 +810,28 @@ public class Compiler {
                     self.out(" ")
                 }
             }
-            if !self.isParsed { self.err() }
+            if !self.isParsed { try self.err() }
         }
     }
 
-    func ruleCX3() {
+    func ruleCX3() throws {
         self.contextPush("CX3")
         defer { self.contextPop() }
-        self.ruleNUMBER()
-        if self.isError { return }
+        try self.ruleNUMBER()
         if self.isParsed {
         }
         if !self.isParsed {
-            self.ruleSQUOTE()
-            if self.isError { return }
+            try self.ruleSQUOTE()
             if self.isParsed {
                 self.token = String(Array(self.inbuf.utf8)[self.inp])
                 self.inp += 1
-                if !self.isParsed { self.err() }
+                if !self.isParsed { try self.err() }
             }
         }
     }
 
     // token definitions 
-    func rulePREFIX() {
+    func rulePREFIX() throws {
         self.contextPush("PREFIX")
         defer { self.contextPop() } 
         self.isParsed = true
@@ -911,28 +850,24 @@ public class Compiler {
         }
     }
 
-    func ruleID() {
+    func ruleID() throws {
         self.contextPush("ID")
         defer { self.contextPop() } 
-        self.rulePREFIX()
-        if self.isError { return }
+        try self.rulePREFIX()
         if self.isParsed {
             self.isToken = true
             self.token = ""
             self.isParsed = true
             if !self.isParsed { return }
-            self.ruleALPHA()
-            if self.isError { return }
+            try self.ruleALPHA()
             if !self.isParsed { return }
             self.isParsed = true
             while self.isParsed {
-                self.ruleALPHA()
-                if self.isError { return }
+                try self.ruleALPHA()
                 if self.isParsed {
                 }
                 if !self.isParsed {
-                    self.ruleDIGIT()
-                    if self.isError { return }
+                    try self.ruleDIGIT()
                     if self.isParsed {
                     }
                 }
@@ -945,23 +880,20 @@ public class Compiler {
         }
     }
 
-    func ruleNUMBER() {
+    func ruleNUMBER() throws {
         self.contextPush("NUMBER")
         defer { self.contextPop() } 
-        self.rulePREFIX()
-        if self.isError { return }
+        try self.rulePREFIX()
         if self.isParsed {
             self.isToken = true
             self.token = ""
             self.isParsed = true
             if !self.isParsed { return }
-            self.ruleDIGIT()
-            if self.isError { return }
+            try self.ruleDIGIT()
             if !self.isParsed { return }
             self.isParsed = true
             while self.isParsed {
-                self.ruleDIGIT()
-                if self.isError { return }
+                try self.ruleDIGIT()
             }
             self.isParsed = true
             if !self.isParsed { return }
@@ -971,11 +903,10 @@ public class Compiler {
         }
     }
 
-    func ruleSTRING() {
+    func ruleSTRING() throws {
         self.contextPush("STRING")
         defer { self.contextPop() } 
-        self.rulePREFIX()
-        if self.isError { return }
+        try self.rulePREFIX()
         if self.isParsed {
             self.isParsed =
                 Array(self.inbuf.utf8)[self.inp] == 39 
@@ -1012,7 +943,7 @@ public class Compiler {
         }
     }
 
-    func ruleALPHA() {
+    func ruleALPHA() throws {
         self.contextPush("ALPHA")
         defer { self.contextPop() } 
         self.isParsed =
@@ -1027,7 +958,7 @@ public class Compiler {
         }
     }
 
-    func ruleDIGIT() {
+    func ruleDIGIT() throws {
         self.contextPush("DIGIT")
         defer { self.contextPop() } 
         self.isParsed =
@@ -1040,11 +971,10 @@ public class Compiler {
         }
     }
 
-    func ruleSQUOTE() {
+    func ruleSQUOTE() throws {
         self.contextPush("SQUOTE")
         defer { self.contextPop() } 
-        self.rulePREFIX()
-        if self.isError { return }
+        try self.rulePREFIX()
         if self.isParsed {
             self.isParsed =
                 Array(self.inbuf.utf8)[self.inp] == 39 
@@ -1055,7 +985,7 @@ public class Compiler {
         }
     }
 
-    func ruleCMLINE() {
+    func ruleCMLINE() throws {
         self.contextPush("CMLINE")
         defer { self.contextPop() } 
         self.isToken = true
@@ -1088,12 +1018,9 @@ public class Compiler {
     // runtime variables
     var isParsed = false
     var isToken = false
-    var isError = false
     var inp = 0
     var inbuf = ""
     public var outputBuffer = ""
-    public var erule = ""
-    public var einput = 0
     public var token = ""
     var stack: [StackFrame] = []
 
@@ -1105,11 +1032,8 @@ public class Compiler {
         // initialize for another compile
         self.isParsed = false
         self.isToken = false
-        self.isError = false
         self.inp = 0
         self.outputBuffer = ""
-        self.erule = ""
-        self.einput = 0
         self.token = ""
         self.stack = []
     }
@@ -1162,11 +1086,13 @@ public class Compiler {
         if self.isParsed { self.inp = self.inp + stringToCompare.count }
     }
 
-    func err() {
+    public enum CompilerError: Error {
+        case parseFailure(rule: String, inputOffset: Int)
+    }
+
+    func err() throws {
         // compilation error, provide error indication and context
-        self.isError = true
-        self.erule = self.stack[self.stack.count - 1].erule
-        self.einput = self.inp
+        throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)
     }
 
 }

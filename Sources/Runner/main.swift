@@ -24,14 +24,14 @@ guard let dataAsStr = String(data: data, encoding: .utf8) else {
 }
 
 let compiler = Compiler()
-let result = compiler.compile(dataAsStr)
-if result {
+do {
+    try compiler.compile(dataAsStr)
     print(compiler.outputBuffer)
-} else {
+} catch Compiler.CompilerError.parseFailure(let rule, let inputOffset) {
     print("Compiler Error:")
     print(compiler.outputBuffer)
-    print(compiler.erule)
-    print(compiler.einput)
+    print(rule)
+    print(inputOffset)
     print(compiler.token)
     exit(1)
 }

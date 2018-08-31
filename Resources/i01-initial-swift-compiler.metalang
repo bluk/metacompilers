@@ -13,18 +13,16 @@ PROGRAM = '.SYNTAX' ID
           .OUT(.LM- '}' .NL) ;
 
 [ object definition preamble ]
-PREAMBLE = .OUT('public func compile(_ input: String) -> Bool {' .LM+ .NL)
+PREAMBLE = .OUT('public func compile(_ input: String) throws {' .LM+ .NL)
            .OUT('// initialize compiler variables' .NL)
            .OUT('self.inbuf = input' .NL)
            .OUT('self.initialize()' .NL)
            .OUT('// call the first rule' .NL)
-           .OUT('self.rule' * '()' .NL)
+           .OUT('try self.rule' * '()' .NL)
            .OUT('// special case handling of first rule failure' .NL)
-           .OUT('if !self.isError && !self.isParsed {' .LM+ .NL)
-           .OUT('self.isError = true' .NL)
-           .OUT('self.erule = ' 34 * 34 '' .NL)
-           .OUT('self.einput = self.inp }' .LM- .NL)
-           .OUT('return !self.isError' .NL)
+           .OUT('if !self.isParsed {' .LM+ .NL)
+           .OUT('throw CompilerError.parseFailure(rule: ' 34 * 34 ', inputOffset: self.inp)' .NL)
+           .OUT(.LM- '}' .NL)
            .OUT(.LM- '}' .NL .NL) ;
 
 
@@ -39,12 +37,9 @@ POSTAMBLE =
            .OUT('// runtime variables' .NL)
            .OUT('var isParsed = false' .NL)
            .OUT('var isToken = false' .NL)
-           .OUT('var isError = false' .NL)
            .OUT('var inp = 0' .NL)
            .OUT('var inbuf = ' 34 34 .NL)
            .OUT('public var outputBuffer = ' 34 34 .NL)
-           .OUT('public var erule = ' 34 34  .NL)
-           .OUT('public var einput = 0' .NL)
            .OUT('public var token = ' 34 34 .NL)
            .OUT('var stack: [StackFrame] = []' .NL .NL)
 
@@ -56,11 +51,8 @@ POSTAMBLE =
            .OUT('// initialize for another compile' .NL)
            .OUT('self.isParsed = false' .NL)
            .OUT('self.isToken = false' .NL)
-           .OUT('self.isError = false' .NL)
            .OUT('self.inp = 0' .NL)
            .OUT('self.outputBuffer = ' 34 34 .NL)
-           .OUT('self.erule = ' 34 34 .NL)
-           .OUT('self.einput = 0' .NL)
            .OUT('self.token = ' 34 34 .NL)
            .OUT('self.stack = []' .NL)
            .OUT(.LM- '}' .NL .NL)
@@ -112,22 +104,24 @@ POSTAMBLE =
            .OUT('if self.isParsed { self.inp = self.inp + stringToCompare.count }' .NL)
            .OUT(.LM- '}' .NL .NL)
 
-           .OUT('func err() {' .LM+ .NL)
+           .OUT('public enum CompilerError: Error {' .LM+ .NL)
+           .OUT('case parseFailure(rule: String, inputOffset: Int)' .NL)
+           .OUT(.LM- '}' .NL .NL)
+
+           .OUT('func err() throws {' .LM+ .NL)
            .OUT('// compilation error, provide error indication and context' .NL)
-           .OUT('self.isError = true' .NL)
-           .OUT('self.erule = self.stack[self.stack.count - 1].erule' .NL)
-           .OUT('self.einput = self.inp' .NL)
+           .OUT('throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)' .NL)
            .OUT(.LM- '}' .NL .NL) ;
 
 [ parsing rule definition ]
-PR = ID .OUT('func rule'* '() {' .LM+ .NL)
+PR = ID .OUT('func rule'* '() throws {' .LM+ .NL)
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
      .OUT('defer { self.contextPop() }' .NL)
      '=' EX1 ';'
      .OUT(.LM- '}' .NL .NL) ;
 
 [ token rule definition ]
-TR = ID .OUT('func rule'* '() {' .LM+ .NL)
+TR = ID .OUT('func rule'* '() throws {' .LM+ .NL)
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
      .OUT('defer { self.contextPop() } ' .NL)
      ':' TX1 ';'
@@ -140,11 +134,10 @@ COMMENT = '[' CMLINE ']' .OUT('//' * .NL) ;
 EX1 = EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) ) ;
 
 EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) )
-      $(EX3 .OUT('if !self.isParsed { self.err() }' .NL) / OUTPUT)
+      $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) / OUTPUT)
       .OUT(.LM- '}' .NL) ;
 
-EX3 = ID        .OUT('self.rule' * '()' .NL)
-                .OUT('if self.isError { return }' .NL)  /
+EX3 = ID        .OUT('try self.rule' * '()' .NL) /
       STRING    .OUT('self.test(' 34 * 34 ')' .NL) /
       '(' EX1 ')'                            /
       '.EMPTY'  .OUT('self.isParsed = true' .NL)    /
@@ -192,8 +185,7 @@ TX3 = ( '.TOKEN'  .OUT('self.isToken = true' .NL)
         .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
         .OUT('self.inp += 1 }' .LM- .NL) /
       ID
-        .OUT('self.rule' * '()' .NL)
-        .OUT('if self.isError { return }' .NL)  /
+        .OUT('try self.rule' * '()' .NL) /
       '(' TX1 ')'  ;
 
 [ character expressions ]
