@@ -123,7 +123,7 @@ PR = ID .OUT('func rule'* '() throws {' .LM+ .NL)
 [ token rule definition ]
 TR = ID .OUT('func rule'* '() throws {' .LM+ .NL)
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
-     .OUT('defer { self.contextPop() } ' .NL)
+     .OUT('defer { self.contextPop() }' .NL)
      ':' TX1 ';'
      .OUT(.LM- '}' .NL .NL) ;
 
@@ -195,7 +195,7 @@ CX1 = .OUT('self.isParsed =' .LM+ .NL)
 CX2 = CX3 (':' .OUT('(Array(self.inbuf.utf8)[self.inp] >= ' * ' ) &&' .NL)
                CX3
                .OUT(' (Array(self.inbuf.utf8)[self.inp] <= ' * '  )' ) /
-           .EMPTY .OUT('Array(self.inbuf.utf8)[self.inp] == ' * ' ' )  ) ;
+           .EMPTY .OUT('Array(self.inbuf.utf8)[self.inp] == ' * )  ) ;
 CX3 = NUMBER / SQUOTE .LITCHR ;
 
 [ token definitions ]

@@ -368,7 +368,7 @@ public class Compiler {
             self.out(String(UnicodeScalar(34)))
             self.out(")")
             self.eol()
-            self.out("defer { self.contextPop() } ")
+            self.out("defer { self.contextPop() }")
             self.eol()
             self.test(":")
             if !self.isParsed { try self.err() }
@@ -807,7 +807,6 @@ public class Compiler {
                 if self.isParsed {
                     self.out("Array(self.inbuf.utf8)[self.inp] == ")
                     self.out(self.token)
-                    self.out(" ")
                 }
             }
             if !self.isParsed { try self.err() }
@@ -833,14 +832,14 @@ public class Compiler {
     // token definitions 
     func rulePREFIX() throws {
         self.contextPush("PREFIX")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         self.isParsed = true
         while self.isParsed {
             self.isParsed =
-                Array(self.inbuf.utf8)[self.inp] == 32  ||
-                Array(self.inbuf.utf8)[self.inp] == 9  ||
-                Array(self.inbuf.utf8)[self.inp] == 13  ||
-                Array(self.inbuf.utf8)[self.inp] == 10 
+                Array(self.inbuf.utf8)[self.inp] == 32 ||
+                Array(self.inbuf.utf8)[self.inp] == 9 ||
+                Array(self.inbuf.utf8)[self.inp] == 13 ||
+                Array(self.inbuf.utf8)[self.inp] == 10
             if self.isParsed {
                 if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
                 self.inp += 1 }
@@ -852,7 +851,7 @@ public class Compiler {
 
     func ruleID() throws {
         self.contextPush("ID")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         try self.rulePREFIX()
         if self.isParsed {
             self.isToken = true
@@ -882,7 +881,7 @@ public class Compiler {
 
     func ruleNUMBER() throws {
         self.contextPush("NUMBER")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         try self.rulePREFIX()
         if self.isParsed {
             self.isToken = true
@@ -905,11 +904,11 @@ public class Compiler {
 
     func ruleSTRING() throws {
         self.contextPush("STRING")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         try self.rulePREFIX()
         if self.isParsed {
             self.isParsed =
-                Array(self.inbuf.utf8)[self.inp] == 39 
+                Array(self.inbuf.utf8)[self.inp] == 39
             if self.isParsed {
                 if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
                 self.inp += 1 }
@@ -921,9 +920,9 @@ public class Compiler {
             self.isParsed = true
             while self.isParsed {
                 self.isParsed =
-                    Array(self.inbuf.utf8)[self.inp] == 13  ||
-                    Array(self.inbuf.utf8)[self.inp] == 10  ||
-                    Array(self.inbuf.utf8)[self.inp] == 39 
+                    Array(self.inbuf.utf8)[self.inp] == 13 ||
+                    Array(self.inbuf.utf8)[self.inp] == 10 ||
+                    Array(self.inbuf.utf8)[self.inp] == 39
                 self.isParsed = !self.isParsed
                 if self.isParsed {
                     if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
@@ -935,7 +934,7 @@ public class Compiler {
             self.isParsed = true
             if !self.isParsed { return }
             self.isParsed =
-                Array(self.inbuf.utf8)[self.inp] == 39 
+                Array(self.inbuf.utf8)[self.inp] == 39
             if self.isParsed {
                 if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
                 self.inp += 1 }
@@ -945,7 +944,7 @@ public class Compiler {
 
     func ruleALPHA() throws {
         self.contextPush("ALPHA")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         self.isParsed =
             (Array(self.inbuf.utf8)[self.inp] >= 65 ) &&
              (Array(self.inbuf.utf8)[self.inp] <= 90  ) ||
@@ -960,7 +959,7 @@ public class Compiler {
 
     func ruleDIGIT() throws {
         self.contextPush("DIGIT")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         self.isParsed =
             (Array(self.inbuf.utf8)[self.inp] >= 48 ) &&
              (Array(self.inbuf.utf8)[self.inp] <= 57  )
@@ -973,11 +972,11 @@ public class Compiler {
 
     func ruleSQUOTE() throws {
         self.contextPush("SQUOTE")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         try self.rulePREFIX()
         if self.isParsed {
             self.isParsed =
-                Array(self.inbuf.utf8)[self.inp] == 39 
+                Array(self.inbuf.utf8)[self.inp] == 39
             if self.isParsed {
                 if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
                 self.inp += 1 }
@@ -987,7 +986,7 @@ public class Compiler {
 
     func ruleCMLINE() throws {
         self.contextPush("CMLINE")
-        defer { self.contextPop() } 
+        defer { self.contextPop() }
         self.isToken = true
         self.token = ""
         self.isParsed = true
@@ -995,9 +994,9 @@ public class Compiler {
             self.isParsed = true
             while self.isParsed {
                 self.isParsed =
-                    Array(self.inbuf.utf8)[self.inp] == 10  ||
-                    Array(self.inbuf.utf8)[self.inp] == 13  ||
-                    Array(self.inbuf.utf8)[self.inp] == 93 
+                    Array(self.inbuf.utf8)[self.inp] == 10 ||
+                    Array(self.inbuf.utf8)[self.inp] == 13 ||
+                    Array(self.inbuf.utf8)[self.inp] == 93
                 self.isParsed = !self.isParsed
                 if self.isParsed {
                     if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
