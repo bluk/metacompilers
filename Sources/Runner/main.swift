@@ -51,9 +51,9 @@ class CodeGenerator {
                 traverseNodes(node: child)
             }
         case .rule:
-            out(content: "func rule\(node.content!) throws {\n")
+            out(content: "func rule\(node.content!)() throws {\n")
             leftMargin += 4
-            out(content: "self.contextPush(\(node.content!)\n")
+            out(content: "self.contextPush(\"\(node.content!)\")\n")
             out(content: "defer { self.contextPop() }\n")
             for child in node.children {
                 traverseNodes(node: child)

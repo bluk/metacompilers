@@ -31,9 +31,9 @@ PREAMBLE = .OUT('public func compile(_ input: String) throws {' .LM+ .NL) .NODE(
 [ runtime and object definition postamble ]
 POSTAMBLE =
 
-           .OUT('struct StackFrame {' .LM+ .NL) .NODE(.NODEOUTPUT )
-           .OUT('var erule: String' .NL) .NODE(.NODEOUTPUT )
-           .OUT('var leftMargin: Int' .NL) .NODE(.NODEOUTPUT )
+           .OUT('struct StackFrame {' .LM+ .NL) .NODE(.NODEOUTPUT 'struct StackFrame {' .LM+ .NL)
+           .OUT('var erule: String' .NL) .NODE(.NODEOUTPUT 'var erule: String' .NL)
+           .OUT('var leftMargin: Int' .NL) .NODE(.NODEOUTPUT 'var leftMargin: Int' .NL)
            .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
 
            .OUT('// runtime variables' .NL) .NODE(.NODEOUTPUT '// runtime variables' .NL)
@@ -164,7 +164,7 @@ COMMENT = '[' CMLINE ']' .OUT('//' * .NL) .NODE(.NODEOUTPUT '//' * .NL)
 [ parsing expressions ]
 EX1 = EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL) ) ;
 
-EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) )
+EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) .NODE(.NODEOUTPUT 'if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) .NODE(.NODEOUTPUT 'if true {' .LM+ .NL) )
       $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) .NODE(.NODEOUTPUT 'if !self.isParsed { try self.err() }' .NL) / OUTPUT / NODE )
       .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
       ;
