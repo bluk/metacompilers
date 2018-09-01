@@ -2200,6 +2200,108 @@ public class Compiler {
                 popNodeContext()
             }
         }
+        if !self.isParsed {
+            self.test(".NODECOMMENT")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .comment)")
+                self.eol()
+                self.out("latestNode?.content = self.token")
+                self.eol()
+                self.out("add(childNode: latestNode!)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .comment)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode?.content = self.token"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: latestNode!)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODEEXPRESSION")
+            if self.isParsed {
+                self.out("add(childNode: Node(type: .expression))")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: Node(type: .expression))"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODEOR")
+            if self.isParsed {
+                self.out("add(childNode: Node(type: .or))")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .or)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: latestNode!)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODEAND")
+            if self.isParsed {
+                self.out("add(childNode: Node(type: .and))")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: Node(type: .and))"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODEZEROORMORE")
+            if self.isParsed {
+                self.out("add(childNode: Node(type: .zeroOrMore))")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "add(childNode: Node(type: .zeroOrMore))"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
     }
 
     func ruleNODECONTENT() throws {

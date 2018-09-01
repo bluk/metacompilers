@@ -28,7 +28,9 @@ public class Node {
         case rule
         case leftMargin(margin: Int)
         case helper(name: String)
-
+        case and
+        case or
+        case zeroOrMore
     }
 
     public let type: NodeType
