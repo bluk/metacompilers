@@ -25,8 +25,10 @@ public class Node {
         case expression
         case comment
         case output
+        case rule
         case leftMargin(margin: Int)
         case helper(name: String)
+
     }
 
     public let type: NodeType
