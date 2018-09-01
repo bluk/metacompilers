@@ -2210,13 +2210,7 @@ public class Compiler {
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .or)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode?.content = "add(childNode: Node(type: .or))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"

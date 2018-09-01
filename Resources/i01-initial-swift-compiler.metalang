@@ -210,7 +210,7 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODERULE' .OUT('latestNode = Node(type: .rule)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .rule)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
            '.NODECOMMENT' .OUT('latestNode = Node(type: .comment)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .comment)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
            '.NODEEXPRESSION' .OUT('add(childNode: Node(type: .expression))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .expression))' .NL)  /
-           '.NODEOR' .OUT('add(childNode: Node(type: .or))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .or)' .NL 'add(childNode: latestNode!)' .NL)  /
+           '.NODEOR' .OUT('add(childNode: Node(type: .or))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .or))' .NL)  /
            '.NODEAND' .OUT('add(childNode: Node(type: .and))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .and))' .NL)  /
            '.NODEZEROORMORE' .OUT('add(childNode: Node(type: .zeroOrMore))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .zeroOrMore))' .NL)
                          ;
