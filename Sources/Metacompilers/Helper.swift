@@ -20,17 +20,24 @@ public class Node {
 
     public enum NodeType {
         case root
-        case text
-        case statement
-        case expression
-        case comment
-        case output
+
         case rule
         case leftMargin(margin: Int)
-        case helper(name: String)
+        case comment
+        case output
         case and
         case or
         case zeroOrMore
+
+        case readCharacter
+        case string
+        case id
+        case empty
+
+        case text
+        case statement
+        case expression
+        case helper(name: String)
     }
 
     public let type: NodeType
