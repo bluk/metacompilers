@@ -158,7 +158,7 @@ TR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
      ;
 
 [ comment definition ]
-COMMENT = '[' CMLINE ']' .OUT('//' * .NL) .NODE(.NODEOUTPUT '//' * .NL)
+COMMENT = '[' CMLINE ']' .OUT('//' * .NL) .NODE(.NODECOMMENT)
           ;
 
 [ parsing expressions ]

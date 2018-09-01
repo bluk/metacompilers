@@ -50,6 +50,8 @@ class CodeGenerator {
             for child in node.children {
                 traverseNodes(node: child)
             }
+        case .comment:
+            out(content: "// \(node.content!.trimmingCharacters(in: .whitespaces))\n")
         case .rule:
             out(content: "func rule\(node.content!)() throws {\n")
             leftMargin += 4
