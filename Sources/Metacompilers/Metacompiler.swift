@@ -1,6 +1,6 @@
 // PROGRAM compiler
 public class Compiler {
-    
+
     public func compile(_ input: String) throws {
         // initialize compiler variables
         self.inbuf = input
@@ -12,8 +12,8 @@ public class Compiler {
             throw CompilerError.parseFailure(rule: "PROGRAM", inputOffset: self.inp)
         }
     }
-    
-    // body of compiler definition
+
+    // body of compiler definition 
     func rulePROGRAM() throws {
         self.contextPush("PROGRAM")
         defer { self.contextPop() }
@@ -109,7 +109,7 @@ public class Compiler {
         }
     }
 
-    // object definition preamble
+    // object definition preamble 
     func rulePREAMBLE() throws {
         self.contextPush("PREAMBLE")
         defer { self.contextPop() }
@@ -278,7 +278,7 @@ public class Compiler {
         }
     }
 
-    // runtime and object definition postamble
+    // runtime and object definition postamble 
     func rulePOSTAMBLE() throws {
         self.contextPush("POSTAMBLE")
         defer { self.contextPop() }
@@ -1506,7 +1506,7 @@ public class Compiler {
         }
     }
 
-    // parsing rule definition
+    // parsing rule definition 
     func rulePR() throws {
         self.contextPush("PR")
         defer { self.contextPop() }
@@ -1543,7 +1543,7 @@ public class Compiler {
         }
     }
 
-    // token rule definition
+    // token rule definition 
     func ruleTR() throws {
         self.contextPush("TR")
         defer { self.contextPop() }
@@ -1580,7 +1580,7 @@ public class Compiler {
         }
     }
 
-    // comment definition
+    // comment definition 
     func ruleCOMMENT() throws {
         self.contextPush("COMMENT")
         defer { self.contextPop() }
@@ -1599,7 +1599,7 @@ public class Compiler {
         }
     }
 
-    // parsing expressions
+    // parsing expressions 
     func ruleEX1() throws {
         self.contextPush("EX1")
         defer { self.contextPop() }
@@ -1865,61 +1865,24 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.isParsed = true")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.isParsed = true"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "while self.isParsed {"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
+                add(childNode: Node(type: .zeroOrMore))
+                self.pushLastChildAsNodeContext()
                 try self.ruleEX3()
                 if !self.isParsed { try self.err() }
+                self.popNodeContext()
                 self.stack[self.stack.count - 1].leftMargin -= 4
                 self.out("}")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "}"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
                 self.out("self.isParsed = true")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.isParsed = true"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
             }
         }
     }
 
-    // output expressions
+    // output expressions 
     func ruleOUTPUT() throws {
         self.contextPush("OUTPUT")
         defer { self.contextPop() }
@@ -2061,8 +2024,8 @@ public class Compiler {
         }
     }
 
-    // .NODE( .NODE_COMMENT '//' * ' compiler' )
-    // node expressions
+    // .NODE( .NODE_COMMENT '//' * ' compiler' ) 
+    //node expressions 
     func ruleNODE() throws {
         self.contextPush("NODE")
         defer { self.contextPop() }
@@ -2510,7 +2473,7 @@ public class Compiler {
         }
     }
 
-    // token expressions
+    // token expressions 
     func ruleTX1() throws {
         self.contextPush("TX1")
         defer { self.contextPop() }
@@ -2865,7 +2828,7 @@ public class Compiler {
         }
     }
 
-    // character expressions
+    // character expressions 
     func ruleCX1() throws {
         self.contextPush("CX1")
         defer { self.contextPop() }
@@ -3000,7 +2963,7 @@ public class Compiler {
         }
     }
 
-    // token definitions
+    // token definitions 
     func rulePREFIX() throws {
         self.contextPush("PREFIX")
         defer { self.contextPop() }
@@ -3197,11 +3160,11 @@ public class Compiler {
     var latestNode: Node?
     var nodeContextStack: [Node] = []
     var stack: [StackFrame] = []
-    
+
     public init() {
         self.initialize()
     }
-    
+
     func initialize () {
         // initialize for another compile
         self.isParsed = false
@@ -3214,7 +3177,7 @@ public class Compiler {
         self.currentNode = rootAST
         self.nodeContextStack = []
     }
-    
+
     func contextPush(_ rulename: String) {
         // push and initialize a new stackframe
         // new context inherits current context left margin
@@ -3223,12 +3186,12 @@ public class Compiler {
         // stackframe definition
         self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))
     }
-    
+
     func contextPop() {
         // pop and possibly deallocate old stackframe
         _ = self.stack.popLast() // pop stackframe
     }
-    
+
     func out(_ output: String) {
         // output string
         var indent = 0
@@ -3238,25 +3201,25 @@ public class Compiler {
           while indent > 0 { self.outputBuffer += " "; indent -= 1 } }
         self.outputBuffer += output
     }
-    
+
     func add(childNode: Node) {
         currentNode?.children.append(childNode)
     }
-    
+
     func pushLastChildAsNodeContext() {
         nodeContextStack.append(currentNode!)
         currentNode = currentNode!.children.last!
     }
-    
+
     func popNodeContext() {
         currentNode = nodeContextStack.popLast()!
     }
-    
+
     func eol () {
         // output end of line
         self.outputBuffer += "\n"
     }
-    
+
     func test (_ stringToCompare: String) {
         // test for a string in the input
         var inputOffset = 0
@@ -3275,14 +3238,15 @@ public class Compiler {
         // advance input if found
         if self.isParsed { self.inp = self.inp + stringToCompare.count }
     }
-    
+
     public enum CompilerError: Error {
         case parseFailure(rule: String, inputOffset: Int)
     }
-    
+
     func err() throws {
         // compilation error, provide error indication and context
         throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)
     }
-    
+
 }
+

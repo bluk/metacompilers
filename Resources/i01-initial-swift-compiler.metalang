@@ -175,11 +175,14 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEOUTPUT 'try self.rul
       '.EMPTY'  .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL)    /
       '.LITCHR' .OUT('self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL) .NODE(.NODEOUTPUT 'self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL)
                 .OUT('self.inp += 1' .NL) .NODE(.NODEOUTPUT 'self.inp += 1' .NL)  /
-      '$' .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL)
-          .OUT('while self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'while self.isParsed {' .LM+ .NL)
+      '$' .OUT('self.isParsed = true' .NL)
+          .OUT('while self.isParsed {' .LM+ .NL)
+          .NODE(.NODEZEROORMORE)
+          .NODECONTEXTPUSH()
            EX3
-          .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
-          .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL)
+          .NODECONTEXTPOP()
+          .OUT(.LM- '}' .NL)
+          .OUT('self.isParsed = true' .NL)
           ;
 
 [ output expressions ]

@@ -50,6 +50,61 @@ class CodeGenerator {
             for child in node.children {
                 traverseNodes(node: child)
             }
+        case .or:
+            guard node.children.count > 0 else {
+                return
+            }
+
+            traverseNodes(node: node.children.first!)
+
+            guard node.children.count > 1 else {
+                return
+            }
+
+            for child in node.children[1...] {
+                out(content: "if !self.isParsed {\n")
+                leftMargin += 4
+                traverseNodes(node: child)
+                leftMargin -= 4
+                out(content: "}\n")
+            }
+        case .and:
+            guard node.children.count > 0 else {
+                return
+            }
+
+            traverseNodes(node: node.children.first!)
+
+            guard node.children.count > 1 else {
+                return
+            }
+
+            for child in node.children[1...] {
+                switch(child.type) {
+                case .output:
+                    traverseNodes(node: child)
+                default:
+                    out(content: "if self.isParsed {\n")
+                    leftMargin += 4
+                    traverseNodes(node: child)
+                    leftMargin -= 4
+                    out(content: "}\n")
+                }
+            }
+        case .zeroOrMore:
+            guard node.children.count > 0 else {
+                return
+            }
+
+            out(content: "self.isParsed = true\n")
+            out(content: "while self.isParsed {\n")
+            leftMargin += 4
+            for child in node.children {
+                traverseNodes(node: child)
+            }
+            leftMargin -= 4
+            out(content: "}\n")
+            out(content: "self.isParsed = true\n")
         case .comment:
             out(content: "// \(node.content!.trimmingCharacters(in: .whitespaces))\n")
         case .rule:
