@@ -138,18 +138,23 @@ POSTAMBLE =
            ;
 
 [ parsing rule definition ]
-PR = ID .OUT('func rule'* '() throws {' .LM+ .NL)
+PR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
+     .NODECONTEXTPUSH()
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
      .OUT('defer { self.contextPop() }' .NL)
      '=' EX1 ';'
-     .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+     .OUT(.LM- '}' .NL .NL)
+     .NODECONTEXTPOP()
      ;
+
 [ token rule definition ]
-TR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODEOUTPUT 'func rule'* '() throws {' .LM+ .NL)
-     .OUT('self.contextPush(' 34 * 34 ')' .NL) .NODE(.NODEOUTPUT )
-     .OUT('defer { self.contextPop() }' .NL) .NODE(.NODEOUTPUT 'defer { self.contextPop() }' .NL)
+TR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
+     .NODECONTEXTPUSH()
+     .OUT('self.contextPush(' 34 * 34 ')' .NL)
+     .OUT('defer { self.contextPop() }' .NL)
      ':' TX1 ';'
-     .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+     .OUT(.LM- '}' .NL .NL)
+     .NODECONTEXTPOP()
      ;
 
 [ comment definition ]
@@ -191,9 +196,9 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODEOUTPUT 'self.out(self
 
 [ .NODE( .NODE_COMMENT '//' * ' compiler' ) ]
 [node expressions ]
-NODE = '.NODE' '(' NODETYPE ')' /
-       '.NODECONTEXTPUSH' .OUT('self.pushLastChildAsNodeContext()') .NODE(.NODEOUTPUT 'self.pushLastChildAsNodeContext()') /
-       '.NODECONTEXTPOP' .OUT('self.popNodeContext()') .NODE(.NODEOUTPUT 'self.popNodeContext()')
+NODE = '.NODECONTEXTPUSH' '(' ')' .OUT('self.pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT 'self.pushLastChildAsNodeContext()' .NL) /
+       '.NODECONTEXTPOP' '(' ')'  .OUT('self.popNodeContext()' .NL) .NODE(.NODEOUTPUT 'self.popNodeContext()' .NL) /
+       '.NODE' '(' NODETYPE ')'
        ;
 
 NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)

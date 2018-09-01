@@ -1518,20 +1518,6 @@ public class Compiler {
             self.out("}")
             self.eol()
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
         }
     }
 
@@ -1546,43 +1532,17 @@ public class Compiler {
             self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func rule"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
+            latestNode = Node(type: .rule)
             latestNode?.content = self.token
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "() throws {"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
             self.out("self.contextPush(")
             self.out(String(UnicodeScalar(34)))
             self.out(self.token)
             self.out(String(UnicodeScalar(34)))
             self.out(")")
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            popNodeContext()
             self.out("defer { self.contextPop() }")
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "defer { self.contextPop() }"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
             self.test(":")
             if !self.isParsed { try self.err() }
             try self.ruleTX1()
@@ -1593,20 +1553,6 @@ public class Compiler {
             self.out("}")
             self.eol()
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
         }
     }
 
@@ -2072,37 +2018,53 @@ public class Compiler {
     func ruleNODE() throws {
         self.contextPush("NODE")
         defer { self.contextPop() }
-        self.test(".NODE")
+        self.test(".NODECONTEXTPUSH")
         if self.isParsed {
             self.test("(")
             if !self.isParsed { try self.err() }
-            try self.ruleNODETYPE()
-            if !self.isParsed { try self.err() }
             self.test(")")
             if !self.isParsed { try self.err() }
-        }
-        if !self.isParsed {
-            self.test(".NODECONTEXTPUSH")
-            if self.isParsed {
-                self.out("self.pushLastChildAsNodeContext()")
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.pushLastChildAsNodeContext()"
-                add(childNode: latestNode!)
-                popNodeContext()
-            }
+            self.out("self.pushLastChildAsNodeContext()")
+            self.eol()
+            add(childNode: Node(type: .output))
+            pushLastChildAsNodeContext()
+            latestNode = Node(type: .text)
+            latestNode?.content = "self.pushLastChildAsNodeContext()"
+            add(childNode: latestNode!)
+            latestNode = Node(type: .text)
+            latestNode?.content = "\n"
+            add(childNode: latestNode!)
+            popNodeContext()
         }
         if !self.isParsed {
             self.test(".NODECONTEXTPOP")
             if self.isParsed {
+                self.test("(")
+                if !self.isParsed { try self.err() }
+                self.test(")")
+                if !self.isParsed { try self.err() }
                 self.out("self.popNodeContext()")
+                self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
                 latestNode?.content = "self.popNodeContext()"
                 add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
                 popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODE")
+            if self.isParsed {
+                self.test("(")
+                if !self.isParsed { try self.err() }
+                try self.ruleNODETYPE()
+                if !self.isParsed { try self.err() }
+                self.test(")")
+                if !self.isParsed { try self.err() }
             }
         }
     }

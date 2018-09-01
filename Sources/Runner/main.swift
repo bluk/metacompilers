@@ -33,12 +33,33 @@ class CodeGenerator {
     var outputBuffer = ""
     var leftMargin = 0
 
+    func out(content: String) {
+        // output string
+        var indent = 0
+        // if newline last output, add left margin before string
+        if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == "\n" {
+            indent = leftMargin
+            while indent > 0 { outputBuffer += " "; indent -= 1 }
+        }
+        outputBuffer += content
+    }
+
     func traverseNodes(node: Node) {
         switch (node.type) {
         case .root:
             for child in node.children {
                 traverseNodes(node: child)
             }
+        case .rule:
+            out(content: "func rule\(node.content!) throws {\n")
+            leftMargin += 4
+            out(content: "self.contextPush(\(node.content!)\n")
+            out(content: "defer { self.contextPop() }\n")
+            for child in node.children {
+                traverseNodes(node: child)
+            }
+            leftMargin -= 4
+            out(content: "}\n\n")
         case .leftMargin(let margin):
             leftMargin = margin
         case .output:
@@ -46,14 +67,7 @@ class CodeGenerator {
                 switch (child.type) {
                 case .text:
                     if let content = child.content {
-                        // output string
-                        var indent = 0
-                        // if newline last output, add left margin before string
-                        if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == "\n" {
-                            indent = leftMargin
-                            while indent > 0 { outputBuffer += " "; indent -= 1 }
-                        }
-                        outputBuffer += content
+                        out(content: content)
                     }
                 case .leftMargin(let margin):
                     leftMargin = margin
