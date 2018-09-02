@@ -189,12 +189,12 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) /
 OUTPUT = '.OUT' '(' .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH() $OUT1 .NODECONTEXTPOP() ')'
          ;
 
-OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODEOUTPUT 'self.out(self.token)' .NL) /
-       STRING  .OUT('self.out(' 34 * 34 ')' .NL) .NODE(.NODEOUTPUT 'self.out(' 34 * 34 ')' .NL) /
-       NUMBER  .OUT('self.out(String(UnicodeScalar(' * ')))' .NL) .NODE(.NODEOUTPUT 'self.out(String(UnicodeScalar(' * ')))' .NL) /
-       '.NL'   .OUT('self.eol()' .NL) .NODE(.NODEOUTPUT 'self.eol()' .NL) /
-       '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) .NODE(.NODEOUTPUT 'self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
-       '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) .NODE(.NODEOUTPUT 'self.stack[self.stack.count - 1].leftMargin -= 4' .NL)
+OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODETEXT 'self.out(self.token)' .NL) /
+       STRING  .OUT('self.out(' 34 * 34 ')' .NL) .NODE(.NODETEXT 'self.out(' 34 * 34 ')' .NL) /
+       NUMBER  .OUT('self.out(String(UnicodeScalar(' * ')))' .NL) .NODE(.NODETEXT 'self.out(String(UnicodeScalar(' * ')))' .NL) /
+       '.NL'   .OUT('self.eol()' .NL) .NODE(.NODETEXT 'self.eol()' .NL) /
+       '.LM+'  .OUT('self.stack[self.stack.count - 1].leftMargin += 4' .NL) .NODE(.NODETEXT 'self.stack[self.stack.count - 1].leftMargin += 4' .NL) /
+       '.LM-'  .OUT('self.stack[self.stack.count - 1].leftMargin -= 4' .NL) .NODE(.NODETEXT 'self.stack[self.stack.count - 1].leftMargin -= 4' .NL)
        ;
 
 [ .NODE( .NODE_COMMENT '//' * ' compiler' ) ]
