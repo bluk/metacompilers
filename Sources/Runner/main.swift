@@ -75,7 +75,17 @@ class CodeGenerator {
 
             traverseNodes(node: node.children.first!)
 
+            switch(node.children.first!.type) {
+            case .output:
+                out(content: "if true {\n")
+            default:
+                out(content: "if self.isParsed {\n")
+            }
+            leftMargin += 4
+
             guard node.children.count > 1 else {
+                leftMargin -= 4
+                out(content: "}\n")
                 return
             }
 
@@ -83,14 +93,63 @@ class CodeGenerator {
                 switch(child.type) {
                 case .output:
                     traverseNodes(node: child)
+//                case .and:
+//                    traverseNodes(node: child)
                 default:
-                    out(content: "if self.isParsed {\n")
-                    leftMargin += 4
                     traverseNodes(node: child)
-                    leftMargin -= 4
-                    out(content: "}\n")
+//                    out(content: "\(child.type)")
+                    out(content: "if !self.isParsed { try self.err() }\n")
                 }
             }
+
+            leftMargin -= 4
+            out(content: "}\n")
+//            guard node.children.count > 0 else {
+//                return
+//            }
+//
+//            var index = 0
+//            for child in node.children {
+//                var isOutput = true
+//                switch(child.type) {
+//                case .output:
+//                    traverseNodes(node: child)
+//                default:
+//                    traverseNodes(node: child)
+//                    isOutput = false
+//                }
+//                index += 1
+//                if !isOutput {
+//                    break
+//                }
+//            }
+//
+//            switch(node.children[index - 1].type) {
+//            case .output:
+//                out(content: "if true {\n")
+//            default:
+//                out(content: "if self.isParsed {\n")
+//            }
+//            leftMargin += 4
+//
+//            guard node.children.count > index else {
+//                leftMargin -= 4
+//                out(content: "}\n")
+//                return
+//            }
+//
+//            for child in node.children[index...] {
+//                switch(child.type) {
+//                case .output:
+//                    traverseNodes(node: child)
+//                default:
+//                    traverseNodes(node: child)
+//                    out(content: "if !self.isParsed { try self.err() }\n")
+//                }
+//            }
+//
+//            leftMargin -= 4
+//            out(content: "}\n")
         case .zeroOrMore:
             guard node.children.count > 0 else {
                 return
@@ -138,6 +197,8 @@ class CodeGenerator {
                     }
                 case .leftMargin(let margin):
                     leftMargin = margin
+                case .output:
+                    traverseNodes(node: child)
                 default:
                     fatalError("Unexpected child")
                 }

@@ -162,11 +162,11 @@ COMMENT = '[' CMLINE ']' .OUT('//' * .NL) .NODE(.NODECOMMENT)
           ;
 
 [ parsing expressions ]
-EX1 = EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL) ) ;
+EX1 = .NODE(.NODEOR) .NODECONTEXTPUSH() EX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) EX2 .OUT(.LM- '}' .NL) ) .NODECONTEXTPOP() ;
 
-EX2 = (EX3 .OUT('if self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) .NODE(.NODEOUTPUT 'if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) .NODE(.NODEOUTPUT 'if true {' .LM+ .NL) )
-      $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) .NODE(.NODEOUTPUT 'if !self.isParsed { try self.err() }' .NL) / OUTPUT / NODE )
-      .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
+EX2 = .NODE(.NODEAND) .NODECONTEXTPUSH() (EX3 .OUT('if self.isParsed {' .LM+ .NL) / OUTPUT .OUT('if true {' .LM+ .NL) / NODE .OUT('if true {' .LM+ .NL) )
+      $(EX3 .OUT('if !self.isParsed { try self.err() }' .NL) / OUTPUT / NODE )
+      .OUT(.LM- '}' .NL) .NODECONTEXTPOP()
       ;
 
 EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) /
@@ -186,7 +186,7 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) /
           ;
 
 [ output expressions ]
-OUTPUT = '.OUT' '(' $OUT1 ')'
+OUTPUT = '.OUT' '(' .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH() $OUT1 .NODECONTEXTPOP() ')'
          ;
 
 OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODEOUTPUT 'self.out(self.token)' .NL) /
