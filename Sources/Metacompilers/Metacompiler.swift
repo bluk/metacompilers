@@ -2137,6 +2137,17 @@ public class Compiler {
             }
         }
         if !self.isParsed {
+            self.test(".NODETEXT")
+            if self.isParsed {
+                self.isParsed = true
+                while self.isParsed {
+                    try self.ruleNODECONTENT()
+                }
+                self.isParsed = true
+                if !self.isParsed { try self.err() }
+            }
+        }
+        if !self.isParsed {
             self.test(".NODEREADCHAR")
             if self.isParsed {
                 self.out("add(childNode: Node(type: .readCharacter))")
@@ -2161,22 +2172,6 @@ public class Compiler {
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
                 latestNode?.content = "add(childNode: Node(type: .empty))"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
-            }
-        }
-        if !self.isParsed {
-            self.test(".NODEEXPRESSION")
-            if self.isParsed {
-                self.out("add(childNode: Node(type: .expression))")
-                self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .expression))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
