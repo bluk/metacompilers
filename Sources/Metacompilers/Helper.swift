@@ -34,6 +34,13 @@ public class Node {
         case id
         case empty
 
+        case charEqual
+        case charLessThanOrEqual
+        case charGreaterThanOrEqual
+
+        case number(value: String)
+        case character(value: String)
+
         case text
         case statement
         case expression
