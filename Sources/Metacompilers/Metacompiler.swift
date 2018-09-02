@@ -2263,6 +2263,22 @@ public class Compiler {
             }
         }
         if !self.isParsed {
+            self.test(".NODECHAREXPRESSION")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .charExpression)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .charExpression)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
             self.test(".NODECHAREQUAL")
             if self.isParsed {
                 self.out("latestNode = Node(type: .charEqual)")
