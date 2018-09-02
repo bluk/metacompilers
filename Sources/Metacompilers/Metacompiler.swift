@@ -1760,21 +1760,9 @@ public class Compiler {
             self.out(self.token)
             self.out("()")
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "try self.rule"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
+            latestNode = Node(type: .id)
             latestNode?.content = self.token
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "()"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
         }
         if !self.isParsed {
             try self.ruleSTRING()
@@ -1785,27 +1773,9 @@ public class Compiler {
                 self.out(String(UnicodeScalar(34)))
                 self.out(")")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.test("
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
+                latestNode = Node(type: .string)
                 latestNode?.content = self.token
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = ")"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -1822,15 +1792,7 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.isParsed = true")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.isParsed = true"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
+                add(childNode: Node(type: .empty))
             }
         }
         if !self.isParsed {
@@ -1838,26 +1800,9 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.token = String(Array(self.inbuf.utf8)[self.inp])")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.token = String(Array(self.inbuf.utf8)[self.inp])"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
+                add(childNode: Node(type: .readCharacter))
                 self.out("self.inp += 1")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.inp += 1"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
             }
         }
         if !self.isParsed {
@@ -2258,7 +2203,7 @@ public class Compiler {
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .readChar))"
+                latestNode?.content = "add(childNode: Node(type: .readCharacter))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"

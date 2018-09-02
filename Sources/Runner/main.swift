@@ -105,6 +105,16 @@ class CodeGenerator {
             leftMargin -= 4
             out(content: "}\n")
             out(content: "self.isParsed = true\n")
+
+        case .readCharacter:
+            out(content: "self.token = String(Array(self.inbuf.utf8)[self.inp])\n")
+            out(content: "self.inp += 1\n")
+        case .string:
+            out(content: "self.test(\"\(node.content!)\")\n")
+        case .id:
+            out(content: "try self.rule\(node.content!)()\n")
+        case .empty:
+            out(content: "self.isParsed = true\n")
         case .comment:
             out(content: "// \(node.content!.trimmingCharacters(in: .whitespaces))\n")
         case .rule:
