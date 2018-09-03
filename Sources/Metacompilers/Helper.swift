@@ -37,6 +37,7 @@ public class Node {
         case charEqual
         case charLessThanOrEqual
         case charGreaterThanOrEqual
+        case charExpression
 
         case number(value: String)
         case character(value: String)

@@ -1214,7 +1214,7 @@ public class Compiler {
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
             latestNode = Node(type: .text)
-            latestNode?.content = "currentNode.children?.append(contentsOf: stashedNodes)"
+            latestNode?.content = "currentNode?.children.append(contentsOf: stashedNodes)"
             add(childNode: latestNode!)
             latestNode = Node(type: .text)
             latestNode?.content = "\n"
@@ -3061,17 +3061,11 @@ public class Compiler {
         self.stack[self.stack.count - 1].leftMargin += 4
         self.eol()
         if true {
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isParsed ="
-            add(childNode: latestNode!)
-            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
+            latestNode = Node(type: .charExpression)
+            self.add(childNode: latestNode!)
+            self.pushLastChildAsNodeContext()
+            add(childNode: Node(type: .or))
+            self.pushLastChildAsNodeContext()
             try self.ruleCX2()
             if !self.isParsed { try self.err() }
             self.isParsed = true
@@ -3080,31 +3074,16 @@ public class Compiler {
                 if self.isParsed {
                     self.out(" ||")
                     self.eol()
-                    add(childNode: Node(type: .output))
-                    pushLastChildAsNodeContext()
-                    latestNode = Node(type: .text)
-                    latestNode?.content = " ||"
-                    add(childNode: latestNode!)
-                    latestNode = Node(type: .text)
-                    latestNode?.content = "\n"
-                    add(childNode: latestNode!)
-                    popNodeContext()
                     try self.ruleCX2()
                     if !self.isParsed { try self.err() }
                 }
             }
             self.isParsed = true
             if !self.isParsed { try self.err() }
+            self.popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
             self.eol()
-            add(childNode: Node(type: .output))
-            pushLastChildAsNodeContext()
-            latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            popNodeContext()
+            self.popNodeContext()
         }
     }
 
@@ -3113,59 +3092,43 @@ public class Compiler {
         defer { self.contextPop() }
         try self.ruleCX3()
         if self.isParsed {
+            self.stash(node: latestNode!)
             self.test(":")
             if self.isParsed {
-                self.out("(Array(self.inbuf.utf8)[self.inp] >= ")
+                add(childNode: Node(type: .and))
+                self.pushLastChildAsNodeContext()
+                self.out("( Array(self.inbuf.utf8)[self.inp] >= ")
                 self.out(self.token)
-                self.out(" ) &&")
+                self.out(" &&")
                 self.eol()
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "(Array(self.inbuf.utf8)[self.inp] >= "
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = " ) &&"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                popNodeContext()
+                latestNode = Node(type: .charGreaterThanOrEqual)
+                self.add(childNode: latestNode!)
+                self.pushLastChildAsNodeContext()
+                self.popNodeStash()
+                self.popNodeContext()
                 try self.ruleCX3()
                 if !self.isParsed { try self.err() }
-                self.out(" (Array(self.inbuf.utf8)[self.inp] <= ")
+                self.stash(node: latestNode!)
+                self.out(" Array(self.inbuf.utf8)[self.inp] <= ")
                 self.out(self.token)
-                self.out("  )")
-                add(childNode: Node(type: .output))
-                pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = " (Array(self.inbuf.utf8)[self.inp] <= "
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "  )"
-                add(childNode: latestNode!)
-                popNodeContext()
+                self.out(" )")
+                latestNode = Node(type: .charLessThanOrEqual)
+                self.add(childNode: latestNode!)
+                self.pushLastChildAsNodeContext()
+                self.popNodeStash()
+                self.popNodeContext()
+                self.popNodeContext()
             }
             if !self.isParsed {
                 self.isParsed = true
                 if self.isParsed {
                     self.out("Array(self.inbuf.utf8)[self.inp] == ")
                     self.out(self.token)
-                    add(childNode: Node(type: .output))
-                    pushLastChildAsNodeContext()
-                    latestNode = Node(type: .text)
-                    latestNode?.content = "Array(self.inbuf.utf8)[self.inp] == "
-                    add(childNode: latestNode!)
-                    latestNode = Node(type: .text)
-                    latestNode?.content = self.token
-                    add(childNode: latestNode!)
-                    popNodeContext()
+                    latestNode = Node(type: .charEqual)
+                    self.add(childNode: latestNode!)
+                    self.pushLastChildAsNodeContext()
+                    self.popNodeStash()
+                    self.popNodeContext()
                 }
             }
             if !self.isParsed { try self.err() }
@@ -3177,6 +3140,7 @@ public class Compiler {
         defer { self.contextPop() }
         try self.ruleNUMBER()
         if self.isParsed {
+            latestNode = Node(type: .number(value: self.token))
         }
         if !self.isParsed {
             try self.ruleSQUOTE()
@@ -3184,6 +3148,7 @@ public class Compiler {
                 self.token = String(Array(self.inbuf.utf8)[self.inp])
                 self.inp += 1
                 if !self.isParsed { try self.err() }
+                latestNode = Node(type: .character(value: self.token))
             }
         }
     }
@@ -3305,10 +3270,10 @@ public class Compiler {
         self.contextPush("ALPHA")
         defer { self.contextPop() }
         self.isParsed =
-            (Array(self.inbuf.utf8)[self.inp] >= 65 ) &&
-             (Array(self.inbuf.utf8)[self.inp] <= 90  ) ||
-            (Array(self.inbuf.utf8)[self.inp] >= 97 ) &&
-             (Array(self.inbuf.utf8)[self.inp] <= 122  )
+            ( Array(self.inbuf.utf8)[self.inp] >= 65 &&
+             Array(self.inbuf.utf8)[self.inp] <= 90 ) ||
+            ( Array(self.inbuf.utf8)[self.inp] >= 97 &&
+             Array(self.inbuf.utf8)[self.inp] <= 122 )
         if self.isParsed {
             if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
             self.inp += 1 }
@@ -3320,8 +3285,8 @@ public class Compiler {
         self.contextPush("DIGIT")
         defer { self.contextPop() }
         self.isParsed =
-            (Array(self.inbuf.utf8)[self.inp] >= 48 ) &&
-             (Array(self.inbuf.utf8)[self.inp] <= 57  )
+            ( Array(self.inbuf.utf8)[self.inp] >= 48 &&
+             Array(self.inbuf.utf8)[self.inp] <= 57 )
         if self.isParsed {
             if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }
             self.inp += 1 }

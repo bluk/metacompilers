@@ -110,7 +110,7 @@ POSTAMBLE =
            .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
 
            .OUT('func popNodeStash() {' .LM+ .NL) .NODE(.NODEOUTPUT 'func popNodeStash() {' .LM+ .NL)
-           .OUT('currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL) .NODE(.NODEOUTPUT 'currentNode.children?.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL)
+           .OUT('currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL) .NODE(.NODEOUTPUT 'currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL)
            .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
 
            .OUT('func eol () {' .LM+ .NL) .NODE(.NODEOUTPUT 'func eol () {' .LM+ .NL)
@@ -276,14 +276,16 @@ TX3 = ( '.TOKEN'  .OUT('self.isToken = true' .NL) .NODE(.NODEOUTPUT 'self.isToke
       '(' TX1 ')'  ;
 
 [ character expressions ]
-CX1 = .OUT('self.isParsed =' .LM+ .NL) .NODE(.NODEOUTPUT 'self.isParsed =' .LM+ .NL)
-      CX2 $('!' .OUT(' ||' .NL) .NODE(.NODEOUTPUT ' ||' .NL) CX2)
-      .OUT(.LM- .NL) .NODE(.NODEOUTPUT .LM- .NL) ;
-CX2 = CX3 (':' .OUT('(Array(self.inbuf.utf8)[self.inp] >= ' * ' ) &&' .NL) .NODE(.NODEOUTPUT '(Array(self.inbuf.utf8)[self.inp] >= ' * ' ) &&' .NL)
-               CX3
-               .OUT(' (Array(self.inbuf.utf8)[self.inp] <= ' * '  )' ) .NODE(.NODEOUTPUT ' (Array(self.inbuf.utf8)[self.inp] <= ' * '  )' ) /
-           .EMPTY .OUT('Array(self.inbuf.utf8)[self.inp] == ' * ) .NODE(.NODEOUTPUT 'Array(self.inbuf.utf8)[self.inp] == ' * )  ) ;
-CX3 = NUMBER / SQUOTE .LITCHR ;
+CX1 = .OUT('self.isParsed =' .LM+ .NL) .NODE(.NODECHAREXPRESSION) .NODEADDCHILD() .NODECONTEXTPUSH()
+      .NODE(.NODEOR) .NODECONTEXTPUSH() CX2 $('!' .OUT(' ||' .NL) CX2) .NODECONTEXTPOP()
+      .OUT(.LM- .NL) .NODECONTEXTPOP()
+      ;
+CX2 = CX3 .NODESTASHPUSH()
+          (':' .NODE(.NODEAND) .NODECONTEXTPUSH() .OUT('( Array(self.inbuf.utf8)[self.inp] >= ' * ' &&' .NL) .NODE(.NODECHARGREATERTHANEQUAL) .NODEADDCHILD() .NODECONTEXTPUSH() .NODESTASHPOP() .NODECONTEXTPOP()
+              CX3 .NODESTASHPUSH() .OUT(' Array(self.inbuf.utf8)[self.inp] <= ' * ' )') .NODE(.NODECHARLESSTHANEQUAL) .NODEADDCHILD() .NODECONTEXTPUSH() .NODESTASHPOP() .NODECONTEXTPOP() .NODECONTEXTPOP() /
+          .EMPTY .OUT('Array(self.inbuf.utf8)[self.inp] == ' * ) .NODE(.NODECHAREQUAL) .NODEADDCHILD() .NODECONTEXTPUSH() .NODESTASHPOP() .NODECONTEXTPOP() )
+      ;
+CX3 = NUMBER .NODE(.NODENUMBER) / SQUOTE .LITCHR .NODE(.NODECHAR);
 
 [ token definitions ]
 .TOKENS
