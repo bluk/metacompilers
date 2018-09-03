@@ -2263,6 +2263,86 @@ public class Compiler {
             }
         }
         if !self.isParsed {
+            self.test(".NODETOKENEXPRESSION")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .tokenExpression)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .tokenExpression)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODETOKENSTART")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .tokenStart)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .tokenStart)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODETOKENEND")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .tokenEnd)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .tokenEnd)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODETOKENANYBUT")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .tokenAnyBut)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .tokenAnyBut)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
+            self.test(".NODETOKENANY")
+            if self.isParsed {
+                self.out("latestNode = Node(type: .tokenAny)")
+                self.eol()
+                add(childNode: Node(type: .output))
+                pushLastChildAsNodeContext()
+                latestNode = Node(type: .text)
+                latestNode?.content = "latestNode = Node(type: .tokenAny)"
+                add(childNode: latestNode!)
+                latestNode = Node(type: .text)
+                latestNode?.content = "\n"
+                add(childNode: latestNode!)
+                popNodeContext()
+            }
+        }
+        if !self.isParsed {
             self.test(".NODECHAREXPRESSION")
             if self.isParsed {
                 self.out("latestNode = Node(type: .charExpression)")
