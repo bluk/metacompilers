@@ -186,12 +186,6 @@ class CodeGenerator {
             }
         case .text:
             fatalError("Unexpected node")
-        case .statement:
-            fatalError("Unexpected node")
-        case .expression:
-            fatalError("Unexpected node")
-        case .helper(_):
-            fatalError("Unexpected node")
         case .charExpression:
             out(content: "self.isParsed =\n")
             isCharExpressionStack.append(true)

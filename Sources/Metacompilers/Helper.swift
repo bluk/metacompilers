@@ -7,15 +7,6 @@
 
 import Foundation
 
-public struct NodeParameter {
-    public enum ParameterType {
-        case literal(String)
-        case bool(Bool)
-        case keyValue(String, String)
-        case string(String)
-    }
-}
-
 public class Node {
 
     public enum NodeType {
@@ -49,14 +40,9 @@ public class Node {
         case tokenEnd
 
         case text(value: String)
-        case statement
-        case expression
-        case helper(name: String)
     }
 
     public let type: NodeType
-    public var content: String?
-    public var parameters: [NodeParameter] = []
     public var children: [Node] = []
 
     public init(type: NodeType) {
