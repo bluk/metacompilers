@@ -243,6 +243,14 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODEZEROORMORE' .OUT('add(childNode: Node(type: .zeroOrMore))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .zeroOrMore))' .NL)
                          ;
 
+NODECONTENTTEXT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: self.token))' .NL ) /
+                  STRING .OUT('latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL ) /
+                  NUMBER .OUT('latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL ) /
+                  '.NL'  .OUT('latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL ) /
+                  '.LM+' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL) /
+                  '.LM-' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL)
+                  ;
+
 NODECONTENT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) /
               STRING .OUT('latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
               NUMBER .OUT('latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) /
