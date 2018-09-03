@@ -32,7 +32,8 @@ guard let dataAsStr = String(data: data, encoding: .utf8) else {
 class CodeGenerator {
     var outputBuffer = ""
     var leftMargin = 0
-    var isCharExpression = false
+    var isCharExpressionStack: [Bool] = [false]
+    var isTokenExpressionStack: [Bool] = [false]
 
     func out(content: String) {
         // output string
@@ -70,14 +71,14 @@ class CodeGenerator {
             }
 
             for child in node.children[1...] {
-                if isCharExpression {
+                if let isCharExpression = isCharExpressionStack.last, isCharExpression {
                     out(content: " ||\n")
                 } else {
                     out(content: "if !self.isParsed {\n")
                     leftMargin += 4
                 }
                 traverseNodes(node: child)
-                if !isCharExpression {
+                if let isCharExpression = isCharExpressionStack.last, !isCharExpression {
                     leftMargin -= 4
                     out(content: "}\n")
                 }
@@ -87,12 +88,12 @@ class CodeGenerator {
                 return
             }
 
-            if isCharExpression {
+            if let isCharExpression = isCharExpressionStack.last, isCharExpression {
                 out(content: "( ")
             }
             traverseNodes(node: node.children.first!)
 
-            if !isCharExpression {
+            if let isCharExpression = isCharExpressionStack.last, !isCharExpression {
                 switch(node.children.first!.type) {
                 case .output:
                     out(content: "if true {\n")
@@ -103,7 +104,7 @@ class CodeGenerator {
             }
 
             guard node.children.count > 1 else {
-                if isCharExpression {
+                if let isCharExpression = isCharExpressionStack.last, isCharExpression {
                     out(content: " )")
                 } else {
                     leftMargin -= 4
@@ -113,23 +114,27 @@ class CodeGenerator {
             }
 
             for child in node.children[1...] {
-                if isCharExpression {
+                if let isCharExpression = isCharExpressionStack.last, isCharExpression {
                     out(content: " &&\n")
                     out(content: " ")
                 }
                 traverseNodes(node: child)
 
-                if !isCharExpression {
+                if let isCharExpression = isCharExpressionStack.last, !isCharExpression {
                     switch(child.type) {
                     case .output:
                         break
                     default:
-                        out(content: "if !self.isParsed { try self.err() }\n")
+                        if let value = isTokenExpressionStack.last, value == true{
+                            out(content: "if !self.isParsed { return }\n")
+                        } else {
+                            out(content: "if !self.isParsed { try self.err() }\n")
+                        }
                     }
                 }
             }
 
-            if isCharExpression {
+            if let isCharExpression = isCharExpressionStack.last, isCharExpression {
                 out(content: " )")
             } else {
                 leftMargin -= 4
@@ -191,7 +196,7 @@ class CodeGenerator {
             fatalError("Unexpected node")
         case .charExpression:
             out(content: "self.isParsed =\n")
-            isCharExpression = true
+            isCharExpressionStack.append(true)
             leftMargin += 4
 
             guard node.children.count > 0 else {
@@ -202,7 +207,7 @@ class CodeGenerator {
 
             leftMargin -= 4
             out(content: "\n")
-            isCharExpression = false
+            _ = isCharExpressionStack.popLast()
         case .charEqual:
             guard node.children.count == 1 else {
                 fatalError("Unexpected only 1 child node")
@@ -258,6 +263,34 @@ class CodeGenerator {
             fatalError("Unexpected node")
         case .character(_):
             fatalError("Unexpected node")
+        case .tokenExpression:
+            isTokenExpressionStack.append(true)
+            node.children.forEach(traverseNodes)
+            _ = isTokenExpressionStack.popLast()
+        case .tokenAny:
+            node.children.forEach(traverseNodes)
+            out(content: "if self.isParsed {\n")
+            leftMargin += 4
+            out(content: "if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }\n")
+            out(content: "self.inp += 1 }")
+            leftMargin -= 4
+            out(content: "\n")
+        case .tokenAnyBut:
+            node.children.forEach(traverseNodes)
+            out(content: "self.isParsed = !self.isParsed\n")
+            out(content: "if self.isParsed {\n")
+            leftMargin += 4
+            out(content: "if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }\n")
+            out(content: "self.inp += 1 }")
+            leftMargin -= 4
+            out(content: "\n")
+        case .tokenStart:
+            out(content: "self.isToken = true\n")
+            out(content: "self.token = \"\"\n")
+            out(content: "self.isParsed = true\n")
+        case .tokenEnd:
+            out(content: "self.isToken = false\n")
+            out(content: "self.isParsed = true\n")
         }
     }
 }

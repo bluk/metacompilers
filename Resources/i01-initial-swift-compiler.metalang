@@ -252,32 +252,39 @@ NODECONTENT = '*'    .OUT('latestNode = Node(type: .text)' .NL 'latestNode?.cont
               ;
 
 [ token expressions ]
-TX1 = TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL) )
+TX1 = .NODE(.NODETOKENEXPRESSION) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODEOR) .NODECONTEXTPUSH() TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) .NODECONTEXTPOP() .NODECONTEXTPOP()
       ;
 
-TX2 = TX3 .OUT('if self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if self.isParsed {' .LM+ .NL)
-      $(TX3 .OUT('if !self.isParsed { return }' .NL) .NODE(.NODEOUTPUT 'if !self.isParsed { return }' .NL) )
-      .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
+TX2 = .NODE(.NODEAND) .NODECONTEXTPUSH() TX3 .OUT('if self.isParsed {' .LM+ .NL)
+      $(TX3 .OUT('if !self.isParsed { return }' .NL))
+      .OUT(.LM- '}' .NL)
+      .NODECONTEXTPOP()
       ;
 
-TX3 = ( '.TOKEN'  .OUT('self.isToken = true' .NL) .NODE(.NODEOUTPUT 'self.isToken = true' .NL)
-                  .OUT('self.token = ' 34 34 .NL) .NODE(.NODEOUTPUT 'self.token = ' 34 34 .NL) /
-        '.DELTOK' .OUT('self.isToken = false' .NL) .NODE(.NODEOUTPUT 'self.isToken = false' .NL) /
-        '$' .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL)
-            .OUT('while self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'while self.isParsed {' .LM+ .NL)
+TX3 = ( '.TOKEN'  .OUT('self.isToken = true' .NL)
+                  .OUT('self.token = ' 34 34 .NL) .NODE(.NODETOKENSTART) .NODEADDCHILD() /
+        '.DELTOK' .OUT('self.isToken = false' .NL) .NODE(.NODETOKENEND) .NODEADDCHILD() /
+        '$' .OUT('self.isParsed = true' .NL)
+            .OUT('while self.isParsed {' .LM+ .NL)
+            .NODE(.NODEZEROORMORE)
+            .NODECONTEXTPUSH()
              TX3
-            .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL) )
-        .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL) /
-      '.ANYBUT(' CX1 ')' .OUT('self.isParsed = !self.isParsed' .NL) .NODE(.NODEOUTPUT 'self.isParsed = !self.isParsed' .NL)
-        .OUT('if self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if self.isParsed {' .LM+ .NL)
-        .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL) .NODE(.NODEOUTPUT 'if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
-        .OUT('self.inp += 1 }' .LM- .NL) .NODE(.NODEOUTPUT 'self.inp += 1 }' .LM- .NL) /
-      '.ANY(' CX1 ')'
-        .OUT('if self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if self.isParsed {' .LM+ .NL)
-        .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL) .NODE(.NODEOUTPUT 'if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
-        .OUT('self.inp += 1 }' .LM- .NL) .NODE(.NODEOUTPUT 'self.inp += 1 }' .LM- .NL) /
+            .NODECONTEXTPOP()
+            .OUT(.LM- '}' .NL)
+        )
+        .OUT('self.isParsed = true' .NL) /
+      '.ANYBUT(' .NODE(.NODETOKENANYBUT) .NODEADDCHILD() .NODECONTEXTPUSH() CX1 .NODECONTEXTPOP() ')'
+        .OUT('self.isParsed = !self.isParsed' .NL)
+        .OUT('if self.isParsed {' .LM+ .NL)
+        .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
+        .OUT('self.inp += 1 }' .LM- .NL) /
+      '.ANY(' .NODE(.NODETOKENANY) .NODEADDCHILD() .NODECONTEXTPUSH() CX1 .NODECONTEXTPOP() ')'
+        .OUT('if self.isParsed {' .LM+ .NL)
+        .OUT('if self.isToken { self.token += String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp])) }' .NL)
+        .OUT('self.inp += 1 }' .LM- .NL) /
       ID
-        .OUT('try self.rule' * '()' .NL) .NODE(.NODEOUTPUT 'try self.rule' * '()' .NL) /
+        .OUT('try self.rule' * '()' .NL)
+        .NODE(.NODEID) /
       '(' TX1 ')'  ;
 
 [ character expressions ]

@@ -42,6 +42,12 @@ public class Node {
         case number(value: String)
         case character(value: String)
 
+        case tokenExpression
+        case tokenAny
+        case tokenAnyBut
+        case tokenStart
+        case tokenEnd
+
         case text
         case statement
         case expression
