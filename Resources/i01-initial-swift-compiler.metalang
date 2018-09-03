@@ -148,7 +148,7 @@ POSTAMBLE =
            ;
 
 [ parsing rule definition ]
-PR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
+PR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE) .NODEADDCHILD()
      .NODECONTEXTPUSH()
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
      .OUT('defer { self.contextPop() }' .NL)
@@ -158,7 +158,7 @@ PR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
      ;
 
 [ token rule definition ]
-TR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE)
+TR = ID .OUT('func rule'* '() throws {' .LM+ .NL) .NODE(.NODERULE) .NODEADDCHILD()
      .NODECONTEXTPUSH()
      .OUT('self.contextPush(' 34 * 34 ')' .NL)
      .OUT('defer { self.contextPop() }' .NL)
@@ -220,7 +220,7 @@ NODE = '.NODECONTEXTPUSH' '(' ')' .OUT('self.pushLastChildAsNodeContext()' .NL) 
 NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)
                          $NODECONTENT
                          .OUT('popNodeContext()' .NL) .NODE(.NODEOUTPUT 'popNodeContext()' .NL) /
-           '.NODERULE' .OUT('latestNode = Node(type: .rule)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .rule)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
+           '.NODERULE' .OUT('latestNode = Node(type: .rule(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .rule(value: self.token))' .NL) /
            '.NODECOMMENT' .OUT('latestNode = Node(type: .comment)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .comment)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
            '.NODEID' .OUT('latestNode = Node(type: .id)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .id)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
            '.NODETOKENEXPRESSION' .OUT('latestNode = Node(type: .tokenExpression)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenExpression)' .NL) /

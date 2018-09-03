@@ -163,10 +163,10 @@ class CodeGenerator {
             out(content: "self.isParsed = true\n")
         case .comment:
             out(content: "//\(node.content!)\n")
-        case .rule:
-            out(content: "func rule\(node.content!)() throws {\n")
+        case .rule(let value):
+            out(content: "func rule\(value)() throws {\n")
             leftMargin += 4
-            out(content: "self.contextPush(\"\(node.content!)\")\n")
+            out(content: "self.contextPush(\"\(value)\")\n")
             out(content: "defer { self.contextPop() }\n")
             node.children.forEach(traverseNodes)
             leftMargin -= 4

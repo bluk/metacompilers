@@ -21,7 +21,7 @@ public class Node {
     public enum NodeType {
         case root
 
-        case rule
+        case rule(value: String)
         case leftMargin(margin: Int)
         case comment
         case output

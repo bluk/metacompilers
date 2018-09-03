@@ -1633,9 +1633,8 @@ public class Compiler {
             self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .rule)
-            latestNode?.content = self.token
-            add(childNode: latestNode!)
+            latestNode = Node(type: .rule(value: self.token))
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             self.out("self.contextPush(")
             self.out(String(UnicodeScalar(34)))
@@ -1670,9 +1669,8 @@ public class Compiler {
             self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .rule)
-            latestNode?.content = self.token
-            add(childNode: latestNode!)
+            latestNode = Node(type: .rule(value: self.token))
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             self.out("self.contextPush(")
             self.out(String(UnicodeScalar(34)))
@@ -2169,28 +2167,12 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODERULE")
             if self.isParsed {
-                self.out("latestNode = Node(type: .rule)")
-                self.eol()
-                self.out("latestNode?.content = self.token")
-                self.eol()
-                self.out("add(childNode: latestNode!)")
+                self.out("latestNode = Node(type: .rule(value: self.token))")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .rule)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = self.token"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode?.content = "latestNode = Node(type: .rule(value: self.token))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
