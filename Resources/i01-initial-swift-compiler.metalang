@@ -183,7 +183,7 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) /
       STRING    .OUT('self.test(' 34 * 34 ')' .NL) .NODE(.NODESTRING) /
       '(' EX1 ')'                            /
       '.EMPTY'  .OUT('self.isParsed = true' .NL) .NODE(.NODEEMPTY)    /
-      '.LITCHR' .OUT('self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL) .NODE(.NODEREADCHAR)
+      '.LITCHR' .OUT('self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL) .NODE(.NODEREADCHAR) .NODEADDCHILD()
                 .OUT('self.inp += 1' .NL) /
       '$' .OUT('self.isParsed = true' .NL)
           .OUT('while self.isParsed {' .LM+ .NL)
@@ -236,7 +236,7 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODENUMBER' .OUT('latestNode = Node(type: .number(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .number(value: self.token))' .NL) /
            '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .character(value: self.token))' .NL) /
            '.NODETEXT' $NODECONTENT /
-           '.NODEREADCHAR' .OUT('add(childNode: Node(type: .readCharacter))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .readCharacter))' .NL)  /
+           '.NODEREADCHAR' .OUT('latestNode = Node(type: .readCharacter)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .readCharacter)' .NL)  /
            '.NODEEMPTY' .OUT('add(childNode: Node(type: .empty))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .empty))' .NL)  /
            '.NODEOR' .OUT('add(childNode: Node(type: .or))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .or))' .NL)  /
            '.NODEAND' .OUT('add(childNode: Node(type: .and))' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .and))' .NL)  /

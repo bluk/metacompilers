@@ -1846,7 +1846,8 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.token = String(Array(self.inbuf.utf8)[self.inp])")
                 self.eol()
-                add(childNode: Node(type: .readCharacter))
+                latestNode = Node(type: .readCharacter)
+                self.add(childNode: latestNode!)
                 self.out("self.inp += 1")
                 self.eol()
             }
@@ -2449,12 +2450,12 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEREADCHAR")
             if self.isParsed {
-                self.out("add(childNode: Node(type: .readCharacter))")
+                self.out("latestNode = Node(type: .readCharacter)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .readCharacter))"
+                latestNode?.content = "latestNode = Node(type: .readCharacter)"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
