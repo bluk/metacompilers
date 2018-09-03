@@ -27,17 +27,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// "
+            latestNode = Node(type: .text(value: "// "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = self.token
+            latestNode = Node(type: .text(value: self.token))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = " compiler"
+            latestNode = Node(type: .text(value: " compiler"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public class Compiler {")
@@ -46,16 +42,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public class Compiler {"
+            latestNode = Node(type: .text(value: "public class Compiler {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             try self.rulePREAMBLE()
@@ -99,11 +92,9 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
@@ -119,57 +110,47 @@ public class Compiler {
         if true {
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public func compile(_ input: String) throws {"
+            latestNode = Node(type: .text(value: "public func compile(_ input: String) throws {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// initialize compiler variables")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// initialize compiler variables"
+            latestNode = Node(type: .text(value: "// initialize compiler variables"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.inbuf = input")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.inbuf = input"
+            latestNode = Node(type: .text(value: "self.inbuf = input"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.initialize()")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.initialize()"
+            latestNode = Node(type: .text(value: "self.initialize()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// call the first rule")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// call the first rule"
+            latestNode = Node(type: .text(value: "// call the first rule"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("try self.rule")
@@ -178,28 +159,22 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "try self.rule"
+            latestNode = Node(type: .text(value: "try self.rule"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = self.token
+            latestNode = Node(type: .text(value: self.token))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "()"
+            latestNode = Node(type: .text(value: "()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// special case handling of first rule failure")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// special case handling of first rule failure"
+            latestNode = Node(type: .text(value: "// special case handling of first rule failure"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("if !self.isParsed {")
@@ -207,13 +182,11 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "if !self.isParsed {"
+            latestNode = Node(type: .text(value: "if !self.isParsed {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("throw CompilerError.parseFailure(rule: ")
@@ -224,23 +197,17 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "throw CompilerError.parseFailure(rule: "
+            latestNode = Node(type: .text(value: "throw CompilerError.parseFailure(rule: "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = self.token
+            latestNode = Node(type: .text(value: self.token))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = ", inputOffset: self.inp)"
+            latestNode = Node(type: .text(value: ", inputOffset: self.inp)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -250,11 +217,9 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -265,14 +230,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
@@ -288,35 +250,29 @@ public class Compiler {
         if true {
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "struct StackFrame {"
+            latestNode = Node(type: .text(value: "struct StackFrame {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var erule: String")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var erule: String"
+            latestNode = Node(type: .text(value: "var erule: String"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var leftMargin: Int")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var leftMargin: Int"
+            latestNode = Node(type: .text(value: "var leftMargin: Int"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -326,55 +282,45 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// runtime variables")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// runtime variables"
+            latestNode = Node(type: .text(value: "// runtime variables"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var isParsed = false")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var isParsed = false"
+            latestNode = Node(type: .text(value: "var isParsed = false"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var isToken = false")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var isToken = false"
+            latestNode = Node(type: .text(value: "var isToken = false"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var inp = 0")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var inp = 0"
+            latestNode = Node(type: .text(value: "var inp = 0"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var inbuf = ")
@@ -383,17 +329,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var inbuf = "
+            latestNode = Node(type: .text(value: "var inbuf = "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public var outputBuffer = ")
@@ -402,17 +344,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public var outputBuffer = "
+            latestNode = Node(type: .text(value: "public var outputBuffer = "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public var token = ")
@@ -421,72 +359,58 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public var token = "
+            latestNode = Node(type: .text(value: "public var token = "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public var rootAST = Node(type: .root)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public var rootAST = Node(type: .root)"
+            latestNode = Node(type: .text(value: "public var rootAST = Node(type: .root)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var currentNode: Node?")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var currentNode: Node?"
+            latestNode = Node(type: .text(value: "var currentNode: Node?"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var latestNode: Node?")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var latestNode: Node?"
+            latestNode = Node(type: .text(value: "var latestNode: Node?"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var nodeContextStack: [Node] = []")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var nodeContextStack: [Node] = []"
+            latestNode = Node(type: .text(value: "var nodeContextStack: [Node] = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var stashedNodes: [Node] = []")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var stashedNodes: [Node] = []"
+            latestNode = Node(type: .text(value: "var stashedNodes: [Node] = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var stack: [StackFrame] = []")
@@ -494,14 +418,11 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var stack: [StackFrame] = []"
+            latestNode = Node(type: .text(value: "var stack: [StackFrame] = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public init() {")
@@ -509,24 +430,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public init() {"
+            latestNode = Node(type: .text(value: "public init() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.initialize()")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.initialize()"
+            latestNode = Node(type: .text(value: "self.initialize()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -537,14 +454,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func initialize () {")
@@ -552,57 +466,47 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func initialize () {"
+            latestNode = Node(type: .text(value: "func initialize () {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// initialize for another compile")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// initialize for another compile"
+            latestNode = Node(type: .text(value: "// initialize for another compile"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.isParsed = false")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isParsed = false"
+            latestNode = Node(type: .text(value: "self.isParsed = false"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.isToken = false")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isToken = false"
+            latestNode = Node(type: .text(value: "self.isToken = false"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.inp = 0")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.inp = 0"
+            latestNode = Node(type: .text(value: "self.inp = 0"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.outputBuffer = ")
@@ -611,17 +515,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.outputBuffer = "
+            latestNode = Node(type: .text(value: "self.outputBuffer = "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.token = ")
@@ -630,72 +530,58 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.token = "
+            latestNode = Node(type: .text(value: "self.token = "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.stack = []")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.stack = []"
+            latestNode = Node(type: .text(value: "self.stack = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.rootAST = Node(type: .root)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.rootAST = Node(type: .root)"
+            latestNode = Node(type: .text(value: "self.rootAST = Node(type: .root)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.currentNode = rootAST")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.currentNode = rootAST"
+            latestNode = Node(type: .text(value: "self.currentNode = rootAST"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.nodeContextStack = []")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.nodeContextStack = []"
+            latestNode = Node(type: .text(value: "self.nodeContextStack = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.stashedNodes = []")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.stashedNodes = []"
+            latestNode = Node(type: .text(value: "self.stashedNodes = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -706,14 +592,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func contextPush(_ rulename: String) {")
@@ -721,35 +604,29 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func contextPush(_ rulename: String) {"
+            latestNode = Node(type: .text(value: "func contextPush(_ rulename: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// push and initialize a new stackframe")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// push and initialize a new stackframe"
+            latestNode = Node(type: .text(value: "// push and initialize a new stackframe"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// new context inherits current context left margin")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// new context inherits current context left margin"
+            latestNode = Node(type: .text(value: "// new context inherits current context left margin"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var leftMargin = 0")
@@ -758,39 +635,31 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var leftMargin = 0"
+            latestNode = Node(type: .text(value: "var leftMargin = 0"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }"
+            latestNode = Node(type: .text(value: "if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// stackframe definition")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// stackframe definition"
+            latestNode = Node(type: .text(value: "// stackframe definition"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))"
+            latestNode = Node(type: .text(value: "self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -801,14 +670,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func contextPop() {")
@@ -816,35 +682,29 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func contextPop() {"
+            latestNode = Node(type: .text(value: "func contextPop() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// pop and possibly deallocate old stackframe")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// pop and possibly deallocate old stackframe"
+            latestNode = Node(type: .text(value: "// pop and possibly deallocate old stackframe"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("_ = self.stack.popLast() // pop stackframe")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "_ = self.stack.popLast() // pop stackframe"
+            latestNode = Node(type: .text(value: "_ = self.stack.popLast() // pop stackframe"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -855,14 +715,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func out(_ output: String) {")
@@ -870,46 +727,38 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func out(_ output: String) {"
+            latestNode = Node(type: .text(value: "func out(_ output: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// output string")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// output string"
+            latestNode = Node(type: .text(value: "// output string"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var indent = 0")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var indent = 0"
+            latestNode = Node(type: .text(value: "var indent = 0"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// if newline last output, add left margin before string")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// if newline last output, add left margin before string"
+            latestNode = Node(type: .text(value: "// if newline last output, add left margin before string"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == ")
@@ -921,37 +770,28 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == "
+            latestNode = Node(type: .text(value: "if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(92))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(92))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "n"
+            latestNode = Node(type: .text(value: "n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = " {"
+            latestNode = Node(type: .text(value: " {"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("  indent = self.stack[self.stack.count - 1].leftMargin")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "  indent = self.stack[self.stack.count - 1].leftMargin"
+            latestNode = Node(type: .text(value: "  indent = self.stack[self.stack.count - 1].leftMargin"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("  while indent > 0 { self.outputBuffer += ")
@@ -962,34 +802,26 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "  while indent > 0 { self.outputBuffer += "
+            latestNode = Node(type: .text(value: "  while indent > 0 { self.outputBuffer += "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = " "
+            latestNode = Node(type: .text(value: " "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "; indent -= 1 } }"
+            latestNode = Node(type: .text(value: "; indent -= 1 } }"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.outputBuffer += output")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.outputBuffer += output"
+            latestNode = Node(type: .text(value: "self.outputBuffer += output"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1000,14 +832,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func add(childNode: Node) {")
@@ -1015,24 +844,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func add(childNode: Node) {"
+            latestNode = Node(type: .text(value: "func add(childNode: Node) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("currentNode?.children.append(childNode)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "currentNode?.children.append(childNode)"
+            latestNode = Node(type: .text(value: "currentNode?.children.append(childNode)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1043,14 +868,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func pushLastChildAsNodeContext() {")
@@ -1058,35 +880,29 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func pushLastChildAsNodeContext() {"
+            latestNode = Node(type: .text(value: "func pushLastChildAsNodeContext() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("nodeContextStack.append(currentNode!)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "nodeContextStack.append(currentNode!)"
+            latestNode = Node(type: .text(value: "nodeContextStack.append(currentNode!)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("currentNode = currentNode!.children.last!")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "currentNode = currentNode!.children.last!"
+            latestNode = Node(type: .text(value: "currentNode = currentNode!.children.last!"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1097,14 +913,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func popNodeContext() {")
@@ -1112,24 +925,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func popNodeContext() {"
+            latestNode = Node(type: .text(value: "func popNodeContext() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("currentNode = nodeContextStack.popLast()!")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "currentNode = nodeContextStack.popLast()!"
+            latestNode = Node(type: .text(value: "currentNode = nodeContextStack.popLast()!"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1140,14 +949,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func stash(node: Node) {")
@@ -1155,24 +961,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func stash(node: Node) {"
+            latestNode = Node(type: .text(value: "func stash(node: Node) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("stashedNodes.append(node)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "stashedNodes.append(node)"
+            latestNode = Node(type: .text(value: "stashedNodes.append(node)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1183,14 +985,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func popNodeStash() {")
@@ -1198,13 +997,11 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func popNodeStash() {"
+            latestNode = Node(type: .text(value: "func popNodeStash() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("currentNode?.children.append(contentsOf: stashedNodes)")
@@ -1213,17 +1010,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "currentNode?.children.append(contentsOf: stashedNodes)"
+            latestNode = Node(type: .text(value: "currentNode?.children.append(contentsOf: stashedNodes)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "stashedNodes = []"
+            latestNode = Node(type: .text(value: "stashedNodes = []"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1234,14 +1027,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func eol () {")
@@ -1249,24 +1039,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func eol () {"
+            latestNode = Node(type: .text(value: "func eol () {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// output end of line")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// output end of line"
+            latestNode = Node(type: .text(value: "// output end of line"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.outputBuffer += ")
@@ -1277,23 +1063,17 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.outputBuffer += "
+            latestNode = Node(type: .text(value: "self.outputBuffer += "))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(92))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(92))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "n"
+            latestNode = Node(type: .text(value: "n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = String(UnicodeScalar(34))
+            latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1304,14 +1084,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func test (_ stringToCompare: String) {")
@@ -1319,189 +1096,155 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func test (_ stringToCompare: String) {"
+            latestNode = Node(type: .text(value: "func test (_ stringToCompare: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// test for a string in the input")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// test for a string in the input"
+            latestNode = Node(type: .text(value: "// test for a string in the input"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("var inputOffset = 0")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "var inputOffset = 0"
+            latestNode = Node(type: .text(value: "var inputOffset = 0"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// delete whitespace")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// delete whitespace"
+            latestNode = Node(type: .text(value: "// delete whitespace"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("while Array(self.inbuf.utf8)[self.inp] == 32 ||")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "while Array(self.inbuf.utf8)[self.inp] == 32 ||"
+            latestNode = Node(type: .text(value: "while Array(self.inbuf.utf8)[self.inp] == 32 ||"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("       Array(self.inbuf.utf8)[self.inp] == 9 ||")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "       Array(self.inbuf.utf8)[self.inp] == 9 ||"
+            latestNode = Node(type: .text(value: "       Array(self.inbuf.utf8)[self.inp] == 9 ||"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("       Array(self.inbuf.utf8)[self.inp] == 13 ||")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "       Array(self.inbuf.utf8)[self.inp] == 13 ||"
+            latestNode = Node(type: .text(value: "       Array(self.inbuf.utf8)[self.inp] == 13 ||"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}"
+            latestNode = Node(type: .text(value: "       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// test string case insensitive")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// test string case insensitive"
+            latestNode = Node(type: .text(value: "// test string case insensitive"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.isParsed = true")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isParsed = true"
+            latestNode = Node(type: .text(value: "self.isParsed = true"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {"
+            latestNode = Node(type: .text(value: "while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() =="
+            latestNode = Node(type: .text(value: "self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() =="))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()"
+            latestNode = Node(type: .text(value: "                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("  inputOffset += 1 }")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "  inputOffset += 1 }"
+            latestNode = Node(type: .text(value: "  inputOffset += 1 }"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)"
+            latestNode = Node(type: .text(value: "self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// advance input if found")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// advance input if found"
+            latestNode = Node(type: .text(value: "// advance input if found"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("if self.isParsed { self.inp = self.inp + stringToCompare.count }")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "if self.isParsed { self.inp = self.inp + stringToCompare.count }"
+            latestNode = Node(type: .text(value: "if self.isParsed { self.inp = self.inp + stringToCompare.count }"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1512,14 +1255,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("public enum CompilerError: Error {")
@@ -1527,24 +1267,20 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "public enum CompilerError: Error {"
+            latestNode = Node(type: .text(value: "public enum CompilerError: Error {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("case parseFailure(rule: String, inputOffset: Int)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "case parseFailure(rule: String, inputOffset: Int)"
+            latestNode = Node(type: .text(value: "case parseFailure(rule: String, inputOffset: Int)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1555,14 +1291,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("func err() throws {")
@@ -1570,35 +1303,29 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "func err() throws {"
+            latestNode = Node(type: .text(value: "func err() throws {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("// compilation error, provide error indication and context")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "// compilation error, provide error indication and context"
+            latestNode = Node(type: .text(value: "// compilation error, provide error indication and context"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.out("throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)"
+            latestNode = Node(type: .text(value: "throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.stack[self.stack.count - 1].leftMargin -= 4
@@ -1609,14 +1336,11 @@ public class Compiler {
             pushLastChildAsNodeContext()
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "}"
+            latestNode = Node(type: .text(value: "}"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
@@ -1882,8 +1606,7 @@ public class Compiler {
             if !self.isParsed { try self.err() }
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = ""
+            latestNode = Node(type: .text(value: ""))
             add(childNode: latestNode!)
             popNodeContext()
             self.pushLastChildAsNodeContext()
@@ -1906,11 +1629,9 @@ public class Compiler {
         if self.isParsed {
             self.out("self.out(self.token)")
             self.eol()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.out(self.token)"
+            latestNode = Node(type: .text(value: "self.out(self.token)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
         }
         if !self.isParsed {
@@ -1922,23 +1643,17 @@ public class Compiler {
                 self.out(String(UnicodeScalar(34)))
                 self.out(")")
                 self.eol()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.out("
+                latestNode = Node(type: .text(value: "self.out("))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
+                latestNode = Node(type: .text(value: self.token))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = ")"
+                latestNode = Node(type: .text(value: ")"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
             }
         }
@@ -1949,17 +1664,13 @@ public class Compiler {
                 self.out(self.token)
                 self.out(")))")
                 self.eol()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.out(String(UnicodeScalar("
+                latestNode = Node(type: .text(value: "self.out(String(UnicodeScalar("))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
+                latestNode = Node(type: .text(value: self.token))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = ")))"
+                latestNode = Node(type: .text(value: ")))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
             }
         }
@@ -1968,11 +1679,9 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.eol()")
                 self.eol()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.eol()"
+                latestNode = Node(type: .text(value: "self.eol()"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
             }
         }
@@ -1981,11 +1690,9 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.stack[self.stack.count - 1].leftMargin += 4")
                 self.eol()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.stack[self.stack.count - 1].leftMargin += 4"
+                latestNode = Node(type: .text(value: "self.stack[self.stack.count - 1].leftMargin += 4"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
             }
         }
@@ -1994,11 +1701,9 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.stack[self.stack.count - 1].leftMargin -= 4")
                 self.eol()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.stack[self.stack.count - 1].leftMargin -= 4"
+                latestNode = Node(type: .text(value: "self.stack[self.stack.count - 1].leftMargin -= 4"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
             }
         }
@@ -2019,11 +1724,9 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "self.pushLastChildAsNodeContext()"
+            latestNode = Node(type: .text(value: "self.pushLastChildAsNodeContext()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
@@ -2038,11 +1741,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.popNodeContext()"
+                latestNode = Node(type: .text(value: "self.popNodeContext()"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2058,11 +1759,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.popNodeStash()"
+                latestNode = Node(type: .text(value: "self.popNodeStash()"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2078,11 +1777,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.stash(node: latestNode!)"
+                latestNode = Node(type: .text(value: "self.stash(node: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2098,11 +1795,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "self.add(childNode: latestNode!)"
+                latestNode = Node(type: .text(value: "self.add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2131,17 +1826,13 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "add(childNode: Node(type: .output))"
+            latestNode = Node(type: .text(value: "add(childNode: Node(type: .output))"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "pushLastChildAsNodeContext()"
+            latestNode = Node(type: .text(value: "pushLastChildAsNodeContext()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
             self.isParsed = true
@@ -2154,11 +1845,9 @@ public class Compiler {
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "popNodeContext()"
+            latestNode = Node(type: .text(value: "popNodeContext()"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
@@ -2169,11 +1858,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .rule(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .rule(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2185,11 +1872,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .comment(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .comment(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2201,11 +1886,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .id(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .id(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2217,11 +1900,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .tokenExpression)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .tokenExpression)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2233,11 +1914,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .tokenStart)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .tokenStart)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2249,11 +1928,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .tokenEnd)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .tokenEnd)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2265,11 +1942,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .tokenAnyBut)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .tokenAnyBut)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2281,11 +1956,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .tokenAny)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .tokenAny)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2297,11 +1970,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .charExpression)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .charExpression)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2313,11 +1984,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .charEqual)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .charEqual)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2329,11 +1998,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .charLessThanOrEqual)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .charLessThanOrEqual)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2345,11 +2012,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .charGreaterThanOrEqual)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .charGreaterThanOrEqual)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2361,11 +2026,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .string(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .string(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2377,11 +2040,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .number(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .number(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2393,11 +2054,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .character(value: self.token))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .character(value: self.token))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2420,11 +2079,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .readCharacter)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .readCharacter)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2436,11 +2093,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .empty))"
+                latestNode = Node(type: .text(value: "add(childNode: Node(type: .empty))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2452,11 +2107,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .or))"
+                latestNode = Node(type: .text(value: "add(childNode: Node(type: .or))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2468,11 +2121,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .and))"
+                latestNode = Node(type: .text(value: "add(childNode: Node(type: .and))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2484,11 +2135,9 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: Node(type: .zeroOrMore))"
+                latestNode = Node(type: .text(value: "add(childNode: Node(type: .zeroOrMore))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2500,74 +2149,50 @@ public class Compiler {
         defer { self.contextPop() }
         self.test("*")
         if self.isParsed {
-            self.out("latestNode = Node(type: .text)")
-            self.eol()
-            self.out("latestNode?.content = self.token")
+            self.out("latestNode = Node(type: .text(value: self.token))")
             self.eol()
             self.out("add(childNode: latestNode!)")
             self.eol()
             add(childNode: Node(type: .output))
             pushLastChildAsNodeContext()
-            latestNode = Node(type: .text)
-            latestNode?.content = "latestNode = Node(type: .text)"
+            latestNode = Node(type: .text(value: "latestNode = Node(type: .text(value: self.token))"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "latestNode?.content = self.token"
+            latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
             add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "add(childNode: latestNode!)"
-            add(childNode: latestNode!)
-            latestNode = Node(type: .text)
-            latestNode?.content = "\n"
+            latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
             popNodeContext()
         }
         if !self.isParsed {
             try self.ruleSTRING()
             if self.isParsed {
-                self.out("latestNode = Node(type: .text)")
-                self.eol()
-                self.out("latestNode?.content = ")
+                self.out("latestNode = Node(type: .text(value: ")
                 self.out(String(UnicodeScalar(34)))
                 self.out(self.token)
                 self.out(String(UnicodeScalar(34)))
+                self.out("))")
                 self.eol()
                 self.out("add(childNode: latestNode!)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .text)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .text(value: "))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = "
+                latestNode = Node(type: .text(value: self.token))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
+                latestNode = Node(type: .text(value: "))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2575,39 +2200,25 @@ public class Compiler {
         if !self.isParsed {
             try self.ruleNUMBER()
             if self.isParsed {
-                self.out("latestNode = Node(type: .text)")
-                self.eol()
-                self.out("latestNode?.content = String(UnicodeScalar(")
+                self.out("latestNode = Node(type: .text(value: String(UnicodeScalar(")
                 self.out(self.token)
-                self.out("))")
+                self.out("))))")
                 self.eol()
                 self.out("add(childNode: latestNode!)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .text)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .text(value: String(UnicodeScalar("))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: self.token))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = String(UnicodeScalar("
+                latestNode = Node(type: .text(value: "))))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = self.token
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "))"
+                latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2615,47 +2226,34 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NL")
             if self.isParsed {
-                self.out("latestNode = Node(type: .text)")
-                self.eol()
-                self.out("latestNode?.content = ")
+                self.out("latestNode = Node(type: .text(value: ")
                 self.out(String(UnicodeScalar(34)))
                 self.out(String(UnicodeScalar(92)))
                 self.out("n")
                 self.out(String(UnicodeScalar(34)))
+                self.out("))")
                 self.eol()
                 self.out("add(childNode: latestNode!)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .text)"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .text(value: "))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = "
+                latestNode = Node(type: .text(value: String(UnicodeScalar(92))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: "n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(92))
+                latestNode = Node(type: .text(value: String(UnicodeScalar(34))))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "n"
+                latestNode = Node(type: .text(value: "))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = String(UnicodeScalar(34))
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2669,17 +2267,13 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }
@@ -2693,17 +2287,13 @@ public class Compiler {
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode = Node(type: .text(value: "add(childNode: latestNode!)"))
                 add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
+                latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
                 popNodeContext()
             }

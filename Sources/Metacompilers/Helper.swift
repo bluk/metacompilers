@@ -48,7 +48,7 @@ public class Node {
         case tokenStart
         case tokenEnd
 
-        case text
+        case text(value: String)
         case statement
         case expression
         case helper(name: String)

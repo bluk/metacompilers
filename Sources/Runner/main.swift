@@ -176,10 +176,8 @@ class CodeGenerator {
         case .output:
             for child in node.children {
                 switch (child.type) {
-                case .text:
-                    if let content = child.content {
-                        out(content: content)
-                    }
+                case .text(let value):
+                    out(content: value)
                 case .leftMargin(let margin):
                     leftMargin = margin
                 default:
