@@ -1819,9 +1819,8 @@ public class Compiler {
                 self.out(String(UnicodeScalar(34)))
                 self.out(")")
                 self.eol()
-                latestNode = Node(type: .string)
-                latestNode?.content = self.token
-                add(childNode: latestNode!)
+                latestNode = Node(type: .string(value: self.token))
+                self.add(childNode: latestNode!)
             }
         }
         if !self.isParsed {
@@ -2375,28 +2374,12 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODESTRING")
             if self.isParsed {
-                self.out("latestNode = Node(type: .string)")
-                self.eol()
-                self.out("latestNode?.content = self.token")
-                self.eol()
-                self.out("add(childNode: latestNode!)")
+                self.out("latestNode = Node(type: .string(value: self.token))")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .string)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = self.token"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode?.content = "latestNode = Node(type: .string(value: self.token))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"

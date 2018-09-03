@@ -155,8 +155,8 @@ class CodeGenerator {
         case .readCharacter:
             out(content: "self.token = String(Array(self.inbuf.utf8)[self.inp])\n")
             out(content: "self.inp += 1\n")
-        case .string:
-            out(content: "self.test(\"\(node.content!)\")\n")
+        case .string(let value):
+            out(content: "self.test(\"\(value)\")\n")
         case .id:
             out(content: "try self.rule\(node.content!)()\n")
         case .empty:

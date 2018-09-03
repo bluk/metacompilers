@@ -180,7 +180,7 @@ EX2 = .NODE(.NODEAND) .NODECONTEXTPUSH() (EX3 .OUT('if self.isParsed {' .LM+ .NL
       ;
 
 EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) /
-      STRING    .OUT('self.test(' 34 * 34 ')' .NL) .NODE(.NODESTRING) /
+      STRING    .OUT('self.test(' 34 * 34 ')' .NL) .NODE(.NODESTRING) .NODEADDCHILD() /
       '(' EX1 ')'                            /
       '.EMPTY'  .OUT('self.isParsed = true' .NL) .NODE(.NODEEMPTY)    /
       '.LITCHR' .OUT('self.token = String(Array(self.inbuf.utf8)[self.inp])' .NL) .NODE(.NODEREADCHAR) .NODEADDCHILD()
@@ -232,7 +232,7 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODECHAREQUAL' .OUT('latestNode = Node(type: .charEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charEqual)' .NL) /
            '.NODECHARLESSTHANEQUAL' .OUT('latestNode = Node(type: .charLessThanOrEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charLessThanOrEqual)' .NL) /
            '.NODECHARGREATERTHANEQUAL' .OUT('latestNode = Node(type: .charGreaterThanOrEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charGreaterThanOrEqual)' .NL) /
-           '.NODESTRING' .OUT('latestNode = Node(type: .string)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .string)' .NL 'latestNode?.content = self.token' .NL 'add(childNode: latestNode!)' .NL) /
+           '.NODESTRING' .OUT('latestNode = Node(type: .string(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .string(value: self.token))' .NL) /
            '.NODENUMBER' .OUT('latestNode = Node(type: .number(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .number(value: self.token))' .NL) /
            '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .character(value: self.token))' .NL) /
            '.NODETEXT' $NODECONTENT /

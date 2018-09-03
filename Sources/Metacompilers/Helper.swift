@@ -30,7 +30,7 @@ public class Node {
         case zeroOrMore
 
         case readCharacter
-        case string
+        case string(value: String)
         case id
         case empty
 
