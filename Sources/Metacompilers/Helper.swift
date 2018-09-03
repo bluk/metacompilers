@@ -23,7 +23,7 @@ public class Node {
 
         case rule(value: String)
         case leftMargin(margin: Int)
-        case comment
+        case comment(value: String)
         case output
         case and
         case or

@@ -161,8 +161,8 @@ class CodeGenerator {
             out(content: "try self.rule\(node.content!)()\n")
         case .empty:
             out(content: "self.isParsed = true\n")
-        case .comment:
-            out(content: "//\(node.content!)\n")
+        case .comment(let value):
+            out(content: "//\(value)\n")
         case .rule(let value):
             out(content: "func rule\(value)() throws {\n")
             leftMargin += 4

@@ -1707,9 +1707,8 @@ public class Compiler {
             self.out("//")
             self.out(self.token)
             self.eol()
-            latestNode = Node(type: .comment)
-            latestNode?.content = self.token
-            add(childNode: latestNode!)
+            latestNode = Node(type: .comment(value: self.token))
+            self.add(childNode: latestNode!)
         }
     }
 
@@ -2183,28 +2182,12 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODECOMMENT")
             if self.isParsed {
-                self.out("latestNode = Node(type: .comment)")
-                self.eol()
-                self.out("latestNode?.content = self.token")
-                self.eol()
-                self.out("add(childNode: latestNode!)")
+                self.out("latestNode = Node(type: .comment(value: self.token))")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .comment)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = self.token"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode?.content = "latestNode = Node(type: .comment(value: self.token))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
