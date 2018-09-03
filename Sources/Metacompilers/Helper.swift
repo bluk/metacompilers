@@ -31,7 +31,7 @@ public class Node {
 
         case readCharacter
         case string(value: String)
-        case id
+        case id(value: String)
         case empty
 
         case charEqual

@@ -1806,9 +1806,8 @@ public class Compiler {
             self.out(self.token)
             self.out("()")
             self.eol()
-            latestNode = Node(type: .id)
-            latestNode?.content = self.token
-            add(childNode: latestNode!)
+            latestNode = Node(type: .id(value: self.token))
+            self.add(childNode: latestNode!)
         }
         if !self.isParsed {
             try self.ruleSTRING()
@@ -2198,28 +2197,12 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEID")
             if self.isParsed {
-                self.out("latestNode = Node(type: .id)")
-                self.eol()
-                self.out("latestNode?.content = self.token")
-                self.eol()
-                self.out("add(childNode: latestNode!)")
+                self.out("latestNode = Node(type: .id(value: self.token))")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
                 latestNode = Node(type: .text)
-                latestNode?.content = "latestNode = Node(type: .id)"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "latestNode?.content = self.token"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "\n"
-                add(childNode: latestNode!)
-                latestNode = Node(type: .text)
-                latestNode?.content = "add(childNode: latestNode!)"
+                latestNode?.content = "latestNode = Node(type: .id(value: self.token))"
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text)
                 latestNode?.content = "\n"
@@ -2884,9 +2867,8 @@ public class Compiler {
                 self.out(self.token)
                 self.out("()")
                 self.eol()
-                latestNode = Node(type: .id)
-                latestNode?.content = self.token
-                add(childNode: latestNode!)
+                latestNode = Node(type: .id(value: self.token))
+                self.add(childNode: latestNode!)
             }
         }
         if !self.isParsed {

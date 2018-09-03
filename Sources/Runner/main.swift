@@ -157,8 +157,8 @@ class CodeGenerator {
             out(content: "self.inp += 1\n")
         case .string(let value):
             out(content: "self.test(\"\(value)\")\n")
-        case .id:
-            out(content: "try self.rule\(node.content!)()\n")
+        case .id(let value):
+            out(content: "try self.rule\(value)()\n")
         case .empty:
             out(content: "self.isParsed = true\n")
         case .comment(let value):
