@@ -1,7 +1,7 @@
 // PROGRAM compiler
 public class Compiler {
 
-    public func compile(_ input: String) throws {
+    public final func compile(_ input: String) throws {
         // initialize compiler variables
         self.inbuf = input
         self.initialize()
@@ -14,7 +14,7 @@ public class Compiler {
     }
 
     // body of compiler definition 
-    func rulePROGRAM() throws {
+    final func rulePROGRAM() throws {
         self.contextPush("PROGRAM")
         defer { self.contextPop() }
         self.test(".SYNTAX")
@@ -100,17 +100,17 @@ public class Compiler {
     }
 
     // object definition preamble 
-    func rulePREAMBLE() throws {
+    final func rulePREAMBLE() throws {
         self.contextPush("PREAMBLE")
         defer { self.contextPop() }
         latestNode = Node(type: .output)
         if true {
             self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
-            self.out("public func compile(_ input: String) throws {")
+            self.out("public final func compile(_ input: String) throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "public func compile(_ input: String) throws {"))
+            latestNode = Node(type: .text(value: "public final func compile(_ input: String) throws {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -211,7 +211,7 @@ public class Compiler {
     }
 
     // runtime and object definition postamble 
-    func rulePOSTAMBLE() throws {
+    final func rulePOSTAMBLE() throws {
         self.contextPush("POSTAMBLE")
         defer { self.contextPop() }
         latestNode = Node(type: .output)
@@ -374,10 +374,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func initialize () {")
+            self.out("final func initialize () {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func initialize () {"))
+            latestNode = Node(type: .text(value: "final func initialize () {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -473,10 +473,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func contextPush(_ rulename: String) {")
+            self.out("final func contextPush(_ rulename: String) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func contextPush(_ rulename: String) {"))
+            latestNode = Node(type: .text(value: "final func contextPush(_ rulename: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -530,10 +530,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func contextPop() {")
+            self.out("final func contextPop() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func contextPop() {"))
+            latestNode = Node(type: .text(value: "final func contextPop() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -563,10 +563,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func out(_ output: String) {")
+            self.out("final func out(_ output: String) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func out(_ output: String) {"))
+            latestNode = Node(type: .text(value: "final func out(_ output: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -653,10 +653,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func add(childNode: Node) {")
+            self.out("final func add(childNode: Node) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func add(childNode: Node) {"))
+            latestNode = Node(type: .text(value: "final func add(childNode: Node) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -680,10 +680,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func pushLastChildAsNodeContext() {")
+            self.out("final func pushLastChildAsNodeContext() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func pushLastChildAsNodeContext() {"))
+            latestNode = Node(type: .text(value: "final func pushLastChildAsNodeContext() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -713,10 +713,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func popNodeContext() {")
+            self.out("final func popNodeContext() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func popNodeContext() {"))
+            latestNode = Node(type: .text(value: "final func popNodeContext() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -740,10 +740,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func stash(node: Node) {")
+            self.out("final func stash(node: Node) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func stash(node: Node) {"))
+            latestNode = Node(type: .text(value: "final func stash(node: Node) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -767,10 +767,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func popNodeStash() {")
+            self.out("final func popNodeStash() {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func popNodeStash() {"))
+            latestNode = Node(type: .text(value: "final func popNodeStash() {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -800,10 +800,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func eol () {")
+            self.out("final func eol () {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func eol () {"))
+            latestNode = Node(type: .text(value: "final func eol () {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -845,10 +845,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func test (_ stringToCompare: String) {")
+            self.out("final func test (_ stringToCompare: String) {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func test (_ stringToCompare: String) {"))
+            latestNode = Node(type: .text(value: "final func test (_ stringToCompare: String) {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -989,10 +989,10 @@ public class Compiler {
             add(childNode: latestNode!)
             latestNode = Node(type: .text(value: "\n"))
             add(childNode: latestNode!)
-            self.out("func err() throws {")
+            self.out("final func err() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
             self.eol()
-            latestNode = Node(type: .text(value: "func err() throws {"))
+            latestNode = Node(type: .text(value: "final func err() throws {"))
             add(childNode: latestNode!)
             latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))
             add(childNode: latestNode!)
@@ -1027,12 +1027,12 @@ public class Compiler {
     }
 
     // parsing rule definition 
-    func rulePR() throws {
+    final func rulePR() throws {
         self.contextPush("PR")
         defer { self.contextPop() }
         try self.ruleID()
         if self.isParsed {
-            self.out("func rule")
+            self.out("final func rule")
             self.out(self.token)
             self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
@@ -1063,12 +1063,12 @@ public class Compiler {
     }
 
     // token rule definition 
-    func ruleTR() throws {
+    final func ruleTR() throws {
         self.contextPush("TR")
         defer { self.contextPop() }
         try self.ruleID()
         if self.isParsed {
-            self.out("func rule")
+            self.out("final func rule")
             self.out(self.token)
             self.out("() throws {")
             self.stack[self.stack.count - 1].leftMargin += 4
@@ -1099,7 +1099,7 @@ public class Compiler {
     }
 
     // comment definition 
-    func ruleCOMMENT() throws {
+    final func ruleCOMMENT() throws {
         self.contextPush("COMMENT")
         defer { self.contextPop() }
         self.test("[")
@@ -1117,7 +1117,7 @@ public class Compiler {
     }
 
     // parsing expressions 
-    func ruleEX1() throws {
+    final func ruleEX1() throws {
         self.contextPush("EX1")
         defer { self.contextPop() }
         latestNode = Node(type: .or)
@@ -1146,7 +1146,7 @@ public class Compiler {
         }
     }
 
-    func ruleEX2() throws {
+    final func ruleEX2() throws {
         self.contextPush("EX2")
         defer { self.contextPop() }
         latestNode = Node(type: .and)
@@ -1203,7 +1203,7 @@ public class Compiler {
         }
     }
 
-    func ruleEX3() throws {
+    final func ruleEX3() throws {
         self.contextPush("EX3")
         defer { self.contextPop() }
         try self.ruleID()
@@ -1281,7 +1281,7 @@ public class Compiler {
     }
 
     // output expressions 
-    func ruleOUTPUT() throws {
+    final func ruleOUTPUT() throws {
         self.contextPush("OUTPUT")
         defer { self.contextPop() }
         self.test(".OUT")
@@ -1303,7 +1303,7 @@ public class Compiler {
         }
     }
 
-    func ruleOUT1() throws {
+    final func ruleOUT1() throws {
         self.contextPush("OUT1")
         defer { self.contextPop() }
         self.test("*")
@@ -1392,7 +1392,7 @@ public class Compiler {
 
     // .NODE( .NODE_COMMENT '//' * ' compiler' ) 
     //node expressions 
-    func ruleNODE() throws {
+    final func ruleNODE() throws {
         self.contextPush("NODE")
         defer { self.contextPop() }
         self.test(".NODECONTEXTPUSH")
@@ -1505,7 +1505,7 @@ public class Compiler {
         }
     }
 
-    func ruleNODETYPE() throws {
+    final func ruleNODETYPE() throws {
         self.contextPush("NODETYPE")
         defer { self.contextPop() }
         self.test(".NODEOUTPUT")
@@ -1750,7 +1750,7 @@ public class Compiler {
         }
     }
 
-    func ruleNODETEXTCONTENT() throws {
+    final func ruleNODETEXTCONTENT() throws {
         self.contextPush("NODETEXTCONTENT")
         defer { self.contextPop() }
         self.test("*")
@@ -1889,7 +1889,7 @@ public class Compiler {
     }
 
     // token expressions 
-    func ruleTX1() throws {
+    final func ruleTX1() throws {
         self.contextPush("TX1")
         defer { self.contextPop() }
         latestNode = Node(type: .tokenExpression)
@@ -1922,7 +1922,7 @@ public class Compiler {
         }
     }
 
-    func ruleTX2() throws {
+    final func ruleTX2() throws {
         self.contextPush("TX2")
         defer { self.contextPop() }
         latestNode = Node(type: .and)
@@ -1951,7 +1951,7 @@ public class Compiler {
         }
     }
 
-    func ruleTX3() throws {
+    final func ruleTX3() throws {
         self.contextPush("TX3")
         defer { self.contextPop() }
         self.test(".TOKEN")
@@ -2064,7 +2064,7 @@ public class Compiler {
     }
 
     // character expressions 
-    func ruleCX1() throws {
+    final func ruleCX1() throws {
         self.contextPush("CX1")
         defer { self.contextPop() }
         self.out("self.isParsed =")
@@ -2098,7 +2098,7 @@ public class Compiler {
         }
     }
 
-    func ruleCX2() throws {
+    final func ruleCX2() throws {
         self.contextPush("CX2")
         defer { self.contextPop() }
         try self.ruleCX3()
@@ -2147,7 +2147,7 @@ public class Compiler {
         }
     }
 
-    func ruleCX3() throws {
+    final func ruleCX3() throws {
         self.contextPush("CX3")
         defer { self.contextPop() }
         try self.ruleNUMBER()
@@ -2166,7 +2166,7 @@ public class Compiler {
     }
 
     // token definitions 
-    func rulePREFIX() throws {
+    final func rulePREFIX() throws {
         self.contextPush("PREFIX")
         defer { self.contextPop() }
         self.isParsed = true
@@ -2185,7 +2185,7 @@ public class Compiler {
         }
     }
 
-    func ruleID() throws {
+    final func ruleID() throws {
         self.contextPush("ID")
         defer { self.contextPop() }
         try self.rulePREFIX()
@@ -2215,7 +2215,7 @@ public class Compiler {
         }
     }
 
-    func ruleNUMBER() throws {
+    final func ruleNUMBER() throws {
         self.contextPush("NUMBER")
         defer { self.contextPop() }
         try self.rulePREFIX()
@@ -2238,7 +2238,7 @@ public class Compiler {
         }
     }
 
-    func ruleSTRING() throws {
+    final func ruleSTRING() throws {
         self.contextPush("STRING")
         defer { self.contextPop() }
         try self.rulePREFIX()
@@ -2278,7 +2278,7 @@ public class Compiler {
         }
     }
 
-    func ruleALPHA() throws {
+    final func ruleALPHA() throws {
         self.contextPush("ALPHA")
         defer { self.contextPop() }
         self.isParsed =
@@ -2293,7 +2293,7 @@ public class Compiler {
         }
     }
 
-    func ruleDIGIT() throws {
+    final func ruleDIGIT() throws {
         self.contextPush("DIGIT")
         defer { self.contextPop() }
         self.isParsed =
@@ -2306,7 +2306,7 @@ public class Compiler {
         }
     }
 
-    func ruleSQUOTE() throws {
+    final func ruleSQUOTE() throws {
         self.contextPush("SQUOTE")
         defer { self.contextPop() }
         try self.rulePREFIX()
@@ -2320,7 +2320,7 @@ public class Compiler {
         }
     }
 
-    func ruleCMLINE() throws {
+    final func ruleCMLINE() throws {
         self.contextPush("CMLINE")
         defer { self.contextPop() }
         self.isToken = true
@@ -2368,7 +2368,7 @@ public class Compiler {
         self.initialize()
     }
 
-    func initialize () {
+    final func initialize () {
         // initialize for another compile
         self.isParsed = false
         self.isToken = false
@@ -2382,7 +2382,7 @@ public class Compiler {
         self.stashedNodes = []
     }
 
-    func contextPush(_ rulename: String) {
+    final func contextPush(_ rulename: String) {
         // push and initialize a new stackframe
         // new context inherits current context left margin
         var leftMargin = 0
@@ -2391,12 +2391,12 @@ public class Compiler {
         self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))
     }
 
-    func contextPop() {
+    final func contextPop() {
         // pop and possibly deallocate old stackframe
         _ = self.stack.popLast() // pop stackframe
     }
 
-    func out(_ output: String) {
+    final func out(_ output: String) {
         // output string
         var indent = 0
         // if newline last output, add left margin before string
@@ -2406,34 +2406,34 @@ public class Compiler {
         self.outputBuffer += output
     }
 
-    func add(childNode: Node) {
+    final func add(childNode: Node) {
         currentNode?.children.append(childNode)
     }
 
-    func pushLastChildAsNodeContext() {
+    final func pushLastChildAsNodeContext() {
         nodeContextStack.append(currentNode!)
         currentNode = currentNode!.children.last!
     }
 
-    func popNodeContext() {
+    final func popNodeContext() {
         currentNode = nodeContextStack.popLast()!
     }
 
-    func stash(node: Node) {
+    final func stash(node: Node) {
         stashedNodes.append(node)
     }
 
-    func popNodeStash() {
+    final func popNodeStash() {
         currentNode?.children.append(contentsOf: stashedNodes)
         stashedNodes = []
     }
 
-    func eol () {
+    final func eol () {
         // output end of line
         self.outputBuffer += "\n"
     }
 
-    func test (_ stringToCompare: String) {
+    final func test (_ stringToCompare: String) {
         // test for a string in the input
         var inputOffset = 0
         // delete whitespace
@@ -2456,7 +2456,7 @@ public class Compiler {
         case parseFailure(rule: String, inputOffset: Int)
     }
 
-    func err() throws {
+    final func err() throws {
         // compilation error, provide error indication and context
         throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)
     }

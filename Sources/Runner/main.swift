@@ -29,13 +29,13 @@ guard let dataAsStr = String(data: data, encoding: .utf8) else {
     exit(1)
 }
 
-class CodeGenerator {
+final class CodeGenerator {
     var outputBuffer = ""
     var leftMargin = 0
     var isCharExpressionStack: [Bool] = [false]
     var isTokenExpressionStack: [Bool] = [false]
 
-    func out(content: String) {
+    final func out(content: String) {
         // output string
         var indent = 0
         // if newline last output, add left margin before string
@@ -49,7 +49,7 @@ class CodeGenerator {
         outputBuffer += content
     }
 
-    func traverseNodes(node: Node) {
+    final func traverseNodes(node: Node) {
         switch (node.type) {
         case .root:
             node.children.forEach(traverseNodes)
