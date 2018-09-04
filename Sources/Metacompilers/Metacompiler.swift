@@ -2070,7 +2070,7 @@ public class Compiler {
             if self.isParsed {
                 self.isParsed = true
                 while self.isParsed {
-                    try self.ruleNODECONTENT()
+                    try self.ruleNODETEXTCONTENT()
                 }
                 self.isParsed = true
                 if !self.isParsed { try self.err() }

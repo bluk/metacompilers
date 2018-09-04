@@ -236,7 +236,7 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODESTRING' .OUT('latestNode = Node(type: .string(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .string(value: self.token))' .NL) /
            '.NODENUMBER' .OUT('latestNode = Node(type: .number(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .number(value: self.token))' .NL) /
            '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .character(value: self.token))' .NL) /
-           '.NODETEXT' $NODECONTENT /
+           '.NODETEXT' $NODETEXTCONTENT /
            '.NODEREADCHAR' .OUT('latestNode = Node(type: .readCharacter)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .readCharacter)' .NL)  /
            '.NODEEMPTY' .OUT('latestNode = Node(type: .empty)' .NL) .NODE(.NODEOUTPUT 'latestNode = childNode: Node(type: .empty)' .NL)  /
            '.NODEOR' .OUT('latestNode = Node(type: .or)' .NL) .NODE(.NODEOUTPUT 'latestNode = childNode: Node(type: .or)' .NL)  /
