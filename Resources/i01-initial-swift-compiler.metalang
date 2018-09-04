@@ -3,148 +3,157 @@
 [ body of compiler definition ]
 
 PROGRAM = '.SYNTAX' ID
-          .OUT('// ' * ' compiler' .NL) .NODE(.NODEOUTPUT '// ' * ' compiler' .NL)
-          .OUT('public class Compiler {' .LM+ .NL .NL) .NODE(.NODEOUTPUT 'public class Compiler {' .LM+ .NL .NL)
+          .OUT('// ' * ' compiler' .NL)
+          .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+          .NODE(.NODETEXT '// ' * ' compiler' .NL)
+          .OUT('public class Compiler {' .LM+ .NL .NL) .NODE(.NODETEXT 'public class Compiler {' .LM+ .NL .NL)
+          .NODECONTEXTPOP()
           PREAMBLE
           $(PR / COMMENT)
           '.TOKENS'
           $(TR / COMMENT)
           '.END'
           POSTAMBLE
-          .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
+          .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+          .OUT(.LM- '}' .NL) .NODE(.NODETEXT .LM- '}' .NL)
+          .NODECONTEXTPOP()
           ;
 
 [ object definition preamble ]
-PREAMBLE = .OUT('public func compile(_ input: String) throws {' .LM+ .NL) .NODE(.NODEOUTPUT 'public func compile(_ input: String) throws {' .LM+ .NL)
-           .OUT('// initialize compiler variables' .NL) .NODE(.NODEOUTPUT '// initialize compiler variables' .NL)
-           .OUT('self.inbuf = input' .NL) .NODE(.NODEOUTPUT 'self.inbuf = input' .NL)
-           .OUT('self.initialize()' .NL) .NODE(.NODEOUTPUT 'self.initialize()' .NL)
-           .OUT('// call the first rule' .NL) .NODE(.NODEOUTPUT '// call the first rule' .NL)
-           .OUT('try self.rule' * '()' .NL) .NODE(.NODEOUTPUT 'try self.rule' * '()' .NL)
-           .OUT('// special case handling of first rule failure' .NL) .NODE(.NODEOUTPUT '// special case handling of first rule failure' .NL)
-           .OUT('if !self.isParsed {' .LM+ .NL) .NODE(.NODEOUTPUT 'if !self.isParsed {' .LM+ .NL)
-           .OUT('throw CompilerError.parseFailure(rule: ' 34 * 34 ', inputOffset: self.inp)' .NL) .NODE(.NODEOUTPUT 'throw CompilerError.parseFailure(rule: ' 34 * 34 ', inputOffset: self.inp)' .NL)
-           .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL) ;
+PREAMBLE = .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+           .OUT('public func compile(_ input: String) throws {' .LM+ .NL) .NODE(.NODETEXT 'public func compile(_ input: String) throws {' .LM+ .NL)
+           .OUT('// initialize compiler variables' .NL) .NODE(.NODETEXT '// initialize compiler variables' .NL)
+           .OUT('self.inbuf = input' .NL) .NODE(.NODETEXT 'self.inbuf = input' .NL)
+           .OUT('self.initialize()' .NL) .NODE(.NODETEXT 'self.initialize()' .NL)
+           .OUT('// call the first rule' .NL) .NODE(.NODETEXT '// call the first rule' .NL)
+           .OUT('try self.rule' * '()' .NL) .NODE(.NODETEXT 'try self.rule' * '()' .NL)
+           .OUT('// special case handling of first rule failure' .NL) .NODE(.NODETEXT '// special case handling of first rule failure' .NL)
+           .OUT('if !self.isParsed {' .LM+ .NL) .NODE(.NODETEXT 'if !self.isParsed {' .LM+ .NL)
+           .OUT('throw CompilerError.parseFailure(rule: ' 34 * 34 ', inputOffset: self.inp)' .NL) .NODE(.NODETEXT 'throw CompilerError.parseFailure(rule: ' 34 * 34 ', inputOffset: self.inp)' .NL)
+           .OUT(.LM- '}' .NL) .NODE(.NODETEXT .LM- '}' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
+           .NODECONTEXTPOP()
+           ;
 
 
 [ runtime and object definition postamble ]
 POSTAMBLE =
+           .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+           .OUT('struct StackFrame {' .LM+ .NL) .NODE(.NODETEXT 'struct StackFrame {' .LM+ .NL)
+           .OUT('var erule: String' .NL) .NODE(.NODETEXT 'var erule: String' .NL)
+           .OUT('var leftMargin: Int' .NL) .NODE(.NODETEXT 'var leftMargin: Int' .NL)
+           .OUT(.LM- '}' .NL) .NODE(.NODETEXT .LM- '}' .NL)
 
-           .OUT('struct StackFrame {' .LM+ .NL) .NODE(.NODEOUTPUT 'struct StackFrame {' .LM+ .NL)
-           .OUT('var erule: String' .NL) .NODE(.NODEOUTPUT 'var erule: String' .NL)
-           .OUT('var leftMargin: Int' .NL) .NODE(.NODEOUTPUT 'var leftMargin: Int' .NL)
-           .OUT(.LM- '}' .NL) .NODE(.NODEOUTPUT .LM- '}' .NL)
+           .OUT('// runtime variables' .NL) .NODE(.NODETEXT '// runtime variables' .NL)
+           .OUT('var isParsed = false' .NL) .NODE(.NODETEXT 'var isParsed = false' .NL)
+           .OUT('var isToken = false' .NL) .NODE(.NODETEXT 'var isToken = false' .NL)
+           .OUT('var inp = 0' .NL) .NODE(.NODETEXT 'var inp = 0' .NL)
+           .OUT('var inbuf = ' 34 34 .NL) .NODE(.NODETEXT 'var inbuf = ' 34 34 .NL)
+           .OUT('public var outputBuffer = ' 34 34 .NL) .NODE(.NODETEXT 'public var outputBuffer = ' 34 34 .NL)
+           .OUT('public var token = ' 34 34 .NL) .NODE(.NODETEXT 'public var token = ' 34 34 .NL)
+           .OUT('public var rootAST = Node(type: .root)' .NL) .NODE(.NODETEXT 'public var rootAST = Node(type: .root)' .NL)
+           .OUT('var currentNode: Node?' .NL) .NODE(.NODETEXT 'var currentNode: Node?' .NL)
+           .OUT('var latestNode: Node?' .NL) .NODE(.NODETEXT 'var latestNode: Node?' .NL)
+           .OUT('var nodeContextStack: [Node] = []' .NL) .NODE(.NODETEXT 'var nodeContextStack: [Node] = []' .NL)
+           .OUT('var stashedNodes: [Node] = []' .NL) .NODE(.NODETEXT 'var stashedNodes: [Node] = []' .NL)
+           .OUT('var stack: [StackFrame] = []' .NL .NL) .NODE(.NODETEXT 'var stack: [StackFrame] = []' .NL .NL)
 
-           .OUT('// runtime variables' .NL) .NODE(.NODEOUTPUT '// runtime variables' .NL)
-           .OUT('var isParsed = false' .NL) .NODE(.NODEOUTPUT 'var isParsed = false' .NL)
-           .OUT('var isToken = false' .NL) .NODE(.NODEOUTPUT 'var isToken = false' .NL)
-           .OUT('var inp = 0' .NL) .NODE(.NODEOUTPUT 'var inp = 0' .NL)
-           .OUT('var inbuf = ' 34 34 .NL) .NODE(.NODEOUTPUT 'var inbuf = ' 34 34 .NL)
-           .OUT('public var outputBuffer = ' 34 34 .NL) .NODE(.NODEOUTPUT 'public var outputBuffer = ' 34 34 .NL)
-           .OUT('public var token = ' 34 34 .NL) .NODE(.NODEOUTPUT 'public var token = ' 34 34 .NL)
-           .OUT('public var rootAST = Node(type: .root)' .NL) .NODE(.NODEOUTPUT 'public var rootAST = Node(type: .root)' .NL)
-           .OUT('var currentNode: Node?' .NL) .NODE(.NODEOUTPUT 'var currentNode: Node?' .NL)
-           .OUT('var latestNode: Node?' .NL) .NODE(.NODEOUTPUT 'var latestNode: Node?' .NL)
-           .OUT('var nodeContextStack: [Node] = []' .NL) .NODE(.NODEOUTPUT 'var nodeContextStack: [Node] = []' .NL)
-           .OUT('var stashedNodes: [Node] = []' .NL) .NODE(.NODEOUTPUT 'var stashedNodes: [Node] = []' .NL)
-           .OUT('var stack: [StackFrame] = []' .NL .NL) .NODE(.NODEOUTPUT 'var stack: [StackFrame] = []' .NL .NL)
+           .OUT('public init() {'.LM+ .NL) .NODE(.NODETEXT 'public init() {'.LM+ .NL)
+           .OUT('self.initialize()' .NL) .NODE(.NODETEXT 'self.initialize()' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('public init() {'.LM+ .NL) .NODE(.NODEOUTPUT 'public init() {'.LM+ .NL)
-           .OUT('self.initialize()' .NL) .NODE(.NODEOUTPUT 'self.initialize()' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func initialize () {'.LM+ .NL) .NODE(.NODETEXT 'func initialize () {'.LM+ .NL)
+           .OUT('// initialize for another compile' .NL) .NODE(.NODETEXT '// initialize for another compile' .NL)
+           .OUT('self.isParsed = false' .NL) .NODE(.NODETEXT 'self.isParsed = false' .NL)
+           .OUT('self.isToken = false' .NL) .NODE(.NODETEXT 'self.isToken = false' .NL)
+           .OUT('self.inp = 0' .NL) .NODE(.NODETEXT 'self.inp = 0' .NL)
+           .OUT('self.outputBuffer = ' 34 34 .NL) .NODE(.NODETEXT 'self.outputBuffer = ' 34 34 .NL)
+           .OUT('self.token = ' 34 34 .NL) .NODE(.NODETEXT 'self.token = ' 34 34 .NL)
+           .OUT('self.stack = []' .NL) .NODE(.NODETEXT 'self.stack = []' .NL)
+           .OUT('self.rootAST = Node(type: .root)' .NL) .NODE(.NODETEXT 'self.rootAST = Node(type: .root)' .NL)
+           .OUT('self.currentNode = rootAST' .NL) .NODE(.NODETEXT 'self.currentNode = rootAST' .NL)
+           .OUT('self.nodeContextStack = []' .NL) .NODE(.NODETEXT 'self.nodeContextStack = []' .NL)
+           .OUT('self.stashedNodes = []' .NL) .NODE(.NODETEXT 'self.stashedNodes = []' .NL)
 
-           .OUT('func initialize () {'.LM+ .NL) .NODE(.NODEOUTPUT 'func initialize () {'.LM+ .NL)
-           .OUT('// initialize for another compile' .NL) .NODE(.NODEOUTPUT '// initialize for another compile' .NL)
-           .OUT('self.isParsed = false' .NL) .NODE(.NODEOUTPUT 'self.isParsed = false' .NL)
-           .OUT('self.isToken = false' .NL) .NODE(.NODEOUTPUT 'self.isToken = false' .NL)
-           .OUT('self.inp = 0' .NL) .NODE(.NODEOUTPUT 'self.inp = 0' .NL)
-           .OUT('self.outputBuffer = ' 34 34 .NL) .NODE(.NODEOUTPUT 'self.outputBuffer = ' 34 34 .NL)
-           .OUT('self.token = ' 34 34 .NL) .NODE(.NODEOUTPUT 'self.token = ' 34 34 .NL)
-           .OUT('self.stack = []' .NL) .NODE(.NODEOUTPUT 'self.stack = []' .NL)
-           .OUT('self.rootAST = Node(type: .root)' .NL) .NODE(.NODEOUTPUT 'self.rootAST = Node(type: .root)' .NL)
-           .OUT('self.currentNode = rootAST' .NL) .NODE(.NODEOUTPUT 'self.currentNode = rootAST' .NL)
-           .OUT('self.nodeContextStack = []' .NL) .NODE(.NODEOUTPUT 'self.nodeContextStack = []' .NL)
-           .OUT('self.stashedNodes = []' .NL) .NODE(.NODEOUTPUT 'self.stashedNodes = []' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func contextPush(_ rulename: String) {' .LM+ .NL) .NODE(.NODETEXT 'func contextPush(_ rulename: String) {' .LM+ .NL)
+           .OUT('// push and initialize a new stackframe' .NL) .NODE(.NODETEXT '// push and initialize a new stackframe' .NL)
+           .OUT('// new context inherits current context left margin' .NL) .NODE(.NODETEXT '// new context inherits current context left margin' .NL)
+           .OUT('var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL) .NODE(.NODETEXT 'var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL)
+           .OUT('// stackframe definition' .NL) .NODE(.NODETEXT '// stackframe definition' .NL)
+           .OUT('self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL) .NODE(.NODETEXT 'self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func contextPush(_ rulename: String) {' .LM+ .NL) .NODE(.NODEOUTPUT 'func contextPush(_ rulename: String) {' .LM+ .NL)
-           .OUT('// push and initialize a new stackframe' .NL) .NODE(.NODEOUTPUT '// push and initialize a new stackframe' .NL)
-           .OUT('// new context inherits current context left margin' .NL) .NODE(.NODEOUTPUT '// new context inherits current context left margin' .NL)
-           .OUT('var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL) .NODE(.NODEOUTPUT 'var leftMargin = 0' .NL 'if self.stack.count >= 1 { leftMargin = self.stack[self.stack.count - 1].leftMargin }' .NL)
-           .OUT('// stackframe definition' .NL) .NODE(.NODEOUTPUT '// stackframe definition' .NL)
-           .OUT('self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL) .NODE(.NODEOUTPUT 'self.stack.append(StackFrame(erule: rulename, leftMargin: leftMargin))' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func contextPop() {' .LM+ .NL) .NODE(.NODETEXT 'func contextPop() {' .LM+ .NL)
+           .OUT('// pop and possibly deallocate old stackframe' .NL) .NODE(.NODETEXT '// pop and possibly deallocate old stackframe' .NL)
+           .OUT('_ = self.stack.popLast() // pop stackframe' .NL) .NODE(.NODETEXT '_ = self.stack.popLast() // pop stackframe' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func contextPop() {' .LM+ .NL) .NODE(.NODEOUTPUT 'func contextPop() {' .LM+ .NL)
-           .OUT('// pop and possibly deallocate old stackframe' .NL) .NODE(.NODEOUTPUT '// pop and possibly deallocate old stackframe' .NL)
-           .OUT('_ = self.stack.popLast() // pop stackframe' .NL) .NODE(.NODEOUTPUT '_ = self.stack.popLast() // pop stackframe' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func out(_ output: String) {' .LM+ .NL) .NODE(.NODETEXT 'func out(_ output: String) {' .LM+ .NL)
+           .OUT('// output string' .NL) .NODE(.NODETEXT '// output string' .NL)
+           .OUT('var indent = 0' .NL) .NODE(.NODETEXT 'var indent = 0' .NL)
+           .OUT('// if newline last output, add left margin before string' .NL) .NODE(.NODETEXT '// if newline last output, add left margin before string' .NL)
+           .OUT('if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == ' 34 92 'n' 34 ' {' .NL) .NODE(.NODETEXT 'if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == ' 34 92 'n' 34 ' {' .NL)
+           .OUT('  indent = self.stack[self.stack.count - 1].leftMargin' .NL) .NODE(.NODETEXT '  indent = self.stack[self.stack.count - 1].leftMargin' .NL)
+           .OUT('  while indent > 0 { self.outputBuffer += ' 34 ' ' 34 '; indent -= 1 } }' .NL) .NODE(.NODETEXT '  while indent > 0 { self.outputBuffer += ' 34 ' ' 34 '; indent -= 1 } }' .NL)
+           .OUT('self.outputBuffer += output' .NL) .NODE(.NODETEXT 'self.outputBuffer += output' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func out(_ output: String) {' .LM+ .NL) .NODE(.NODEOUTPUT 'func out(_ output: String) {' .LM+ .NL)
-           .OUT('// output string' .NL) .NODE(.NODEOUTPUT '// output string' .NL)
-           .OUT('var indent = 0' .NL) .NODE(.NODEOUTPUT 'var indent = 0' .NL)
-           .OUT('// if newline last output, add left margin before string' .NL) .NODE(.NODEOUTPUT '// if newline last output, add left margin before string' .NL)
-           .OUT('if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == ' 34 92 'n' 34 ' {' .NL) .NODE(.NODEOUTPUT 'if self.outputBuffer.count > 0 && String(UnicodeScalar(Array(self.outputBuffer.utf8)[self.outputBuffer.count - 1])) == ' 34 92 'n' 34 ' {' .NL)
-           .OUT('  indent = self.stack[self.stack.count - 1].leftMargin' .NL) .NODE(.NODEOUTPUT '  indent = self.stack[self.stack.count - 1].leftMargin' .NL)
-           .OUT('  while indent > 0 { self.outputBuffer += ' 34 ' ' 34 '; indent -= 1 } }' .NL) .NODE(.NODEOUTPUT '  while indent > 0 { self.outputBuffer += ' 34 ' ' 34 '; indent -= 1 } }' .NL)
-           .OUT('self.outputBuffer += output' .NL) .NODE(.NODEOUTPUT 'self.outputBuffer += output' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func add(childNode: Node) {' .LM+ .NL) .NODE(.NODETEXT 'func add(childNode: Node) {' .LM+ .NL)
+           .OUT('currentNode?.children.append(childNode)' .NL) .NODE(.NODETEXT 'currentNode?.children.append(childNode)' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func add(childNode: Node) {' .LM+ .NL) .NODE(.NODEOUTPUT 'func add(childNode: Node) {' .LM+ .NL)
-           .OUT('currentNode?.children.append(childNode)' .NL) .NODE(.NODEOUTPUT 'currentNode?.children.append(childNode)' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func pushLastChildAsNodeContext() {' .LM+ .NL) .NODE(.NODETEXT 'func pushLastChildAsNodeContext() {' .LM+ .NL)
+           .OUT('nodeContextStack.append(currentNode!)' .NL) .NODE(.NODETEXT 'nodeContextStack.append(currentNode!)' .NL)
+           .OUT('currentNode = currentNode!.children.last!' .NL) .NODE(.NODETEXT 'currentNode = currentNode!.children.last!' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func pushLastChildAsNodeContext() {' .LM+ .NL) .NODE(.NODEOUTPUT 'func pushLastChildAsNodeContext() {' .LM+ .NL)
-           .OUT('nodeContextStack.append(currentNode!)' .NL) .NODE(.NODEOUTPUT 'nodeContextStack.append(currentNode!)' .NL)
-           .OUT('currentNode = currentNode!.children.last!' .NL) .NODE(.NODEOUTPUT 'currentNode = currentNode!.children.last!' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func popNodeContext() {' .LM+ .NL) .NODE(.NODETEXT 'func popNodeContext() {' .LM+ .NL)
+           .OUT('currentNode = nodeContextStack.popLast()!' .NL) .NODE(.NODETEXT 'currentNode = nodeContextStack.popLast()!' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func popNodeContext() {' .LM+ .NL) .NODE(.NODEOUTPUT 'func popNodeContext() {' .LM+ .NL)
-           .OUT('currentNode = nodeContextStack.popLast()!' .NL) .NODE(.NODEOUTPUT 'currentNode = nodeContextStack.popLast()!' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func stash(node: Node) {' .LM+ .NL) .NODE(.NODETEXT 'func stash(node: Node) {' .LM+ .NL)
+           .OUT('stashedNodes.append(node)' .NL) .NODE(.NODETEXT 'stashedNodes.append(node)' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func stash(node: Node) {' .LM+ .NL) .NODE(.NODEOUTPUT 'func stash(node: Node) {' .LM+ .NL)
-           .OUT('stashedNodes.append(node)' .NL) .NODE(.NODEOUTPUT 'stashedNodes.append(node)' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func popNodeStash() {' .LM+ .NL) .NODE(.NODETEXT 'func popNodeStash() {' .LM+ .NL)
+           .OUT('currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL) .NODE(.NODETEXT 'currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func popNodeStash() {' .LM+ .NL) .NODE(.NODEOUTPUT 'func popNodeStash() {' .LM+ .NL)
-           .OUT('currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL) .NODE(.NODEOUTPUT 'currentNode?.children.append(contentsOf: stashedNodes)' .NL 'stashedNodes = []' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func eol () {' .LM+ .NL) .NODE(.NODETEXT 'func eol () {' .LM+ .NL)
+           .OUT('// output end of line' .NL) .NODE(.NODETEXT '// output end of line' .NL)
+           .OUT('self.outputBuffer += ' 34 92 'n' 34 .NL) .NODE(.NODETEXT 'self.outputBuffer += ' 34 92 'n' 34 .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func eol () {' .LM+ .NL) .NODE(.NODEOUTPUT 'func eol () {' .LM+ .NL)
-           .OUT('// output end of line' .NL) .NODE(.NODEOUTPUT '// output end of line' .NL)
-           .OUT('self.outputBuffer += ' 34 92 'n' 34 .NL) .NODE(.NODEOUTPUT 'self.outputBuffer += ' 34 92 'n' 34 .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func test (_ stringToCompare: String) {' .LM+ .NL) .NODE(.NODETEXT 'func test (_ stringToCompare: String) {' .LM+ .NL)
+           .OUT('// test for a string in the input' .NL) .NODE(.NODETEXT '// test for a string in the input' .NL)
+           .OUT('var inputOffset = 0' .NL) .NODE(.NODETEXT 'var inputOffset = 0' .NL)
+           .OUT('// delete whitespace' .NL) .NODE(.NODETEXT '// delete whitespace' .NL)
+           .OUT('while Array(self.inbuf.utf8)[self.inp] == 32 ||' .NL) .NODE(.NODETEXT 'while Array(self.inbuf.utf8)[self.inp] == 32 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 9 ||' .NL) .NODE(.NODETEXT '       Array(self.inbuf.utf8)[self.inp] == 9 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 13 ||' .NL) .NODE(.NODETEXT '       Array(self.inbuf.utf8)[self.inp] == 13 ||' .NL)
+           .OUT('       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}' .NL) .NODE(.NODETEXT '       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}' .NL)
+           .OUT('// test string case insensitive' .NL) .NODE(.NODETEXT '// test string case insensitive' .NL)
+           .OUT('self.isParsed = true' .NL) .NODE(.NODETEXT 'self.isParsed = true' .NL)
+           .OUT('while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL) .NODE(.NODETEXT 'while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL)
+           .OUT('self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==' .NL) .NODE(.NODETEXT 'self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==' .NL)
+           .OUT('                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()' .NL) .NODE(.NODETEXT '                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()' .NL)
+           .OUT('  inputOffset += 1 }' .NL) .NODE(.NODETEXT '  inputOffset += 1 }' .NL)
+           .OUT('self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)' .NL) .NODE(.NODETEXT 'self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)' .NL)
+           .OUT('// advance input if found' .NL) .NODE(.NODETEXT '// advance input if found' .NL)
+           .OUT('if self.isParsed { self.inp = self.inp + stringToCompare.count }' .NL) .NODE(.NODETEXT 'if self.isParsed { self.inp = self.inp + stringToCompare.count }' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('func test (_ stringToCompare: String) {' .LM+ .NL) .NODE(.NODEOUTPUT 'func test (_ stringToCompare: String) {' .LM+ .NL)
-           .OUT('// test for a string in the input' .NL) .NODE(.NODEOUTPUT '// test for a string in the input' .NL)
-           .OUT('var inputOffset = 0' .NL) .NODE(.NODEOUTPUT 'var inputOffset = 0' .NL)
-           .OUT('// delete whitespace' .NL) .NODE(.NODEOUTPUT '// delete whitespace' .NL)
-           .OUT('while Array(self.inbuf.utf8)[self.inp] == 32 ||' .NL) .NODE(.NODEOUTPUT 'while Array(self.inbuf.utf8)[self.inp] == 32 ||' .NL)
-           .OUT('       Array(self.inbuf.utf8)[self.inp] == 9 ||' .NL) .NODE(.NODEOUTPUT '       Array(self.inbuf.utf8)[self.inp] == 9 ||' .NL)
-           .OUT('       Array(self.inbuf.utf8)[self.inp] == 13 ||' .NL) .NODE(.NODEOUTPUT '       Array(self.inbuf.utf8)[self.inp] == 13 ||' .NL)
-           .OUT('       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}' .NL) .NODE(.NODEOUTPUT '       Array(self.inbuf.utf8)[self.inp] == 10 { self.inp += 1}' .NL)
-           .OUT('// test string case insensitive' .NL) .NODE(.NODEOUTPUT '// test string case insensitive' .NL)
-           .OUT('self.isParsed = true' .NL) .NODE(.NODEOUTPUT 'self.isParsed = true' .NL)
-           .OUT('while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL) .NODE(.NODEOUTPUT 'while self.isParsed && (inputOffset < stringToCompare.count) && ((self.inp + inputOffset) < self.inbuf.count) {' .NL)
-           .OUT('self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==' .NL) .NODE(.NODEOUTPUT 'self.isParsed = String(UnicodeScalar(Array(stringToCompare.utf8)[inputOffset])).uppercased() ==' .NL)
-           .OUT('                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()' .NL) .NODE(.NODEOUTPUT '                String(UnicodeScalar(Array(self.inbuf.utf8)[self.inp + inputOffset])).uppercased()' .NL)
-           .OUT('  inputOffset += 1 }' .NL) .NODE(.NODEOUTPUT '  inputOffset += 1 }' .NL)
-           .OUT('self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)' .NL) .NODE(.NODEOUTPUT 'self.isParsed = self.isParsed && (inputOffset == stringToCompare.count)' .NL)
-           .OUT('// advance input if found' .NL) .NODE(.NODEOUTPUT '// advance input if found' .NL)
-           .OUT('if self.isParsed { self.inp = self.inp + stringToCompare.count }' .NL) .NODE(.NODEOUTPUT 'if self.isParsed { self.inp = self.inp + stringToCompare.count }' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('public enum CompilerError: Error {' .LM+ .NL) .NODE(.NODETEXT 'public enum CompilerError: Error {' .LM+ .NL)
+           .OUT('case parseFailure(rule: String, inputOffset: Int)' .NL) .NODE(.NODETEXT 'case parseFailure(rule: String, inputOffset: Int)' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
 
-           .OUT('public enum CompilerError: Error {' .LM+ .NL) .NODE(.NODEOUTPUT 'public enum CompilerError: Error {' .LM+ .NL)
-           .OUT('case parseFailure(rule: String, inputOffset: Int)' .NL) .NODE(.NODEOUTPUT 'case parseFailure(rule: String, inputOffset: Int)' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
-
-           .OUT('func err() throws {' .LM+ .NL) .NODE(.NODEOUTPUT 'func err() throws {' .LM+ .NL)
-           .OUT('// compilation error, provide error indication and context' .NL) .NODE(.NODEOUTPUT '// compilation error, provide error indication and context' .NL)
-           .OUT('throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)' .NL) .NODE(.NODEOUTPUT 'throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)' .NL)
-           .OUT(.LM- '}' .NL .NL) .NODE(.NODEOUTPUT .LM- '}' .NL .NL)
+           .OUT('func err() throws {' .LM+ .NL) .NODE(.NODETEXT 'func err() throws {' .LM+ .NL)
+           .OUT('// compilation error, provide error indication and context' .NL) .NODE(.NODETEXT '// compilation error, provide error indication and context' .NL)
+           .OUT('throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)' .NL) .NODE(.NODETEXT 'throw CompilerError.parseFailure(rule: self.stack[self.stack.count - 1].erule, inputOffset: self.inp)' .NL)
+           .OUT(.LM- '}' .NL .NL) .NODE(.NODETEXT .LM- '}' .NL .NL)
+           .NODECONTEXTPOP()
            ;
 
 [ parsing rule definition ]
@@ -215,33 +224,33 @@ NODE = '.NODECONTEXTPUSH' '(' ')' .OUT('self.pushLastChildAsNodeContext()' .NL) 
        '.NODESTASHPOP' '(' ')'  .OUT('self.popNodeStash()' .NL) .NODE(.NODEOUTPUT 'self.popNodeStash()' .NL) /
        '.NODESTASHPUSH' '(' ')'  .OUT('self.stash(node: latestNode!)' .NL) .NODE(.NODEOUTPUT 'self.stash(node: latestNode!)' .NL) /
        '.NODEADDCHILD' '(' ')'  .OUT('self.add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'self.add(childNode: latestNode!)' .NL) /
-       '.NODE' '(' NODETYPE ')'
+       '.NODE' .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH() '(' NODETYPE ')' .NODECONTEXTPOP()
        ;
 
-NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT 'add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)
+NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL) .NODE(.NODETEXT 'add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)
                          $NODECONTENT
-                         .OUT('popNodeContext()' .NL) .NODE(.NODEOUTPUT 'popNodeContext()' .NL) /
-           '.NODERULE' .OUT('latestNode = Node(type: .rule(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .rule(value: self.token))' .NL) /
-           '.NODECOMMENT' .OUT('latestNode = Node(type: .comment(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .comment(value: self.token))' .NL) /
-           '.NODEID' .OUT('latestNode = Node(type: .id(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .id(value: self.token))' .NL) /
-           '.NODETOKENEXPRESSION' .OUT('latestNode = Node(type: .tokenExpression)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenExpression)' .NL) /
-           '.NODETOKENSTART' .OUT('latestNode = Node(type: .tokenStart)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenStart)' .NL) /
-           '.NODETOKENEND' .OUT('latestNode = Node(type: .tokenEnd)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenEnd)' .NL) /
-           '.NODETOKENANYBUT' .OUT('latestNode = Node(type: .tokenAnyBut)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenAnyBut)' .NL) /
-           '.NODETOKENANY' .OUT('latestNode = Node(type: .tokenAny)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .tokenAny)' .NL) /
-           '.NODECHAREXPRESSION' .OUT('latestNode = Node(type: .charExpression)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charExpression)' .NL) /
-           '.NODECHAREQUAL' .OUT('latestNode = Node(type: .charEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charEqual)' .NL) /
-           '.NODECHARLESSTHANEQUAL' .OUT('latestNode = Node(type: .charLessThanOrEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charLessThanOrEqual)' .NL) /
-           '.NODECHARGREATERTHANEQUAL' .OUT('latestNode = Node(type: .charGreaterThanOrEqual)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .charGreaterThanOrEqual)' .NL) /
-           '.NODESTRING' .OUT('latestNode = Node(type: .string(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .string(value: self.token))' .NL) /
-           '.NODENUMBER' .OUT('latestNode = Node(type: .number(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .number(value: self.token))' .NL) /
-           '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .character(value: self.token))' .NL) /
+                         .OUT('popNodeContext()' .NL) .NODE(.NODETEXT 'popNodeContext()' .NL) /
+           '.NODERULE' .OUT('latestNode = Node(type: .rule(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .rule(value: self.token))' .NL) /
+           '.NODECOMMENT' .OUT('latestNode = Node(type: .comment(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .comment(value: self.token))' .NL) /
+           '.NODEID' .OUT('latestNode = Node(type: .id(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .id(value: self.token))' .NL) /
+           '.NODETOKENEXPRESSION' .OUT('latestNode = Node(type: .tokenExpression)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .tokenExpression)' .NL) /
+           '.NODETOKENSTART' .OUT('latestNode = Node(type: .tokenStart)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .tokenStart)' .NL) /
+           '.NODETOKENEND' .OUT('latestNode = Node(type: .tokenEnd)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .tokenEnd)' .NL) /
+           '.NODETOKENANYBUT' .OUT('latestNode = Node(type: .tokenAnyBut)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .tokenAnyBut)' .NL) /
+           '.NODETOKENANY' .OUT('latestNode = Node(type: .tokenAny)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .tokenAny)' .NL) /
+           '.NODECHAREXPRESSION' .OUT('latestNode = Node(type: .charExpression)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .charExpression)' .NL) /
+           '.NODECHAREQUAL' .OUT('latestNode = Node(type: .charEqual)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .charEqual)' .NL) /
+           '.NODECHARLESSTHANEQUAL' .OUT('latestNode = Node(type: .charLessThanOrEqual)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .charLessThanOrEqual)' .NL) /
+           '.NODECHARGREATERTHANEQUAL' .OUT('latestNode = Node(type: .charGreaterThanOrEqual)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .charGreaterThanOrEqual)' .NL) /
+           '.NODESTRING' .OUT('latestNode = Node(type: .string(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .string(value: self.token))' .NL) /
+           '.NODENUMBER' .OUT('latestNode = Node(type: .number(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .number(value: self.token))' .NL) /
+           '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .character(value: self.token))' .NL) /
            '.NODETEXT' $NODETEXTCONTENT /
-           '.NODEREADCHAR' .OUT('latestNode = Node(type: .readCharacter)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .readCharacter)' .NL)  /
-           '.NODEEMPTY' .OUT('latestNode = Node(type: .empty)' .NL) .NODE(.NODEOUTPUT 'latestNode = childNode: Node(type: .empty)' .NL)  /
-           '.NODEOR' .OUT('latestNode = Node(type: .or)' .NL) .NODE(.NODEOUTPUT 'latestNode = childNode: Node(type: .or)' .NL)  /
-           '.NODEAND' .OUT('latestNode = Node(type: .and)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .and)' .NL)  /
-           '.NODEZEROORMORE' .OUT('latestNode = Node(type: .zeroOrMore)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .zeroOrMore)' .NL)
+           '.NODEREADCHAR' .OUT('latestNode = Node(type: .readCharacter)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .readCharacter)' .NL)  /
+           '.NODEEMPTY' .OUT('latestNode = Node(type: .empty)' .NL) .NODE(.NODETEXT 'latestNode = childNode: Node(type: .empty)' .NL)  /
+           '.NODEOR' .OUT('latestNode = Node(type: .or)' .NL) .NODE(.NODETEXT 'latestNode = childNode: Node(type: .or)' .NL)  /
+           '.NODEAND' .OUT('latestNode = Node(type: .and)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .and)' .NL)  /
+           '.NODEZEROORMORE' .OUT('latestNode = Node(type: .zeroOrMore)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .zeroOrMore)' .NL)
                          ;
 
 NODETEXTCONTENT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) /
