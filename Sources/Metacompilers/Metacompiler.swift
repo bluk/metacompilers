@@ -1440,8 +1440,9 @@ public class Compiler {
     func ruleEX1() throws {
         self.contextPush("EX1")
         defer { self.contextPop() }
-        add(childNode: Node(type: .or))
+        latestNode = Node(type: .or)
         if true {
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             try self.ruleEX2()
             if !self.isParsed { try self.err() }
@@ -1468,8 +1469,9 @@ public class Compiler {
     func ruleEX2() throws {
         self.contextPush("EX2")
         defer { self.contextPop() }
-        add(childNode: Node(type: .and))
+        latestNode = Node(type: .and)
         if true {
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             try self.ruleEX3()
             if self.isParsed {
@@ -1560,7 +1562,8 @@ public class Compiler {
             if self.isParsed {
                 self.out("self.isParsed = true")
                 self.eol()
-                add(childNode: Node(type: .empty))
+                latestNode = Node(type: .empty)
+                self.add(childNode: latestNode!)
             }
         }
         if !self.isParsed {
@@ -1582,7 +1585,8 @@ public class Compiler {
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
-                add(childNode: Node(type: .zeroOrMore))
+                latestNode = Node(type: .zeroOrMore)
+                self.add(childNode: latestNode!)
                 self.pushLastChildAsNodeContext()
                 try self.ruleEX3()
                 if !self.isParsed { try self.err() }
@@ -2089,11 +2093,11 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEEMPTY")
             if self.isParsed {
-                self.out("add(childNode: Node(type: .empty))")
+                self.out("latestNode = Node(type: .empty)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text(value: "add(childNode: Node(type: .empty))"))
+                latestNode = Node(type: .text(value: "latestNode = childNode: Node(type: .empty)"))
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
@@ -2103,11 +2107,11 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEOR")
             if self.isParsed {
-                self.out("add(childNode: Node(type: .or))")
+                self.out("latestNode = Node(type: .or)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text(value: "add(childNode: Node(type: .or))"))
+                latestNode = Node(type: .text(value: "latestNode = childNode: Node(type: .or)"))
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
@@ -2117,11 +2121,11 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEAND")
             if self.isParsed {
-                self.out("add(childNode: Node(type: .and))")
+                self.out("latestNode = Node(type: .and)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text(value: "add(childNode: Node(type: .and))"))
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .and)"))
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
@@ -2131,11 +2135,11 @@ public class Compiler {
         if !self.isParsed {
             self.test(".NODEZEROORMORE")
             if self.isParsed {
-                self.out("add(childNode: Node(type: .zeroOrMore))")
+                self.out("latestNode = Node(type: .zeroOrMore)")
                 self.eol()
                 add(childNode: Node(type: .output))
                 pushLastChildAsNodeContext()
-                latestNode = Node(type: .text(value: "add(childNode: Node(type: .zeroOrMore))"))
+                latestNode = Node(type: .text(value: "latestNode = Node(type: .zeroOrMore)"))
                 add(childNode: latestNode!)
                 latestNode = Node(type: .text(value: "\n"))
                 add(childNode: latestNode!)
@@ -2428,7 +2432,8 @@ public class Compiler {
         if true {
             self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
-            add(childNode: Node(type: .or))
+            latestNode = Node(type: .or)
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             try self.ruleTX2()
             if !self.isParsed { try self.err() }
@@ -2456,8 +2461,9 @@ public class Compiler {
     func ruleTX2() throws {
         self.contextPush("TX2")
         defer { self.contextPop() }
-        add(childNode: Node(type: .and))
+        latestNode = Node(type: .and)
         if true {
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             try self.ruleTX3()
             if !self.isParsed { try self.err() }
@@ -2512,7 +2518,8 @@ public class Compiler {
                 self.out("while self.isParsed {")
                 self.stack[self.stack.count - 1].leftMargin += 4
                 self.eol()
-                add(childNode: Node(type: .zeroOrMore))
+                latestNode = Node(type: .zeroOrMore)
+                self.add(childNode: latestNode!)
                 self.pushLastChildAsNodeContext()
                 try self.ruleTX3()
                 if !self.isParsed { try self.err() }
@@ -2603,7 +2610,8 @@ public class Compiler {
             latestNode = Node(type: .charExpression)
             self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
-            add(childNode: Node(type: .or))
+            latestNode = Node(type: .or)
+            self.add(childNode: latestNode!)
             self.pushLastChildAsNodeContext()
             try self.ruleCX2()
             if !self.isParsed { try self.err() }
@@ -2634,7 +2642,8 @@ public class Compiler {
             self.stash(node: latestNode!)
             self.test(":")
             if self.isParsed {
-                add(childNode: Node(type: .and))
+                latestNode = Node(type: .and)
+                self.add(childNode: latestNode!)
                 self.pushLastChildAsNodeContext()
                 self.out("( Array(self.inbuf.utf8)[self.inp] >= ")
                 self.out(self.token)
