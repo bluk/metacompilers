@@ -4,7 +4,7 @@
 
 PROGRAM = '.SYNTAX' ID
           .OUT('// ' * ' compiler' .NL)
-          .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+          .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH()
           .NODE(.NODETEXT '// ' * ' compiler' .NL)
           .OUT('public class Compiler {' .LM+ .NL .NL) .NODE(.NODETEXT 'public class Compiler {' .LM+ .NL .NL)
           .NODECONTEXTPOP()
@@ -14,13 +14,13 @@ PROGRAM = '.SYNTAX' ID
           $(TR / COMMENT)
           '.END'
           POSTAMBLE
-          .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+          .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH()
           .OUT(.LM- '}' .NL) .NODE(.NODETEXT .LM- '}' .NL)
           .NODECONTEXTPOP()
           ;
 
 [ object definition preamble ]
-PREAMBLE = .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+PREAMBLE = .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH()
            .OUT('public func compile(_ input: String) throws {' .LM+ .NL) .NODE(.NODETEXT 'public func compile(_ input: String) throws {' .LM+ .NL)
            .OUT('// initialize compiler variables' .NL) .NODE(.NODETEXT '// initialize compiler variables' .NL)
            .OUT('self.inbuf = input' .NL) .NODE(.NODETEXT 'self.inbuf = input' .NL)
@@ -38,7 +38,7 @@ PREAMBLE = .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
 
 [ runtime and object definition postamble ]
 POSTAMBLE =
-           .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH()
+           .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH()
            .OUT('struct StackFrame {' .LM+ .NL) .NODE(.NODETEXT 'struct StackFrame {' .LM+ .NL)
            .OUT('var erule: String' .NL) .NODE(.NODETEXT 'var erule: String' .NL)
            .OUT('var leftMargin: Int' .NL) .NODE(.NODETEXT 'var leftMargin: Int' .NL)
@@ -206,7 +206,7 @@ EX3 = ID        .OUT('try self.rule' * '()' .NL) .NODE(.NODEID) .NODEADDCHILD() 
           ;
 
 [ output expressions ]
-OUTPUT = '.OUT' '(' .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH() $OUT1 .NODECONTEXTPOP() ')'
+OUTPUT = '.OUT' '(' .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() $OUT1 .NODECONTEXTPOP() ')'
          ;
 
 OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODETEXT 'self.out(self.token)' .NL) /
@@ -219,17 +219,15 @@ OUT1 = '*'     .OUT('self.out(self.token)' .NL) .NODE(.NODETEXT 'self.out(self.t
 
 [ .NODE( .NODE_COMMENT '//' * ' compiler' ) ]
 [node expressions ]
-NODE = '.NODECONTEXTPUSH' '(' ')' .OUT('self.pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT 'self.pushLastChildAsNodeContext()' .NL) /
-       '.NODECONTEXTPOP' '(' ')'  .OUT('self.popNodeContext()' .NL) .NODE(.NODEOUTPUT 'self.popNodeContext()' .NL) /
-       '.NODESTASHPOP' '(' ')'  .OUT('self.popNodeStash()' .NL) .NODE(.NODEOUTPUT 'self.popNodeStash()' .NL) /
-       '.NODESTASHPUSH' '(' ')'  .OUT('self.stash(node: latestNode!)' .NL) .NODE(.NODEOUTPUT 'self.stash(node: latestNode!)' .NL) /
-       '.NODEADDCHILD' '(' ')'  .OUT('self.add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'self.add(childNode: latestNode!)' .NL) /
-       '.NODE' .NODE(.NODEOUTPUT '') .NODECONTEXTPUSH() '(' NODETYPE ')' .NODECONTEXTPOP()
+NODE = '.NODECONTEXTPUSH' '(' ')' .OUT('self.pushLastChildAsNodeContext()' .NL) .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODETEXT 'self.pushLastChildAsNodeContext()' .NL) .NODECONTEXTPOP() /
+       '.NODECONTEXTPOP' '(' ')'  .OUT('self.popNodeContext()' .NL) .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODETEXT 'self.popNodeContext()' .NL) .NODECONTEXTPOP() /
+       '.NODESTASHPOP' '(' ')'  .OUT('self.popNodeStash()' .NL) .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODETEXT 'self.popNodeStash()' .NL) .NODECONTEXTPOP() /
+       '.NODESTASHPUSH' '(' ')'  .OUT('self.stash(node: latestNode!)' .NL) .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODETEXT 'self.stash(node: latestNode!)' .NL) .NODECONTEXTPOP() /
+       '.NODEADDCHILD' '(' ')'  .OUT('self.add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODETEXT 'self.add(childNode: latestNode!)' .NL) .NODECONTEXTPOP() /
+       '.NODE' .NODE(.NODEOUTPUT) .NODEADDCHILD() .NODECONTEXTPUSH() '(' NODETYPE ')' .NODECONTEXTPOP()
        ;
 
-NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL) .NODE(.NODETEXT 'add(childNode: Node(type: .output))' .NL 'pushLastChildAsNodeContext()' .NL)
-                         $NODECONTENT
-                         .OUT('popNodeContext()' .NL) .NODE(.NODETEXT 'popNodeContext()' .NL) /
+NODETYPE = '.NODEOUTPUT' .OUT('latestNode = Node(type: .output)' .NL ) .NODE(.NODETEXT 'latestNode = Node(type: .output)' .NL) /
            '.NODERULE' .OUT('latestNode = Node(type: .rule(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .rule(value: self.token))' .NL) /
            '.NODECOMMENT' .OUT('latestNode = Node(type: .comment(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .comment(value: self.token))' .NL) /
            '.NODEID' .OUT('latestNode = Node(type: .id(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .id(value: self.token))' .NL) /
@@ -247,27 +245,19 @@ NODETYPE = '.NODEOUTPUT' .OUT('add(childNode: Node(type: .output))' .NL 'pushLas
            '.NODECHAR' .OUT('latestNode = Node(type: .character(value: self.token))' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .character(value: self.token))' .NL) /
            '.NODETEXT' $NODETEXTCONTENT /
            '.NODEREADCHAR' .OUT('latestNode = Node(type: .readCharacter)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .readCharacter)' .NL)  /
-           '.NODEEMPTY' .OUT('latestNode = Node(type: .empty)' .NL) .NODE(.NODETEXT 'latestNode = childNode: Node(type: .empty)' .NL)  /
-           '.NODEOR' .OUT('latestNode = Node(type: .or)' .NL) .NODE(.NODETEXT 'latestNode = childNode: Node(type: .or)' .NL)  /
+           '.NODEEMPTY' .OUT('latestNode = Node(type: .empty)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .empty)' .NL)  /
+           '.NODEOR' .OUT('latestNode = Node(type: .or)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .or)' .NL)  /
            '.NODEAND' .OUT('latestNode = Node(type: .and)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .and)' .NL)  /
            '.NODEZEROORMORE' .OUT('latestNode = Node(type: .zeroOrMore)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .zeroOrMore)' .NL)
                          ;
 
-NODETEXTCONTENT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) /
-                  STRING .OUT('latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
-                  NUMBER .OUT('latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) /
-                  '.NL'  .OUT('latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
-                  '.LM+' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) /
-                  '.LM-' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL)
+NODETEXTCONTENT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODETEXT 'latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) /
+                  STRING .OUT('latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODETEXT 'latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
+                  NUMBER .OUT('latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODETEXT 'latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) /
+                  '.NL'  .OUT('latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODETEXT 'latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
+                  '.LM+' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) /
+                  '.LM-' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODETEXT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL)
                   ;
-
-NODECONTENT = '*'    .OUT('latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: self.token))' .NL 'add(childNode: latestNode!)' .NL ) /
-              STRING .OUT('latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 * 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
-              NUMBER .OUT('latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: String(UnicodeScalar(' * '))))' .NL 'add(childNode: latestNode!)' .NL ) /
-              '.NL'  .OUT('latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) .NODE(.NODEOUTPUT 'latestNode = Node(type: .text(value: ' 34 92 'n' 34 '))' .NL 'add(childNode: latestNode!)' .NL ) /
-              '.LM+' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) /
-              '.LM-' .OUT('latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL) .NODE(.NODEOUTPUT 'latestNode = Node(type: .leftMargin(margin: self.stack[self.stack.count - 1].leftMargin))' .NL 'add(childNode: latestNode!)' .NL)
-              ;
 
 [ token expressions ]
 TX1 = .NODE(.NODETOKENEXPRESSION) .NODEADDCHILD() .NODECONTEXTPUSH() .NODE(.NODEOR) .NODEADDCHILD() .NODECONTEXTPUSH() TX2 $('/' .OUT('if !self.isParsed {' .LM+ .NL) TX2 .OUT(.LM- '}' .NL) ) .NODECONTEXTPOP() .NODECONTEXTPOP()
