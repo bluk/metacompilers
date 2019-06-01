@@ -1,9 +1,5 @@
 # Metacompilers
 
-[![Apache-2.0 License](https://img.shields.io/github/license/bluk/metacompilers.svg)](https://github.com/bluk/metacompilers/blob/master/LICENSE) [![Swift](https://img.shields.io/badge/swift-4.1-orange.svg)](https://swift.org) [![SPM Compatible](https://img.shields.io/badge/SPM-compatible-orange.svg)](https://github.com/apple/swift-package-manager) ![Platforms](https://img.shields.io/badge/Platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-blue.svg)
-
-[![Build Status](https://travis-ci.com/bluk/metacompilers.svg?branch=master)](https://travis-ci.com/bluk/metacompilers) [![CircleCI](https://circleci.com/gh/bluk/metacompilers.svg?style=svg)](https://circleci.com/gh/bluk/metacompilers)
-
 A project to explore developing [metacompilers](https://en.wikipedia.org/wiki/Compiler-compiler) based on the excellent
 [Tutorial: Metacompilers Part 1](http://www.bayfronttechnologies.com/mc_tutorial.html).
 
@@ -45,4 +41,4 @@ dependencies: [
 
 ## License
 
-[Apache-2.0 License](https://github.com/bluk/metacompilers/blob/master/LICENSE)
+[Apache-2.0](LICENSE)
